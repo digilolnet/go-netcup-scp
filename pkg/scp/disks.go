@@ -66,7 +66,7 @@ func (c *Client) GetDisk(ctx context.Context, serverID int32, diskName string) (
 // This operation cannot be undone.
 // Returns a TaskInfo when the API responds with 202 (async), or nil for 200.
 func (c *Client) FormatDisk(ctx context.Context, serverID int32, diskName string) (*TaskInfo, error) {
-	resp, err := c.api.PostApiV1ServersServerIdDisksDiskNameFormatWithResponse(ctx, serverID, diskName)
+	resp, err := c.api.PostApiV1ServersServerIdDisksDiskNameFormatWithResponse(ctx, serverID, diskName, setContentTypeJSON)
 	if err != nil {
 		return nil, fmt.Errorf("format disk: %w", err)
 	}
