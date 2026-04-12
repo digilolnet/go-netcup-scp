@@ -44,8 +44,33 @@ func TestAttachISO(t *testing.T) {
 	})
 	defer cleanup()
 
-	if err := client.AttachISO(context.Background(), 123, &AttachISOOptions{IsoID: &isoID}); err != nil {
+	task, err := client.AttachISO(context.Background(), 123, &AttachISOOptions{IsoID: &isoID})
+	if err != nil {
 		t.Errorf("AttachISO() error = %v", err)
+	}
+	if task != nil {
+		t.Errorf("expected nil task for 200 response, got %v", task)
+	}
+}
+
+func TestAttachISOAsync(t *testing.T) {
+	isoID := int32(1)
+	uuid := "attach-iso-task-1"
+	client, cleanup := newTestClient(t, func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path == "/api/v1/servers/123/iso" && r.Method == http.MethodPost {
+			writeJSON(w, http.StatusAccepted, generated.TaskInfo{Uuid: &uuid})
+			return
+		}
+		w.WriteHeader(http.StatusNotFound)
+	})
+	defer cleanup()
+
+	task, err := client.AttachISO(context.Background(), 123, &AttachISOOptions{IsoID: &isoID})
+	if err != nil {
+		t.Errorf("AttachISO() error = %v", err)
+	}
+	if task == nil || task.Uuid == nil || *task.Uuid != uuid {
+		t.Errorf("unexpected task: %v", task)
 	}
 }
 
@@ -55,11 +80,11 @@ func TestAttachISOValidation(t *testing.T) {
 	})
 	defer cleanup()
 
-	if err := client.AttachISO(context.Background(), 123, nil); err == nil {
+	if _, err := client.AttachISO(context.Background(), 123, nil); err == nil {
 		t.Error("expected error for nil opts")
 	}
 
-	if err := client.AttachISO(context.Background(), 123, &AttachISOOptions{}); err == nil {
+	if _, err := client.AttachISO(context.Background(), 123, &AttachISOOptions{}); err == nil {
 		t.Error("expected error when neither IsoID nor UserIsoName is set")
 	}
 }

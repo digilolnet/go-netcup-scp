@@ -110,7 +110,7 @@ func newIsosGetAttachedCmd() *cobra.Command {
 func newIsosAttachCmd() *cobra.Command {
 	var isoID int
 	var userIso string
-	var bootCdrom bool
+	var bootCdrom, wait bool
 	cmd := &cobra.Command{
 		Use:               "attach <server-id>",
 		Short:             "Attach an ISO to a server",
@@ -137,16 +137,17 @@ func newIsosAttachCmd() *cobra.Command {
 			if bootCdrom {
 				opts.ChangeBootDeviceToCdrom = new(true)
 			}
-			if err := cc.client.AttachISO(cc.ctx, id, opts); err != nil {
+			task, err := cc.client.AttachISO(cc.ctx, id, opts)
+			if err != nil {
 				return err
 			}
-			printOK(cc)
-			return nil
+			return printTaskAndWait(cc, task, wait)
 		},
 	}
 	cmd.Flags().IntVar(&isoID, "iso-id", 0, "ID of a standard ISO image")
 	cmd.Flags().StringVar(&userIso, "user-iso", "", "name of a user-uploaded ISO")
 	cmd.Flags().BoolVar(&bootCdrom, "boot-cdrom", false, "change boot device to CDROM after attaching")
+	cmd.Flags().BoolVar(&wait, "wait", false, "wait for task to complete")
 	return cmd
 }
 

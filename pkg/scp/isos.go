@@ -72,13 +72,15 @@ type AttachISOOptions struct {
 
 // AttachISO attaches an ISO image to a server.
 // Either IsoID or UserIsoName must be provided in opts.
-func (c *Client) AttachISO(ctx context.Context, serverID int32, opts *AttachISOOptions) error {
+// Returns a TaskInfo when the API responds with 202 (async operation started), or nil
+// when it responds synchronously. Use the task UUID with GetTask / WaitForTask to track completion.
+func (c *Client) AttachISO(ctx context.Context, serverID int32, opts *AttachISOOptions) (*TaskInfo, error) {
 	if opts == nil {
-		return fmt.Errorf("attach iso: options cannot be nil")
+		return nil, fmt.Errorf("attach iso: options cannot be nil")
 	}
 
 	if opts.IsoID == nil && opts.UserIsoName == nil {
-		return fmt.Errorf("attach iso: either IsoID or UserIsoName must be provided")
+		return nil, fmt.Errorf("attach iso: either IsoID or UserIsoName must be provided")
 	}
 
 	body := generated.ServerAttachIso{
@@ -89,14 +91,20 @@ func (c *Client) AttachISO(ctx context.Context, serverID int32, opts *AttachISOO
 
 	resp, err := c.api.PostApiV1ServersServerIdIsoWithResponse(ctx, serverID, body)
 	if err != nil {
-		return fmt.Errorf("attach iso: %w", err)
+		return nil, fmt.Errorf("attach iso: %w", err)
 	}
 
-	if err := checkResponse(resp, 200, 201); err != nil {
-		return fmt.Errorf("attach iso: %w", err)
+	if err := checkResponse(resp, 200, 201, 202); err != nil {
+		return nil, fmt.Errorf("attach iso: %w", err)
 	}
 
-	return nil
+	if resp.JSON202 != nil {
+		return resp.JSON202, nil
+	}
+	if resp.HALJSON202 != nil {
+		return resp.HALJSON202, nil
+	}
+	return nil, nil
 }
 
 // DetachISO detaches the currently attached ISO from a server.
