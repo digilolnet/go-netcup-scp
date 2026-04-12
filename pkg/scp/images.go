@@ -81,7 +81,7 @@ func (c *Client) InitiateImageUpload(ctx context.Context, userID int32, key stri
 		Multipart: &multipart,
 	}
 
-	resp, err := c.api.PostApiV1UsersUserIdImagesKeyWithResponse(ctx, userID, key, params)
+	resp, err := c.api.PostApiV1UsersUserIdImagesKeyWithResponse(ctx, userID, key, params, setContentTypeJSON)
 	if err != nil {
 		return "", fmt.Errorf("initiate image upload: %w", err)
 	}
@@ -105,7 +105,7 @@ func (c *Client) InitiateMultipartImageUpload(ctx context.Context, userID int32,
 		Multipart: &multipart,
 	}
 
-	resp, err := c.api.PostApiV1UsersUserIdImagesKeyWithResponse(ctx, userID, key, params)
+	resp, err := c.api.PostApiV1UsersUserIdImagesKeyWithResponse(ctx, userID, key, params, setContentTypeJSON)
 	if err != nil {
 		return "", fmt.Errorf("initiate multipart image upload: %w", err)
 	}
