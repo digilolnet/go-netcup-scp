@@ -23,7 +23,8 @@ import (
 
 // CreateSnapshot creates a snapshot of a server.
 // The snapshot can be created online (while server is running) or offline.
-func (c *Client) CreateSnapshot(ctx context.Context, serverID int32, name, description string) error {
+// Returns a TaskInfo when the API responds with 202 (async), or nil for 200/201.
+func (c *Client) CreateSnapshot(ctx context.Context, serverID int32, name, description string) (*TaskInfo, error) {
 	onlineSnapshot := true
 	resp, err := c.api.PostApiV1ServersServerIdSnapshotsWithResponse(
 		ctx,
@@ -35,14 +36,17 @@ func (c *Client) CreateSnapshot(ctx context.Context, serverID int32, name, descr
 		},
 	)
 	if err != nil {
-		return fmt.Errorf("create snapshot: %w", err)
+		return nil, fmt.Errorf("create snapshot: %w", err)
 	}
 
 	if err := checkResponse(resp, 200, 201, 202); err != nil {
-		return fmt.Errorf("create snapshot: %w", err)
+		return nil, fmt.Errorf("create snapshot: %w", err)
 	}
 
-	return nil
+	if resp.JSON202 != nil {
+		return resp.JSON202, nil
+	}
+	return resp.HALJSON202, nil
 }
 
 // ListSnapshots retrieves all snapshots for a server.
@@ -83,32 +87,40 @@ func (c *Client) GetSnapshot(ctx context.Context, serverID int32, name string) (
 
 // DeleteSnapshot deletes a snapshot.
 // This operation cannot be undone.
-func (c *Client) DeleteSnapshot(ctx context.Context, serverID int32, name string) error {
+// Returns a TaskInfo when the API responds with 202 (async), or nil for 200/204.
+func (c *Client) DeleteSnapshot(ctx context.Context, serverID int32, name string) (*TaskInfo, error) {
 	resp, err := c.api.DeleteApiV1ServersServerIdSnapshotsNameWithResponse(ctx, serverID, name)
 	if err != nil {
-		return fmt.Errorf("delete snapshot: %w", err)
+		return nil, fmt.Errorf("delete snapshot: %w", err)
 	}
 
 	if err := checkResponse(resp, 200, 202, 204); err != nil {
-		return fmt.Errorf("delete snapshot: %w", err)
+		return nil, fmt.Errorf("delete snapshot: %w", err)
 	}
 
-	return nil
+	if resp.JSON202 != nil {
+		return resp.JSON202, nil
+	}
+	return resp.HALJSON202, nil
 }
 
 // RevertSnapshot reverts a server to a previous snapshot state.
 // This operation will revert the server to the state it was in when the snapshot was created.
-func (c *Client) RevertSnapshot(ctx context.Context, serverID int32, name string) error {
+// Returns a TaskInfo when the API responds with 202 (async), or nil for 200.
+func (c *Client) RevertSnapshot(ctx context.Context, serverID int32, name string) (*TaskInfo, error) {
 	resp, err := c.api.PostApiV1ServersServerIdSnapshotsNameRevertWithResponse(ctx, serverID, name)
 	if err != nil {
-		return fmt.Errorf("revert snapshot: %w", err)
+		return nil, fmt.Errorf("revert snapshot: %w", err)
 	}
 
 	if err := checkResponse(resp, 200, 202); err != nil {
-		return fmt.Errorf("revert snapshot: %w", err)
+		return nil, fmt.Errorf("revert snapshot: %w", err)
 	}
 
-	return nil
+	if resp.JSON202 != nil {
+		return resp.JSON202, nil
+	}
+	return resp.HALJSON202, nil
 }
 
 // DryRunSnapshot checks whether a snapshot can be created without actually creating one.

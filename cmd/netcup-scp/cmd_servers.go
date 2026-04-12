@@ -244,7 +244,8 @@ func newServersGetCmd() *cobra.Command {
 }
 
 func newServersStartCmd() *cobra.Command {
-	return &cobra.Command{
+	var wait bool
+	cmd := &cobra.Command{
 		Use:               "start <id>",
 		Short:             "Power on a server",
 		Args:              cobra.ExactArgs(1),
@@ -260,17 +261,19 @@ func newServersStartCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			if err := cc.client.StartServer(cc.ctx, id); err != nil {
+			task, err := cc.client.StartServer(cc.ctx, id)
+			if err != nil {
 				return err
 			}
-			printOK(cc)
-			return nil
+			return printTaskAndWait(cc, task, wait)
 		},
 	}
+	cmd.Flags().BoolVar(&wait, "wait", false, "wait for task to complete")
+	return cmd
 }
 
 func newServersStopCmd() *cobra.Command {
-	var powerOff bool
+	var powerOff, wait bool
 	cmd := &cobra.Command{
 		Use:               "stop <id>",
 		Short:             "Shut down a server",
@@ -287,19 +290,20 @@ func newServersStopCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			if err := cc.client.StopServer(cc.ctx, id, powerOff); err != nil {
+			task, err := cc.client.StopServer(cc.ctx, id, powerOff)
+			if err != nil {
 				return err
 			}
-			printOK(cc)
-			return nil
+			return printTaskAndWait(cc, task, wait)
 		},
 	}
 	cmd.Flags().BoolVar(&powerOff, "power-off", false, "hard power off instead of graceful shutdown")
+	cmd.Flags().BoolVar(&wait, "wait", false, "wait for task to complete")
 	return cmd
 }
 
 func newServersRestartCmd() *cobra.Command {
-	var reset bool
+	var reset, wait bool
 	cmd := &cobra.Command{
 		Use:               "restart <id>",
 		Short:             "Reboot a server",
@@ -316,19 +320,21 @@ func newServersRestartCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			if err := cc.client.RestartServer(cc.ctx, id, reset); err != nil {
+			task, err := cc.client.RestartServer(cc.ctx, id, reset)
+			if err != nil {
 				return err
 			}
-			printOK(cc)
-			return nil
+			return printTaskAndWait(cc, task, wait)
 		},
 	}
 	cmd.Flags().BoolVar(&reset, "reset", false, "hard reset instead of power cycle")
+	cmd.Flags().BoolVar(&wait, "wait", false, "wait for task to complete")
 	return cmd
 }
 
 func newServersAutostartCmd() *cobra.Command {
-	return &cobra.Command{
+	var wait bool
+	cmd := &cobra.Command{
 		Use:               "autostart <id> <on|off>",
 		Short:             "Configure autostart",
 		Args:              cobra.ExactArgs(2),
@@ -348,17 +354,20 @@ func newServersAutostartCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			if err := cc.client.SetAutostart(cc.ctx, id, enabled); err != nil {
+			task, err := cc.client.SetAutostart(cc.ctx, id, enabled)
+			if err != nil {
 				return err
 			}
-			printOK(cc)
-			return nil
+			return printTaskAndWait(cc, task, wait)
 		},
 	}
+	cmd.Flags().BoolVar(&wait, "wait", false, "wait for task to complete")
+	return cmd
 }
 
 func newServersUEFICmd() *cobra.Command {
-	return &cobra.Command{
+	var wait bool
+	cmd := &cobra.Command{
 		Use:               "uefi <id> <on|off>",
 		Short:             "Configure UEFI boot",
 		Args:              cobra.ExactArgs(2),
@@ -378,13 +387,15 @@ func newServersUEFICmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			if err := cc.client.SetUEFI(cc.ctx, id, enabled); err != nil {
+			task, err := cc.client.SetUEFI(cc.ctx, id, enabled)
+			if err != nil {
 				return err
 			}
-			printOK(cc)
-			return nil
+			return printTaskAndWait(cc, task, wait)
 		},
 	}
+	cmd.Flags().BoolVar(&wait, "wait", false, "wait for task to complete")
+	return cmd
 }
 
 func newServersNicknameCmd() *cobra.Command {
@@ -457,7 +468,8 @@ func newServersLogsCmd() *cobra.Command {
 }
 
 func newServersCPUTopologyCmd() *cobra.Command {
-	return &cobra.Command{
+	var wait bool
+	cmd := &cobra.Command{
 		Use:               "cpu-topology <id> <sockets> <cores>",
 		Short:             "Set CPU topology",
 		Args:              cobra.ExactArgs(3),
@@ -481,13 +493,15 @@ func newServersCPUTopologyCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			if err := cc.client.SetCPUTopology(cc.ctx, id, sockets, cores); err != nil {
+			task, err := cc.client.SetCPUTopology(cc.ctx, id, sockets, cores)
+			if err != nil {
 				return err
 			}
-			printOK(cc)
-			return nil
+			return printTaskAndWait(cc, task, wait)
 		},
 	}
+	cmd.Flags().BoolVar(&wait, "wait", false, "wait for task to complete")
+	return cmd
 }
 
 func newServersGuestAgentCmd() *cobra.Command {

@@ -18,8 +18,12 @@ func TestCreateSnapshot(t *testing.T) {
 	})
 	defer cleanup()
 
-	if err := client.CreateSnapshot(context.Background(), 123, "snap1", "my snapshot"); err != nil {
+	task, err := client.CreateSnapshot(context.Background(), 123, "snap1", "my snapshot")
+	if err != nil {
 		t.Errorf("CreateSnapshot() error = %v", err)
+	}
+	if task != nil {
+		t.Errorf("expected nil task for 201 response, got %v", task)
 	}
 }
 
@@ -79,23 +83,32 @@ func TestDeleteSnapshot(t *testing.T) {
 	})
 	defer cleanup()
 
-	if err := client.DeleteSnapshot(context.Background(), 123, "snap1"); err != nil {
+	task, err := client.DeleteSnapshot(context.Background(), 123, "snap1")
+	if err != nil {
 		t.Errorf("DeleteSnapshot() error = %v", err)
+	}
+	if task != nil {
+		t.Errorf("expected nil task for 204 response, got %v", task)
 	}
 }
 
 func TestRevertSnapshot(t *testing.T) {
+	uuid := "revert-task-1"
 	client, cleanup := newTestClient(t, func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path == "/api/v1/servers/123/snapshots/snap1/revert" && r.Method == http.MethodPost {
-			w.WriteHeader(http.StatusAccepted)
+			writeJSON(w, http.StatusAccepted, generated.TaskInfo{Uuid: &uuid})
 			return
 		}
 		w.WriteHeader(http.StatusNotFound)
 	})
 	defer cleanup()
 
-	if err := client.RevertSnapshot(context.Background(), 123, "snap1"); err != nil {
+	task, err := client.RevertSnapshot(context.Background(), 123, "snap1")
+	if err != nil {
 		t.Errorf("RevertSnapshot() error = %v", err)
+	}
+	if task == nil || task.Uuid == nil || *task.Uuid != uuid {
+		t.Errorf("unexpected task: %v", task)
 	}
 }
 

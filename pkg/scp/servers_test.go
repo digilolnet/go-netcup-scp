@@ -166,47 +166,62 @@ func TestGetServer(t *testing.T) {
 }
 
 func TestStartServer(t *testing.T) {
+	uuid := "start-task-1"
 	client, cleanup := newTestClient(t, func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path == "/api/v1/servers/123" && r.Method == http.MethodPatch {
-			writeJSON(w, http.StatusAccepted, map[string]any{"id": 123})
+			writeJSON(w, http.StatusAccepted, generated.TaskInfo{Uuid: &uuid})
 			return
 		}
 		w.WriteHeader(http.StatusNotFound)
 	})
 	defer cleanup()
 
-	if err := client.StartServer(context.Background(), 123); err != nil {
+	task, err := client.StartServer(context.Background(), 123)
+	if err != nil {
 		t.Errorf("StartServer() error = %v", err)
+	}
+	if task == nil || task.Uuid == nil || *task.Uuid != uuid {
+		t.Errorf("unexpected task: %v", task)
 	}
 }
 
 func TestStopServer(t *testing.T) {
+	uuid := "stop-task-1"
 	client, cleanup := newTestClient(t, func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path == "/api/v1/servers/123" && r.Method == http.MethodPatch {
-			writeJSON(w, http.StatusAccepted, map[string]any{"id": 123})
+			writeJSON(w, http.StatusAccepted, generated.TaskInfo{Uuid: &uuid})
 			return
 		}
 		w.WriteHeader(http.StatusNotFound)
 	})
 	defer cleanup()
 
-	if err := client.StopServer(context.Background(), 123, false); err != nil {
+	task, err := client.StopServer(context.Background(), 123, false)
+	if err != nil {
 		t.Errorf("StopServer() error = %v", err)
+	}
+	if task == nil || task.Uuid == nil || *task.Uuid != uuid {
+		t.Errorf("unexpected task: %v", task)
 	}
 }
 
 func TestRestartServer(t *testing.T) {
+	uuid := "restart-task-1"
 	client, cleanup := newTestClient(t, func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path == "/api/v1/servers/123" && r.Method == http.MethodPatch {
-			writeJSON(w, http.StatusAccepted, map[string]any{"id": 123})
+			writeJSON(w, http.StatusAccepted, generated.TaskInfo{Uuid: &uuid})
 			return
 		}
 		w.WriteHeader(http.StatusNotFound)
 	})
 	defer cleanup()
 
-	if err := client.RestartServer(context.Background(), 123, false); err != nil {
+	task, err := client.RestartServer(context.Background(), 123, false)
+	if err != nil {
 		t.Errorf("RestartServer() error = %v", err)
+	}
+	if task == nil || task.Uuid == nil || *task.Uuid != uuid {
+		t.Errorf("unexpected task: %v", task)
 	}
 }
 
@@ -220,8 +235,12 @@ func TestSetAutostart(t *testing.T) {
 	})
 	defer cleanup()
 
-	if err := client.SetAutostart(context.Background(), 123, true); err != nil {
+	task, err := client.SetAutostart(context.Background(), 123, true)
+	if err != nil {
 		t.Errorf("SetAutostart() error = %v", err)
+	}
+	if task != nil {
+		t.Errorf("expected nil task for 200 response, got %v", task)
 	}
 }
 
@@ -235,8 +254,12 @@ func TestSetUEFI(t *testing.T) {
 	})
 	defer cleanup()
 
-	if err := client.SetUEFI(context.Background(), 123, true); err != nil {
+	task, err := client.SetUEFI(context.Background(), 123, true)
+	if err != nil {
 		t.Errorf("SetUEFI() error = %v", err)
+	}
+	if task != nil {
+		t.Errorf("expected nil task for 200 response, got %v", task)
 	}
 }
 
@@ -265,8 +288,12 @@ func TestSetCPUTopology(t *testing.T) {
 	})
 	defer cleanup()
 
-	if err := client.SetCPUTopology(context.Background(), 123, 2, 4); err != nil {
+	task, err := client.SetCPUTopology(context.Background(), 123, 2, 4)
+	if err != nil {
 		t.Errorf("SetCPUTopology() error = %v", err)
+	}
+	if task != nil {
+		t.Errorf("expected nil task for 200 response, got %v", task)
 	}
 }
 

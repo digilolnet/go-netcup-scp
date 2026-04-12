@@ -101,14 +101,16 @@ func (c *Client) GetServer(ctx context.Context, serverID int32, opts *GetServerO
 }
 
 // StartServer powers on the server.
-// Returns immediately; server may take time to fully boot.
-func (c *Client) StartServer(ctx context.Context, serverID int32) error {
+// Returns a TaskInfo when the API responds with 202 (async), or nil when it
+// responds with 200 (already running / synchronous). Use the task UUID with
+// GetTask / WaitForTask to track completion.
+func (c *Client) StartServer(ctx context.Context, serverID int32) (*TaskInfo, error) {
 	state := generated.ServerState1ON
 	patch := &generated.ServerStatePatch{State: &state}
 
 	body, err := json.Marshal(patch)
 	if err != nil {
-		return fmt.Errorf("start server: %w", err)
+		return nil, fmt.Errorf("start server: %w", err)
 	}
 
 	resp, err := c.api.PatchApiV1ServersServerIdWithBodyWithResponse(
@@ -119,20 +121,25 @@ func (c *Client) StartServer(ctx context.Context, serverID int32) error {
 		bytes.NewReader(body),
 	)
 	if err != nil {
-		return fmt.Errorf("start server: %w", err)
+		return nil, fmt.Errorf("start server: %w", err)
 	}
 
 	if err := checkResponse(resp, 200, 202); err != nil {
-		return fmt.Errorf("start server: %w", err)
+		return nil, fmt.Errorf("start server: %w", err)
 	}
 
-	return nil
+	if resp.JSON202 != nil {
+		return resp.JSON202, nil
+	}
+	return resp.HALJSON202, nil
 }
 
 // StopServer shuts down the server.
 // If powerOff is true, performs hard power off; otherwise attempts graceful shutdown.
-// Returns immediately; server may take time to fully stop.
-func (c *Client) StopServer(ctx context.Context, serverID int32, powerOff bool) error {
+// Returns a TaskInfo when the API responds with 202 (async), or nil when it
+// responds with 200 (already stopped / synchronous). Use the task UUID with
+// GetTask / WaitForTask to track completion.
+func (c *Client) StopServer(ctx context.Context, serverID int32, powerOff bool) (*TaskInfo, error) {
 	state := generated.ServerState1OFF
 	patch := &generated.ServerStatePatch{State: &state}
 	params := &generated.PatchApiV1ServersServerIdParams{}
@@ -144,7 +151,7 @@ func (c *Client) StopServer(ctx context.Context, serverID int32, powerOff bool) 
 
 	body, err := json.Marshal(patch)
 	if err != nil {
-		return fmt.Errorf("stop server: %w", err)
+		return nil, fmt.Errorf("stop server: %w", err)
 	}
 
 	resp, err := c.api.PatchApiV1ServersServerIdWithBodyWithResponse(
@@ -155,20 +162,25 @@ func (c *Client) StopServer(ctx context.Context, serverID int32, powerOff bool) 
 		bytes.NewReader(body),
 	)
 	if err != nil {
-		return fmt.Errorf("stop server: %w", err)
+		return nil, fmt.Errorf("stop server: %w", err)
 	}
 
 	if err := checkResponse(resp, 200, 202); err != nil {
-		return fmt.Errorf("stop server: %w", err)
+		return nil, fmt.Errorf("stop server: %w", err)
 	}
 
-	return nil
+	if resp.JSON202 != nil {
+		return resp.JSON202, nil
+	}
+	return resp.HALJSON202, nil
 }
 
 // RestartServer reboots the server.
 // If reset is true, performs a hard reset; otherwise performs a power cycle.
-// Returns immediately; server may take time to restart.
-func (c *Client) RestartServer(ctx context.Context, serverID int32, reset bool) error {
+// Returns a TaskInfo when the API responds with 202 (async), or nil when it
+// responds with 200 (synchronous). Use the task UUID with GetTask / WaitForTask
+// to track completion.
+func (c *Client) RestartServer(ctx context.Context, serverID int32, reset bool) (*TaskInfo, error) {
 	state := generated.ServerState1ON
 	patch := &generated.ServerStatePatch{State: &state}
 
@@ -182,7 +194,7 @@ func (c *Client) RestartServer(ctx context.Context, serverID int32, reset bool) 
 
 	body, err := json.Marshal(patch)
 	if err != nil {
-		return fmt.Errorf("restart server: %w", err)
+		return nil, fmt.Errorf("restart server: %w", err)
 	}
 
 	resp, err := c.api.PatchApiV1ServersServerIdWithBodyWithResponse(
@@ -193,23 +205,27 @@ func (c *Client) RestartServer(ctx context.Context, serverID int32, reset bool) 
 		bytes.NewReader(body),
 	)
 	if err != nil {
-		return fmt.Errorf("restart server: %w", err)
+		return nil, fmt.Errorf("restart server: %w", err)
 	}
 
 	if err := checkResponse(resp, 200, 202); err != nil {
-		return fmt.Errorf("restart server: %w", err)
+		return nil, fmt.Errorf("restart server: %w", err)
 	}
 
-	return nil
+	if resp.JSON202 != nil {
+		return resp.JSON202, nil
+	}
+	return resp.HALJSON202, nil
 }
 
 // SetAutostart configures whether the server starts automatically.
-func (c *Client) SetAutostart(ctx context.Context, serverID int32, enabled bool) error {
+// Returns a TaskInfo when the API responds with 202 (async), or nil for 200.
+func (c *Client) SetAutostart(ctx context.Context, serverID int32, enabled bool) (*TaskInfo, error) {
 	patch := &generated.ServerAutostartPatch{Autostart: &enabled}
 
 	body, err := json.Marshal(patch)
 	if err != nil {
-		return fmt.Errorf("set autostart: %w", err)
+		return nil, fmt.Errorf("set autostart: %w", err)
 	}
 
 	resp, err := c.api.PatchApiV1ServersServerIdWithBodyWithResponse(
@@ -220,23 +236,27 @@ func (c *Client) SetAutostart(ctx context.Context, serverID int32, enabled bool)
 		bytes.NewReader(body),
 	)
 	if err != nil {
-		return fmt.Errorf("set autostart: %w", err)
+		return nil, fmt.Errorf("set autostart: %w", err)
 	}
 
 	if err := checkResponse(resp, 200, 202); err != nil {
-		return fmt.Errorf("set autostart: %w", err)
+		return nil, fmt.Errorf("set autostart: %w", err)
 	}
 
-	return nil
+	if resp.JSON202 != nil {
+		return resp.JSON202, nil
+	}
+	return resp.HALJSON202, nil
 }
 
 // SetUEFI configures whether the server uses UEFI boot mode.
-func (c *Client) SetUEFI(ctx context.Context, serverID int32, enabled bool) error {
+// Returns a TaskInfo when the API responds with 202 (async), or nil for 200.
+func (c *Client) SetUEFI(ctx context.Context, serverID int32, enabled bool) (*TaskInfo, error) {
 	patch := &generated.ServerUEFIPatch{Uefi: &enabled}
 
 	body, err := json.Marshal(patch)
 	if err != nil {
-		return fmt.Errorf("set uefi: %w", err)
+		return nil, fmt.Errorf("set uefi: %w", err)
 	}
 
 	resp, err := c.api.PatchApiV1ServersServerIdWithBodyWithResponse(
@@ -247,14 +267,17 @@ func (c *Client) SetUEFI(ctx context.Context, serverID int32, enabled bool) erro
 		bytes.NewReader(body),
 	)
 	if err != nil {
-		return fmt.Errorf("set uefi: %w", err)
+		return nil, fmt.Errorf("set uefi: %w", err)
 	}
 
 	if err := checkResponse(resp, 200, 202); err != nil {
-		return fmt.Errorf("set uefi: %w", err)
+		return nil, fmt.Errorf("set uefi: %w", err)
 	}
 
-	return nil
+	if resp.JSON202 != nil {
+		return resp.JSON202, nil
+	}
+	return resp.HALJSON202, nil
 }
 
 // UpdateNickname sets a custom nickname for the server.
@@ -277,7 +300,7 @@ func (c *Client) UpdateNickname(ctx context.Context, serverID int32, nickname st
 		return fmt.Errorf("update nickname: %w", err)
 	}
 
-	if err := checkResponse(resp, 200, 202); err != nil {
+	if err := checkResponse(resp, 200); err != nil {
 		return fmt.Errorf("update nickname: %w", err)
 	}
 
@@ -413,7 +436,8 @@ func (c *Client) OptimizeStorage(ctx context.Context, serverID int32, opts *Opti
 }
 
 // SetCPUTopology configures the CPU topology (sockets and cores per socket).
-func (c *Client) SetCPUTopology(ctx context.Context, serverID int32, sockets, cores int32) error {
+// Returns a TaskInfo when the API responds with 202 (async), or nil for 200.
+func (c *Client) SetCPUTopology(ctx context.Context, serverID int32, sockets, cores int32) (*TaskInfo, error) {
 	topology := &generated.CpuTopology{
 		SocketCount:         &sockets,
 		CoresPerSocketCount: &cores,
@@ -422,7 +446,7 @@ func (c *Client) SetCPUTopology(ctx context.Context, serverID int32, sockets, co
 
 	body, err := json.Marshal(patch)
 	if err != nil {
-		return fmt.Errorf("set cpu topology: %w", err)
+		return nil, fmt.Errorf("set cpu topology: %w", err)
 	}
 
 	resp, err := c.api.PatchApiV1ServersServerIdWithBodyWithResponse(
@@ -433,14 +457,17 @@ func (c *Client) SetCPUTopology(ctx context.Context, serverID int32, sockets, co
 		bytes.NewReader(body),
 	)
 	if err != nil {
-		return fmt.Errorf("set cpu topology: %w", err)
+		return nil, fmt.Errorf("set cpu topology: %w", err)
 	}
 
 	if err := checkResponse(resp, 200, 202); err != nil {
-		return fmt.Errorf("set cpu topology: %w", err)
+		return nil, fmt.Errorf("set cpu topology: %w", err)
 	}
 
-	return nil
+	if resp.JSON202 != nil {
+		return resp.JSON202, nil
+	}
+	return resp.HALJSON202, nil
 }
 
 // GetGPUDriver retrieves a presigned S3 download URL for the GPU driver for a server.

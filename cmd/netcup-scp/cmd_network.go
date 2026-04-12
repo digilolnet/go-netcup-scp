@@ -171,7 +171,8 @@ func newInterfacesGetCmd() *cobra.Command {
 }
 
 func newInterfacesDeleteCmd() *cobra.Command {
-	return &cobra.Command{
+	var wait bool
+	cmd := &cobra.Command{
 		Use:               "delete <server-id> <mac>",
 		Short:             "Delete a network interface",
 		Args:              cobra.ExactArgs(2),
@@ -196,13 +197,15 @@ func newInterfacesDeleteCmd() *cobra.Command {
 				return fmt.Errorf("interface %s has provider-assigned IP addresses and cannot be recreated via the API — deletion blocked", args[1])
 			}
 
-			if err := cc.client.DeleteInterface(cc.ctx, id, args[1]); err != nil {
+			task, err := cc.client.DeleteInterface(cc.ctx, id, args[1])
+			if err != nil {
 				return err
 			}
-			printOK(cc)
-			return nil
+			return printTaskAndWait(cc, task, wait)
 		},
 	}
+	cmd.Flags().BoolVar(&wait, "wait", false, "wait for task to complete")
+	return cmd
 }
 
 func newInterfacesUpdateDriverCmd() *cobra.Command {

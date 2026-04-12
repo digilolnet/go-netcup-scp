@@ -106,6 +106,7 @@ func newSnapshotsGetCmd() *cobra.Command {
 
 func newSnapshotsCreateCmd() *cobra.Command {
 	var description string
+	var wait bool
 	cmd := &cobra.Command{
 		Use:               "create <server-id> <name>",
 		Short:             "Create a snapshot",
@@ -122,19 +123,21 @@ func newSnapshotsCreateCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			if err := cc.client.CreateSnapshot(cc.ctx, id, args[1], description); err != nil {
+			task, err := cc.client.CreateSnapshot(cc.ctx, id, args[1], description)
+			if err != nil {
 				return err
 			}
-			printOK(cc)
-			return nil
+			return printTaskAndWait(cc, task, wait)
 		},
 	}
 	cmd.Flags().StringVar(&description, "description", "", "snapshot description")
+	cmd.Flags().BoolVar(&wait, "wait", false, "wait for task to complete")
 	return cmd
 }
 
 func newSnapshotsDeleteCmd() *cobra.Command {
-	return &cobra.Command{
+	var wait bool
+	cmd := &cobra.Command{
 		Use:               "delete <server-id> <name>",
 		Short:             "Delete a snapshot",
 		Args:              cobra.ExactArgs(2),
@@ -150,17 +153,20 @@ func newSnapshotsDeleteCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			if err := cc.client.DeleteSnapshot(cc.ctx, id, args[1]); err != nil {
+			task, err := cc.client.DeleteSnapshot(cc.ctx, id, args[1])
+			if err != nil {
 				return err
 			}
-			printOK(cc)
-			return nil
+			return printTaskAndWait(cc, task, wait)
 		},
 	}
+	cmd.Flags().BoolVar(&wait, "wait", false, "wait for task to complete")
+	return cmd
 }
 
 func newSnapshotsRevertCmd() *cobra.Command {
-	return &cobra.Command{
+	var wait bool
+	cmd := &cobra.Command{
 		Use:               "revert <server-id> <name>",
 		Short:             "Revert server to a snapshot",
 		Args:              cobra.ExactArgs(2),
@@ -176,13 +182,15 @@ func newSnapshotsRevertCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			if err := cc.client.RevertSnapshot(cc.ctx, id, args[1]); err != nil {
+			task, err := cc.client.RevertSnapshot(cc.ctx, id, args[1])
+			if err != nil {
 				return err
 			}
-			printOK(cc)
-			return nil
+			return printTaskAndWait(cc, task, wait)
 		},
 	}
+	cmd.Flags().BoolVar(&wait, "wait", false, "wait for task to complete")
+	return cmd
 }
 
 func newSnapshotsDryRunCmd() *cobra.Command {

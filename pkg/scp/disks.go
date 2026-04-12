@@ -64,17 +64,21 @@ func (c *Client) GetDisk(ctx context.Context, serverID int32, diskName string) (
 
 // FormatDisk formats a disk, destroying all data on it.
 // This operation cannot be undone.
-func (c *Client) FormatDisk(ctx context.Context, serverID int32, diskName string) error {
+// Returns a TaskInfo when the API responds with 202 (async), or nil for 200.
+func (c *Client) FormatDisk(ctx context.Context, serverID int32, diskName string) (*TaskInfo, error) {
 	resp, err := c.api.PostApiV1ServersServerIdDisksDiskNameFormatWithResponse(ctx, serverID, diskName)
 	if err != nil {
-		return fmt.Errorf("format disk: %w", err)
+		return nil, fmt.Errorf("format disk: %w", err)
 	}
 
 	if err := checkResponse(resp, 200, 202); err != nil {
-		return fmt.Errorf("format disk: %w", err)
+		return nil, fmt.Errorf("format disk: %w", err)
 	}
 
-	return nil
+	if resp.JSON202 != nil {
+		return resp.JSON202, nil
+	}
+	return resp.HALJSON202, nil
 }
 
 // GetSupportedDiskDrivers retrieves the list of storage drivers supported by a server.
@@ -96,12 +100,13 @@ func (c *Client) GetSupportedDiskDrivers(ctx context.Context, serverID int32) ([
 }
 
 // SetDiskDriver changes the storage driver for all disks on a server.
-func (c *Client) SetDiskDriver(ctx context.Context, serverID int32, driver StorageDriver) error {
+// Returns a TaskInfo when the API responds with 202 (async), or nil for 200.
+func (c *Client) SetDiskDriver(ctx context.Context, serverID int32, driver StorageDriver) (*TaskInfo, error) {
 	patch := &generated.EditDisksDriver{Driver: driver}
 
 	body, err := json.Marshal(patch)
 	if err != nil {
-		return fmt.Errorf("set disk driver: %w", err)
+		return nil, fmt.Errorf("set disk driver: %w", err)
 	}
 
 	resp, err := c.api.PatchApiV1ServersServerIdDisksWithBodyWithResponse(
@@ -111,12 +116,15 @@ func (c *Client) SetDiskDriver(ctx context.Context, serverID int32, driver Stora
 		bytes.NewReader(body),
 	)
 	if err != nil {
-		return fmt.Errorf("set disk driver: %w", err)
+		return nil, fmt.Errorf("set disk driver: %w", err)
 	}
 
 	if err := checkResponse(resp, 200, 202); err != nil {
-		return fmt.Errorf("set disk driver: %w", err)
+		return nil, fmt.Errorf("set disk driver: %w", err)
 	}
 
-	return nil
+	if resp.JSON202 != nil {
+		return resp.JSON202, nil
+	}
+	return resp.HALJSON202, nil
 }

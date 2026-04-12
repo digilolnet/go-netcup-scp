@@ -226,17 +226,21 @@ func IsPrimaryInterface(iface *Interface) bool {
 }
 
 // DeleteInterface removes a network interface from a server.
-func (c *Client) DeleteInterface(ctx context.Context, serverID int32, mac string) error {
+// Returns a TaskInfo when the API responds with 202 (async), or nil for 200/204.
+func (c *Client) DeleteInterface(ctx context.Context, serverID int32, mac string) (*TaskInfo, error) {
 	resp, err := c.api.DeleteApiV1ServersServerIdInterfacesMacWithResponse(ctx, serverID, mac)
 	if err != nil {
-		return fmt.Errorf("delete interface: %w", err)
+		return nil, fmt.Errorf("delete interface: %w", err)
 	}
 
 	if err := checkResponse(resp, 200, 202, 204); err != nil {
-		return fmt.Errorf("delete interface: %w", err)
+		return nil, fmt.Errorf("delete interface: %w", err)
 	}
 
-	return nil
+	if resp.JSON202 != nil {
+		return resp.JSON202, nil
+	}
+	return resp.HALJSON202, nil
 }
 
 // UpdateInterfaceDriver updates a network interface's driver.

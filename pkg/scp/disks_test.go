@@ -55,17 +55,22 @@ func TestGetDisk(t *testing.T) {
 }
 
 func TestFormatDisk(t *testing.T) {
+	uuid := "format-task-1"
 	client, cleanup := newTestClient(t, func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path == "/api/v1/servers/123/disks/vda:format" && r.Method == http.MethodPost {
-			w.WriteHeader(http.StatusAccepted)
+			writeJSON(w, http.StatusAccepted, generated.TaskInfo{Uuid: &uuid})
 			return
 		}
 		w.WriteHeader(http.StatusNotFound)
 	})
 	defer cleanup()
 
-	if err := client.FormatDisk(context.Background(), 123, "vda"); err != nil {
+	task, err := client.FormatDisk(context.Background(), 123, "vda")
+	if err != nil {
 		t.Errorf("FormatDisk() error = %v", err)
+	}
+	if task == nil || task.Uuid == nil || *task.Uuid != uuid {
+		t.Errorf("unexpected task: %v", task)
 	}
 }
 
@@ -79,8 +84,12 @@ func TestSetDiskDriver(t *testing.T) {
 	})
 	defer cleanup()
 
-	if err := client.SetDiskDriver(context.Background(), 123, generated.StorageDriverVIRTIO); err != nil {
+	task, err := client.SetDiskDriver(context.Background(), 123, generated.StorageDriverVIRTIO)
+	if err != nil {
 		t.Errorf("SetDiskDriver() error = %v", err)
+	}
+	if task != nil {
+		t.Errorf("expected nil task for 200 response, got %v", task)
 	}
 }
 

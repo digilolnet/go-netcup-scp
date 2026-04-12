@@ -186,8 +186,12 @@ func TestDeleteInterface(t *testing.T) {
 	})
 	defer cleanup()
 
-	if err := client.DeleteInterface(context.Background(), 123, "aa:bb:cc:dd:ee:ff"); err != nil {
+	task, err := client.DeleteInterface(context.Background(), 123, "aa:bb:cc:dd:ee:ff")
+	if err != nil {
 		t.Errorf("DeleteInterface() error = %v", err)
+	}
+	if task != nil {
+		t.Errorf("expected nil task for 204 response, got %v", task)
 	}
 }
 

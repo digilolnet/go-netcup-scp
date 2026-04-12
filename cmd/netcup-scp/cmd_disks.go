@@ -104,7 +104,8 @@ func newDisksGetCmd() *cobra.Command {
 }
 
 func newDisksFormatCmd() *cobra.Command {
-	return &cobra.Command{
+	var wait bool
+	cmd := &cobra.Command{
 		Use:               "format <server-id> <name>",
 		Short:             "Format a disk (destroys data)",
 		Args:              cobra.ExactArgs(2),
@@ -120,17 +121,20 @@ func newDisksFormatCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			if err := cc.client.FormatDisk(cc.ctx, id, args[1]); err != nil {
+			task, err := cc.client.FormatDisk(cc.ctx, id, args[1])
+			if err != nil {
 				return err
 			}
-			printOK(cc)
-			return nil
+			return printTaskAndWait(cc, task, wait)
 		},
 	}
+	cmd.Flags().BoolVar(&wait, "wait", false, "wait for task to complete")
+	return cmd
 }
 
 func newDisksSetDriverCmd() *cobra.Command {
-	return &cobra.Command{
+	var wait bool
+	cmd := &cobra.Command{
 		Use:               "set-driver <server-id> <driver>",
 		Short:             "Change storage driver for all disks",
 		Args:              cobra.ExactArgs(2),
@@ -146,13 +150,15 @@ func newDisksSetDriverCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			if err := cc.client.SetDiskDriver(cc.ctx, id, scp.StorageDriver(args[1])); err != nil {
+			task, err := cc.client.SetDiskDriver(cc.ctx, id, scp.StorageDriver(args[1]))
+			if err != nil {
 				return err
 			}
-			printOK(cc)
-			return nil
+			return printTaskAndWait(cc, task, wait)
 		},
 	}
+	cmd.Flags().BoolVar(&wait, "wait", false, "wait for task to complete")
+	return cmd
 }
 
 func newDisksSupportedDriversCmd() *cobra.Command {
