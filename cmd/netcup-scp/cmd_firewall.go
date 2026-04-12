@@ -384,6 +384,7 @@ func newFWPoliciesCreateCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
+			cc.invalidateCompletionCache("fw-policies")
 			return printResult(cc, policy, func() {
 				printKV("ID", derefInt32(policy.Id), "Name", derefStr(policy.Name))
 			})
@@ -499,6 +500,7 @@ func newFWPoliciesUpdateCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
+			cc.invalidateCompletionCache("fw-policies")
 			if err := printResult(cc, result, func() {
 				if result.FirewallPolicy != nil {
 					printKV("ID", derefInt32(result.FirewallPolicy.Id), "Name", result.FirewallPolicy.Name)
@@ -539,6 +541,7 @@ func newFWPoliciesDeleteCmd() *cobra.Command {
 			if err := cc.client.DeleteFirewallPolicy(cc.ctx, cc.userID, policyID); err != nil {
 				return err
 			}
+			cc.invalidateCompletionCache("fw-policies")
 			printOK(cc)
 			return nil
 		},

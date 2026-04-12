@@ -229,6 +229,7 @@ func newSSHKeysCreateCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
+			cc.invalidateCompletionCache("ssh-keys")
 			return printResult(cc, created, func() {
 				printKV("ID", derefInt32(created.Id), "Name", created.Name)
 			})
@@ -256,6 +257,7 @@ func newSSHKeysDeleteCmd() *cobra.Command {
 			if err := cc.client.DeleteSSHKey(cc.ctx, cc.userID, keyID); err != nil {
 				return err
 			}
+			cc.invalidateCompletionCache("ssh-keys")
 			printOK(cc)
 			return nil
 		},

@@ -201,6 +201,10 @@ func newInterfacesDeleteCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
+			cc.invalidateCompletionCache(
+				serverKey("interfaces-", id),
+				serverKey("interfaces-deletable-", id),
+			)
 			return printTaskAndWait(cc, task, wait)
 		},
 	}
@@ -263,6 +267,10 @@ func newInterfacesCreateVLANCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
+			cc.invalidateCompletionCache(
+				serverKey("interfaces-", serverID),
+				serverKey("interfaces-deletable-", serverID),
+			)
 			return printTaskAndWait(cc, task, wait)
 		},
 	}

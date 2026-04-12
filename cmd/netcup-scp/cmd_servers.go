@@ -418,6 +418,7 @@ func newServersNicknameCmd() *cobra.Command {
 			if err := cc.client.UpdateNickname(cc.ctx, id, args[1]); err != nil {
 				return err
 			}
+			cc.invalidateCompletionCache("servers")
 			printOK(cc)
 			return nil
 		},

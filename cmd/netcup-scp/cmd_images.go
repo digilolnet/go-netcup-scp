@@ -108,6 +108,7 @@ func newImagesDeleteCmd() *cobra.Command {
 			if err := cc.client.DeleteUserImage(cc.ctx, cc.userID, args[0]); err != nil {
 				return err
 			}
+			cc.invalidateCompletionCache("user-images")
 			printOK(cc)
 			return nil
 		},
@@ -145,6 +146,7 @@ and when installing the image onto a server. Defaults to the file's basename.`,
 			if err := cc.client.UploadImage(cc.ctx, cc.userID, key, f); err != nil {
 				return err
 			}
+			cc.invalidateCompletionCache("user-images")
 			printOK(cc)
 			return nil
 		},

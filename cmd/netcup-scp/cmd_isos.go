@@ -265,6 +265,7 @@ func newUserIsosDeleteCmd() *cobra.Command {
 			if err := cc.client.DeleteUserISO(cc.ctx, cc.userID, args[0]); err != nil {
 				return err
 			}
+			cc.invalidateCompletionCache("user-isos")
 			printOK(cc)
 			return nil
 		},
@@ -373,6 +374,7 @@ and when attaching it to a server. Defaults to the file's basename.`,
 			}
 
 			fmt.Fprintf(os.Stderr, "\r  done (%s)          \n", formatBytes(fileSize))
+			cc.invalidateCompletionCache("user-isos")
 			printOK(cc)
 			return nil
 		},

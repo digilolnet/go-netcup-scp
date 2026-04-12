@@ -68,23 +68,25 @@ func static(values ...string) posCompleter {
 // --- per-position completion functions ---
 
 func serverIDCompletions(cc *cmdContext, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
-	servers, err := cc.client.ListServers(cc.ctx, nil)
-	if err != nil {
-		return nil, cobra.ShellCompDirectiveError
-	}
-	out := make([]string, 0, len(servers))
-	for _, s := range servers {
-		name := derefStr(s.Name)
-		nickname := derefStr(s.Nickname)
-		var desc string
-		if nickname != "" {
-			desc = nickname + " (" + name + ")"
-		} else {
-			desc = name
+	return cc.completionWithCache("servers", func() ([]string, error) {
+		servers, err := cc.client.ListServers(cc.ctx, nil)
+		if err != nil {
+			return nil, err
 		}
-		out = append(out, fmt.Sprintf("%d\t%s", derefInt32(s.Id), desc))
-	}
-	return out, cobra.ShellCompDirectiveNoFileComp
+		out := make([]string, 0, len(servers))
+		for _, s := range servers {
+			name := derefStr(s.Name)
+			nickname := derefStr(s.Nickname)
+			var desc string
+			if nickname != "" {
+				desc = nickname + " (" + name + ")"
+			} else {
+				desc = name
+			}
+			out = append(out, fmt.Sprintf("%d\t%s", derefInt32(s.Id), desc))
+		}
+		return out, nil
+	})
 }
 
 func macCompletions(cc *cmdContext, args []string, _ string) ([]string, cobra.ShellCompDirective) {
@@ -95,15 +97,17 @@ func macCompletions(cc *cmdContext, args []string, _ string) ([]string, cobra.Sh
 	if err != nil {
 		return nil, cobra.ShellCompDirectiveNoFileComp
 	}
-	ifaces, err := cc.client.ListInterfaces(cc.ctx, serverID, nil)
-	if err != nil {
-		return nil, cobra.ShellCompDirectiveError
-	}
-	out := make([]string, 0, len(ifaces))
-	for _, iface := range ifaces {
-		out = append(out, derefStr(iface.Mac))
-	}
-	return out, cobra.ShellCompDirectiveNoFileComp
+	return cc.completionWithCache(serverKey("interfaces-", serverID), func() ([]string, error) {
+		ifaces, err := cc.client.ListInterfaces(cc.ctx, serverID, nil)
+		if err != nil {
+			return nil, err
+		}
+		out := make([]string, 0, len(ifaces))
+		for _, iface := range ifaces {
+			out = append(out, derefStr(iface.Mac))
+		}
+		return out, nil
+	})
 }
 
 func deletableInterfaceMACCompletions(cc *cmdContext, args []string, _ string) ([]string, cobra.ShellCompDirective) {
@@ -114,17 +118,19 @@ func deletableInterfaceMACCompletions(cc *cmdContext, args []string, _ string) (
 	if err != nil {
 		return nil, cobra.ShellCompDirectiveNoFileComp
 	}
-	ifaces, err := cc.client.ListInterfaces(cc.ctx, serverID, nil)
-	if err != nil {
-		return nil, cobra.ShellCompDirectiveError
-	}
-	out := make([]string, 0, len(ifaces))
-	for _, iface := range ifaces {
-		if !scp.IsPrimaryInterface(&iface) {
-			out = append(out, derefStr(iface.Mac))
+	return cc.completionWithCache(serverKey("interfaces-deletable-", serverID), func() ([]string, error) {
+		ifaces, err := cc.client.ListInterfaces(cc.ctx, serverID, nil)
+		if err != nil {
+			return nil, err
 		}
-	}
-	return out, cobra.ShellCompDirectiveNoFileComp
+		out := make([]string, 0, len(ifaces))
+		for _, iface := range ifaces {
+			if !scp.IsPrimaryInterface(&iface) {
+				out = append(out, derefStr(iface.Mac))
+			}
+		}
+		return out, nil
+	})
 }
 
 func snapshotNameCompletions(cc *cmdContext, args []string, _ string) ([]string, cobra.ShellCompDirective) {
@@ -158,15 +164,17 @@ func diskNameCompletions(cc *cmdContext, args []string, _ string) ([]string, cob
 	if err != nil {
 		return nil, cobra.ShellCompDirectiveNoFileComp
 	}
-	disks, err := cc.client.ListDisks(cc.ctx, serverID)
-	if err != nil {
-		return nil, cobra.ShellCompDirectiveError
-	}
-	out := make([]string, 0, len(disks))
-	for _, d := range disks {
-		out = append(out, fmt.Sprintf("%s\t%d MiB", derefStr(d.Name), deref(d.CapacityInMiB)))
-	}
-	return out, cobra.ShellCompDirectiveNoFileComp
+	return cc.completionWithCache(serverKey("disks-", serverID), func() ([]string, error) {
+		disks, err := cc.client.ListDisks(cc.ctx, serverID)
+		if err != nil {
+			return nil, err
+		}
+		out := make([]string, 0, len(disks))
+		for _, d := range disks {
+			out = append(out, fmt.Sprintf("%s\t%d MiB", derefStr(d.Name), deref(d.CapacityInMiB)))
+		}
+		return out, nil
+	})
 }
 
 func diskDriverCompletions(cc *cmdContext, args []string, _ string) ([]string, cobra.ShellCompDirective) {
@@ -177,15 +185,17 @@ func diskDriverCompletions(cc *cmdContext, args []string, _ string) ([]string, c
 	if err != nil {
 		return nil, cobra.ShellCompDirectiveNoFileComp
 	}
-	drivers, err := cc.client.GetSupportedDiskDrivers(cc.ctx, serverID)
-	if err != nil {
-		return nil, cobra.ShellCompDirectiveError
-	}
-	out := make([]string, len(drivers))
-	for i, d := range drivers {
-		out[i] = string(d)
-	}
-	return out, cobra.ShellCompDirectiveNoFileComp
+	return cc.completionWithCache(serverKey("disk-drivers-", serverID), func() ([]string, error) {
+		drivers, err := cc.client.GetSupportedDiskDrivers(cc.ctx, serverID)
+		if err != nil {
+			return nil, err
+		}
+		out := make([]string, len(drivers))
+		for i, d := range drivers {
+			out[i] = string(d)
+		}
+		return out, nil
+	})
 }
 
 func taskUUIDCompletions(cc *cmdContext, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
@@ -205,51 +215,59 @@ func taskUUIDCompletions(cc *cmdContext, _ []string, _ string) ([]string, cobra.
 }
 
 func failoverV4IDCompletions(cc *cmdContext, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
-	ips, err := cc.client.ListFailoverIPv4(cc.ctx, cc.userID, nil)
-	if err != nil {
-		return nil, cobra.ShellCompDirectiveError
-	}
-	out := make([]string, 0, len(ips))
-	for _, f := range ips {
-		out = append(out, fmt.Sprintf("%d\t%s", derefInt32(f.Id), derefStr(f.Ip)))
-	}
-	return out, cobra.ShellCompDirectiveNoFileComp
+	return cc.completionWithCache("failover-v4", func() ([]string, error) {
+		ips, err := cc.client.ListFailoverIPv4(cc.ctx, cc.userID, nil)
+		if err != nil {
+			return nil, err
+		}
+		out := make([]string, 0, len(ips))
+		for _, f := range ips {
+			out = append(out, fmt.Sprintf("%d\t%s", derefInt32(f.Id), derefStr(f.Ip)))
+		}
+		return out, nil
+	})
 }
 
 func failoverV6IDCompletions(cc *cmdContext, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
-	ips, err := cc.client.ListFailoverIPv6(cc.ctx, cc.userID, nil)
-	if err != nil {
-		return nil, cobra.ShellCompDirectiveError
-	}
-	out := make([]string, 0, len(ips))
-	for _, f := range ips {
-		out = append(out, fmt.Sprintf("%d\t%s/%d", derefInt32(f.Id), derefStr(f.NetworkPrefix), derefInt32(f.NetworkPrefixLength)))
-	}
-	return out, cobra.ShellCompDirectiveNoFileComp
+	return cc.completionWithCache("failover-v6", func() ([]string, error) {
+		ips, err := cc.client.ListFailoverIPv6(cc.ctx, cc.userID, nil)
+		if err != nil {
+			return nil, err
+		}
+		out := make([]string, 0, len(ips))
+		for _, f := range ips {
+			out = append(out, fmt.Sprintf("%d\t%s/%d", derefInt32(f.Id), derefStr(f.NetworkPrefix), derefInt32(f.NetworkPrefixLength)))
+		}
+		return out, nil
+	})
 }
 
 func vlanIDCompletions(cc *cmdContext, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
-	vlans, err := cc.client.ListVLans(cc.ctx, cc.userID, nil)
-	if err != nil {
-		return nil, cobra.ShellCompDirectiveError
-	}
-	out := make([]string, 0, len(vlans))
-	for _, v := range vlans {
-		out = append(out, fmt.Sprintf("%d\t%s", derefInt32(v.VlanId), derefStr(v.Name)))
-	}
-	return out, cobra.ShellCompDirectiveNoFileComp
+	return cc.completionWithCache("vlans", func() ([]string, error) {
+		vlans, err := cc.client.ListVLans(cc.ctx, cc.userID, nil)
+		if err != nil {
+			return nil, err
+		}
+		out := make([]string, 0, len(vlans))
+		for _, v := range vlans {
+			out = append(out, fmt.Sprintf("%d\t%s", derefInt32(v.VlanId), derefStr(v.Name)))
+		}
+		return out, nil
+	})
 }
 
 func fwPolicyIDCompletions(cc *cmdContext, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
-	policies, err := cc.client.ListFirewallPolicies(cc.ctx, cc.userID, nil)
-	if err != nil {
-		return nil, cobra.ShellCompDirectiveError
-	}
-	out := make([]string, 0, len(policies))
-	for _, p := range policies {
-		out = append(out, fmt.Sprintf("%d\t%s", derefInt32(p.Id), derefStr(p.Name)))
-	}
-	return out, cobra.ShellCompDirectiveNoFileComp
+	return cc.completionWithCache("fw-policies", func() ([]string, error) {
+		policies, err := cc.client.ListFirewallPolicies(cc.ctx, cc.userID, nil)
+		if err != nil {
+			return nil, err
+		}
+		out := make([]string, 0, len(policies))
+		for _, p := range policies {
+			out = append(out, fmt.Sprintf("%d\t%s", derefInt32(p.Id), derefStr(p.Name)))
+		}
+		return out, nil
+	})
 }
 
 func imageFlavourIDCompletions(cc *cmdContext, args []string, _ string) ([]string, cobra.ShellCompDirective) {
@@ -260,55 +278,63 @@ func imageFlavourIDCompletions(cc *cmdContext, args []string, _ string) ([]strin
 	if err != nil {
 		return nil, cobra.ShellCompDirectiveNoFileComp
 	}
-	flavours, err := cc.client.ListImageFlavours(cc.ctx, serverID)
-	if err != nil {
-		return nil, cobra.ShellCompDirectiveError
-	}
-	out := make([]string, 0, len(flavours))
-	for _, f := range flavours {
-		img := ""
-		if f.Image != nil {
-			img = f.Image.Name
+	return cc.completionWithCache(serverKey("image-flavours-", serverID), func() ([]string, error) {
+		flavours, err := cc.client.ListImageFlavours(cc.ctx, serverID)
+		if err != nil {
+			return nil, err
 		}
-		out = append(out, fmt.Sprintf("%d\t%s — %s", derefInt32(f.Id), img, f.Text))
-	}
-	return out, cobra.ShellCompDirectiveNoFileComp
+		out := make([]string, 0, len(flavours))
+		for _, f := range flavours {
+			img := ""
+			if f.Image != nil {
+				img = f.Image.Name
+			}
+			out = append(out, fmt.Sprintf("%d\t%s — %s", derefInt32(f.Id), img, f.Text))
+		}
+		return out, nil
+	})
 }
 
 func sshKeyIDCompletions(cc *cmdContext, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
-	keys, err := cc.client.ListSSHKeys(cc.ctx, cc.userID)
-	if err != nil {
-		return nil, cobra.ShellCompDirectiveError
-	}
-	out := make([]string, 0, len(keys))
-	for _, k := range keys {
-		out = append(out, fmt.Sprintf("%d\t%s", derefInt32(k.Id), k.Name))
-	}
-	return out, cobra.ShellCompDirectiveNoFileComp
+	return cc.completionWithCache("ssh-keys", func() ([]string, error) {
+		keys, err := cc.client.ListSSHKeys(cc.ctx, cc.userID)
+		if err != nil {
+			return nil, err
+		}
+		out := make([]string, 0, len(keys))
+		for _, k := range keys {
+			out = append(out, fmt.Sprintf("%d\t%s", derefInt32(k.Id), k.Name))
+		}
+		return out, nil
+	})
 }
 
 func userISOKeyCompletions(cc *cmdContext, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
-	isos, err := cc.client.ListUserISOs(cc.ctx, cc.userID)
-	if err != nil {
-		return nil, cobra.ShellCompDirectiveError
-	}
-	out := make([]string, 0, len(isos))
-	for _, iso := range isos {
-		out = append(out, derefStr(iso.Key))
-	}
-	return out, cobra.ShellCompDirectiveNoFileComp
+	return cc.completionWithCache("user-isos", func() ([]string, error) {
+		isos, err := cc.client.ListUserISOs(cc.ctx, cc.userID)
+		if err != nil {
+			return nil, err
+		}
+		out := make([]string, 0, len(isos))
+		for _, iso := range isos {
+			out = append(out, derefStr(iso.Key))
+		}
+		return out, nil
+	})
 }
 
 func imageKeyCompletions(cc *cmdContext, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
-	images, err := cc.client.ListUserImages(cc.ctx, cc.userID)
-	if err != nil {
-		return nil, cobra.ShellCompDirectiveError
-	}
-	out := make([]string, 0, len(images))
-	for _, img := range images {
-		out = append(out, derefStr(img.Key))
-	}
-	return out, cobra.ShellCompDirectiveNoFileComp
+	return cc.completionWithCache("user-images", func() ([]string, error) {
+		images, err := cc.client.ListUserImages(cc.ctx, cc.userID)
+		if err != nil {
+			return nil, err
+		}
+		out := make([]string, 0, len(images))
+		for _, img := range images {
+			out = append(out, derefStr(img.Key))
+		}
+		return out, nil
+	})
 }
 
 // completeContextNames completes context names from the config file (no auth needed).

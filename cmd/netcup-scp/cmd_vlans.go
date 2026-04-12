@@ -139,6 +139,7 @@ func newVLansUpdateCmd() *cobra.Command {
 			if err := cc.client.UpdateVLan(cc.ctx, cc.userID, vlanID, args[1]); err != nil {
 				return err
 			}
+			cc.invalidateCompletionCache("vlans")
 			printOK(cc)
 			return nil
 		},
