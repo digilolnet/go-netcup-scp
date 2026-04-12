@@ -21,7 +21,6 @@ import (
 	"github.com/jedib0t/go-pretty/v6/table"
 	"github.com/spf13/cobra"
 
-	"github.com/digilolnet/go-netcup-scp/internal/generated"
 	"github.com/digilolnet/go-netcup-scp/pkg/scp"
 )
 
@@ -635,7 +634,7 @@ func newServersInstallImageCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			setup := generated.ServerImageSetup{ImageFlavourId: ptr(flavourID)}
+			setup := scp.ServerImageSetup{ImageFlavourId: ptr(flavourID)}
 			if cmd.Flags().Changed("hostname") {
 				setup.Hostname = &hostname
 			}
@@ -721,7 +720,7 @@ func newServersInstallUserImageCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			setup := generated.ServerUserImageSetup{UserImageName: args[1]}
+			setup := scp.ServerUserImageSetup{UserImageName: args[1]}
 			if cmd.Flags().Changed("disk") {
 				setup.DiskName = &diskName
 			}

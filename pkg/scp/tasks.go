@@ -21,6 +21,19 @@ import (
 	"github.com/digilolnet/go-netcup-scp/internal/generated"
 )
 
+// TaskState is the state of an async task.
+type TaskState = generated.TaskState
+
+// TaskInfo contains information about an async task returned by long-running operations.
+type TaskInfo = generated.TaskInfo
+
+// Task state constants.
+const (
+	TaskStateFINISHED = generated.TaskStateFINISHED
+	TaskStateERROR    = generated.TaskStateERROR
+	TaskStateCANCELED = generated.TaskStateCANCELED
+)
+
 // ListTasksOptions configures the ListTasks operation.
 type ListTasksOptions struct {
 	// Limit sets the maximum number of tasks to return.
@@ -32,7 +45,7 @@ type ListTasksOptions struct {
 	// ServerId filters tasks by server ID.
 	ServerId *int32
 	// State filters tasks by state (ROLLBACK is not supported).
-	State *generated.TaskState
+	State *TaskState
 }
 
 // ListTasks retrieves the list of async tasks.
@@ -63,7 +76,7 @@ func (c *Client) ListTasks(ctx context.Context, opts *ListTasksOptions) ([]gener
 }
 
 // GetTask retrieves detailed information about a specific async task.
-func (c *Client) GetTask(ctx context.Context, uuid string) (*generated.TaskInfo, error) {
+func (c *Client) GetTask(ctx context.Context, uuid string) (*TaskInfo, error) {
 	resp, err := c.api.GetApiV1TasksUuidWithResponse(ctx, uuid)
 	if err != nil {
 		return nil, fmt.Errorf("get task: %w", err)
@@ -82,7 +95,7 @@ func (c *Client) GetTask(ctx context.Context, uuid string) (*generated.TaskInfo,
 
 // CancelTask cancels a running async task.
 // Returns the updated task info; the task may still be in progress if cancellation is pending.
-func (c *Client) CancelTask(ctx context.Context, uuid string) (*generated.TaskInfo, error) {
+func (c *Client) CancelTask(ctx context.Context, uuid string) (*TaskInfo, error) {
 	resp, err := c.api.PutApiV1TasksUuidCancelWithResponse(ctx, uuid)
 	if err != nil {
 		return nil, fmt.Errorf("cancel task: %w", err)

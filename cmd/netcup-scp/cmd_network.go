@@ -21,7 +21,6 @@ import (
 	"github.com/jedib0t/go-pretty/v6/table"
 	"github.com/spf13/cobra"
 
-	"github.com/digilolnet/go-netcup-scp/internal/generated"
 	"github.com/digilolnet/go-netcup-scp/pkg/scp"
 )
 
@@ -116,7 +115,7 @@ func newInterfacesGetCmd() *cobra.Command {
 					t := newTable("ID", "CIDR", "GATEWAY / ROUTING TO", "RDNS")
 					for _, ip := range *iface.Ipv4Addresses {
 						gwOrDst := derefStr(ip.Gateway)
-						if ip.Type != nil && *ip.Type == generated.ServerIpTypeROUTEDIP {
+						if ip.Type != nil && *ip.Type == scp.ServerIpTypeROUTEDIP {
 							gwOrDst = "→ " + derefStr(ip.DestinationIp)
 						}
 						t.AppendRow(table.Row{
@@ -131,10 +130,10 @@ func newInterfacesGetCmd() *cobra.Command {
 				if iface.Ipv6Addresses != nil && len(*iface.Ipv6Addresses) > 0 {
 					fmt.Println("\nIPv6:")
 					t := newTable("ID", "CIDR", "GATEWAY / ROUTING TO", "LINK-LOCAL")
-					var ipv6WithRDNS []generated.ServerIpv6
+					var ipv6WithRDNS []scp.ServerIpv6
 					for _, ip := range *iface.Ipv6Addresses {
 						gwOrDst := derefStr(ip.Gateway)
-						if ip.Type != nil && *ip.Type == generated.ServerIpTypeROUTEDIP {
+						if ip.Type != nil && *ip.Type == scp.ServerIpTypeROUTEDIP {
 							gwOrDst = "→ " + derefStr(ip.DestinationIp)
 						}
 						t.AppendRow(table.Row{
@@ -208,17 +207,17 @@ func newInterfacesDeleteCmd() *cobra.Command {
 
 // isPrimaryInterface returns true if the interface has provider-assigned (non-editable) IP addresses.
 // Such interfaces cannot be recreated via the API if deleted.
-func isPrimaryInterface(iface *generated.Interface) bool {
+func isPrimaryInterface(iface *scp.Interface) bool {
 	if iface.Ipv4Addresses != nil {
 		for _, ip := range *iface.Ipv4Addresses {
-			if ip.Type != nil && *ip.Type == generated.ServerIpTypeIP && !deref(ip.Editable) {
+			if ip.Type != nil && *ip.Type == scp.ServerIpTypeIP && !deref(ip.Editable) {
 				return true
 			}
 		}
 	}
 	if iface.Ipv6Addresses != nil {
 		for _, ip := range *iface.Ipv6Addresses {
-			if ip.Type != nil && *ip.Type == generated.ServerIpTypeIP && !deref(ip.LinkLocal) && !deref(ip.Editable) {
+			if ip.Type != nil && *ip.Type == scp.ServerIpTypeIP && !deref(ip.LinkLocal) && !deref(ip.Editable) {
 				return true
 			}
 		}
@@ -245,7 +244,7 @@ func newInterfacesUpdateDriverCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			if err := cc.client.UpdateInterfaceDriver(cc.ctx, id, args[1], generated.NetworkDriver(args[2])); err != nil {
+			if err := cc.client.UpdateInterfaceDriver(cc.ctx, id, args[1], scp.NetworkDriver(args[2])); err != nil {
 				return err
 			}
 			printOK(cc)
@@ -277,14 +276,14 @@ func newInterfacesCreateVLANCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			task, err := cc.client.CreateVLanInterface(cc.ctx, serverID, vlanID, generated.NetworkDriver(driver))
+			task, err := cc.client.CreateVLanInterface(cc.ctx, serverID, vlanID, scp.NetworkDriver(driver))
 			if err != nil {
 				return err
 			}
 			return printTaskAndWait(cc, task, wait)
 		},
 	}
-	cmd.Flags().StringVar(&driver, "driver", string(generated.NetworkDriverVIRTIO), "network driver")
+	cmd.Flags().StringVar(&driver, "driver", string(scp.NetworkDriverVIRTIO), "network driver")
 	cmd.Flags().BoolVar(&wait, "wait", false, "wait for task to complete")
 	registerFlagCompleter(cmd, "driver", func(_ *cmdContext, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
 		return networkDriverCompletions(), cobra.ShellCompDirectiveNoFileComp
@@ -411,10 +410,10 @@ func newRDNSDeleteCmd(_ string, fn func(*cmdContext, string) error) *cobra.Comma
 
 func networkDriverCompletions() []string {
 	return []string{
-		string(generated.NetworkDriverVIRTIO) + "\tparavirtual (recommended)",
-		string(generated.NetworkDriverE1000) + "\tIntel Gigabit",
-		string(generated.NetworkDriverE1000E) + "\tIntel Gigabit (e1000e)",
-		string(generated.NetworkDriverRTL8139) + "\tRealtek Fast Ethernet",
-		string(generated.NetworkDriverVMXNET3) + "\tVMware paravirtual",
+		string(scp.NetworkDriverVIRTIO) + "\tparavirtual (recommended)",
+		string(scp.NetworkDriverE1000) + "\tIntel Gigabit",
+		string(scp.NetworkDriverE1000E) + "\tIntel Gigabit (e1000e)",
+		string(scp.NetworkDriverRTL8139) + "\tRealtek Fast Ethernet",
+		string(scp.NetworkDriverVMXNET3) + "\tVMware paravirtual",
 	}
 }

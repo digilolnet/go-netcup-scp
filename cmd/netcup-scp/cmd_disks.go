@@ -20,7 +20,7 @@ import (
 	"github.com/jedib0t/go-pretty/v6/table"
 	"github.com/spf13/cobra"
 
-	"github.com/digilolnet/go-netcup-scp/internal/generated"
+	"github.com/digilolnet/go-netcup-scp/pkg/scp"
 )
 
 func newDisksCmd() *cobra.Command {
@@ -146,7 +146,7 @@ func newDisksSetDriverCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			if err := cc.client.SetDiskDriver(cc.ctx, id, generated.StorageDriver(args[1])); err != nil {
+			if err := cc.client.SetDiskDriver(cc.ctx, id, scp.StorageDriver(args[1])); err != nil {
 				return err
 			}
 			printOK(cc)

@@ -21,6 +21,21 @@ import (
 	"github.com/digilolnet/go-netcup-scp/internal/generated"
 )
 
+// FirewallPolicySave is the request body for creating or updating a firewall policy.
+type FirewallPolicySave = generated.FirewallPolicySave
+
+// FirewallRule defines a single firewall rule within a policy.
+type FirewallRule = generated.FirewallRule
+
+// FirewallRuleDirection is the traffic direction for a firewall rule.
+type FirewallRuleDirection = generated.FirewallRuleDirection
+
+// FirewallProtocol is the network protocol for a firewall rule.
+type FirewallProtocol = generated.FirewallProtocol
+
+// FirewallAction is the action taken when a firewall rule matches.
+type FirewallAction = generated.FirewallAction
+
 // ListFirewallPoliciesOptions configures the ListFirewallPolicies operation.
 type ListFirewallPoliciesOptions struct {
 	// Limit sets the maximum number of policies to return.
@@ -57,7 +72,7 @@ func (c *Client) ListFirewallPolicies(ctx context.Context, userID int32, opts *L
 }
 
 // CreateFirewallPolicy creates a new firewall policy for a user.
-func (c *Client) CreateFirewallPolicy(ctx context.Context, userID int32, policy generated.FirewallPolicySave) (*generated.FirewallPolicy, error) {
+func (c *Client) CreateFirewallPolicy(ctx context.Context, userID int32, policy FirewallPolicySave) (*generated.FirewallPolicy, error) {
 	resp, err := c.api.PostApiV1UsersUserIdFirewallPoliciesWithResponse(ctx, userID, policy)
 	if err != nil {
 		return nil, fmt.Errorf("create firewall policy: %w", err)
@@ -94,7 +109,7 @@ func (c *Client) GetFirewallPolicy(ctx context.Context, userID, policyID int32) 
 
 // UpdateFirewallPolicy updates an existing firewall policy.
 // If the policy is applied to servers, the update is asynchronous and a task is returned.
-func (c *Client) UpdateFirewallPolicy(ctx context.Context, userID, policyID int32, policy generated.FirewallPolicySave) (*generated.FirewallPolicyUpdateResult, error) {
+func (c *Client) UpdateFirewallPolicy(ctx context.Context, userID, policyID int32, policy FirewallPolicySave) (*generated.FirewallPolicyUpdateResult, error) {
 	resp, err := c.api.PutApiV1UsersUserIdFirewallPoliciesIdWithResponse(ctx, userID, policyID, policy)
 	if err != nil {
 		return nil, fmt.Errorf("update firewall policy: %w", err)

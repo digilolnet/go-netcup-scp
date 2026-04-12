@@ -23,6 +23,33 @@ import (
 	"github.com/digilolnet/go-netcup-scp/internal/generated"
 )
 
+// NetworkDriver is the virtual NIC driver type for VLAN interfaces.
+type NetworkDriver = generated.NetworkDriver
+
+// Network driver constants for use with CreateVLanInterface.
+const (
+	NetworkDriverVIRTIO  NetworkDriver = generated.NetworkDriverVIRTIO
+	NetworkDriverE1000   NetworkDriver = generated.NetworkDriverE1000
+	NetworkDriverE1000E  NetworkDriver = generated.NetworkDriverE1000E
+	NetworkDriverVMXNET3 NetworkDriver = generated.NetworkDriverVMXNET3
+	NetworkDriverRTL8139 NetworkDriver = generated.NetworkDriverRTL8139
+)
+
+// Interface represents a server network interface.
+type Interface = generated.Interface
+
+// ServerIpv6 represents an IPv6 address attached to a network interface.
+type ServerIpv6 = generated.ServerIpv6
+
+// ServerIpType is the classification of an IP address attached to an interface.
+type ServerIpType = generated.ServerIpType
+
+// ServerIpType constants for filtering IP address types.
+const (
+	ServerIpTypeIP       ServerIpType = generated.ServerIpTypeIP
+	ServerIpTypeROUTEDIP ServerIpType = generated.ServerIpTypeROUTEDIP
+)
+
 // ListInterfacesOptions configures the ListInterfaces operation.
 type ListInterfacesOptions struct {
 	// LoadRdns includes reverse DNS entries for each IP address.
@@ -150,7 +177,7 @@ func (c *Client) DeleteRDNSv6(ctx context.Context, ip string) error {
 }
 
 // CreateVLanInterface creates a new VLAN network interface for a server.
-func (c *Client) CreateVLanInterface(ctx context.Context, serverID int32, vlanID int32, driver generated.NetworkDriver) (*generated.TaskInfo, error) {
+func (c *Client) CreateVLanInterface(ctx context.Context, serverID int32, vlanID int32, driver NetworkDriver) (*TaskInfo, error) {
 	patch := generated.ServerCreateNicVlan{
 		VlanId:        vlanID,
 		NetworkDriver: driver,
@@ -192,7 +219,7 @@ func (c *Client) DeleteInterface(ctx context.Context, serverID int32, mac string
 }
 
 // UpdateInterfaceDriver updates a network interface's driver.
-func (c *Client) UpdateInterfaceDriver(ctx context.Context, serverID int32, mac string, driver generated.NetworkDriver) error {
+func (c *Client) UpdateInterfaceDriver(ctx context.Context, serverID int32, mac string, driver NetworkDriver) error {
 	update := generated.ServerInterfaceUpdate{
 		Driver: &driver,
 	}

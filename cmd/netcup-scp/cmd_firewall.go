@@ -20,7 +20,6 @@ import (
 	"github.com/jedib0t/go-pretty/v6/table"
 	"github.com/spf13/cobra"
 
-	"github.com/digilolnet/go-netcup-scp/internal/generated"
 	"github.com/digilolnet/go-netcup-scp/pkg/scp"
 )
 
@@ -112,7 +111,7 @@ func newFirewallUpdateCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			var body generated.ServerFirewallSave
+			var body scp.ServerFirewallSave
 			if err := readJSONStdin(&body); err != nil {
 				return err
 			}
@@ -215,9 +214,9 @@ func newFirewallClearCmd() *cobra.Command {
 				hasCopied = fw.CopiedPolicies != nil && len(*fw.CopiedPolicies) > 0
 			}
 
-			body := generated.ServerFirewallSave{
-				UserPolicies:   []generated.IdentifierInt{},
-				CopiedPolicies: []generated.IdentifierInt{},
+			body := scp.ServerFirewallSave{
+				UserPolicies:   []scp.IdentifierInt{},
+				CopiedPolicies: []scp.IdentifierInt{},
 			}
 			task, err := cc.client.UpdateFirewall(cc.ctx, serverID, mac, body)
 			if err != nil {
@@ -271,19 +270,19 @@ func newFirewallActiveCmd() *cobra.Command {
 				return err
 			}
 
-			body := generated.ServerFirewallSave{
+			body := scp.ServerFirewallSave{
 				Active:         ptr(active),
-				UserPolicies:   []generated.IdentifierInt{},
-				CopiedPolicies: []generated.IdentifierInt{},
+				UserPolicies:   []scp.IdentifierInt{},
+				CopiedPolicies: []scp.IdentifierInt{},
 			}
 			if fw.UserPolicies != nil {
 				for _, p := range *fw.UserPolicies {
-					body.UserPolicies = append(body.UserPolicies, generated.IdentifierInt{Id: derefInt32(p.Id)})
+					body.UserPolicies = append(body.UserPolicies, scp.IdentifierInt{Id: derefInt32(p.Id)})
 				}
 			}
 			if fw.CopiedPolicies != nil {
 				for _, p := range *fw.CopiedPolicies {
-					body.CopiedPolicies = append(body.CopiedPolicies, generated.IdentifierInt{Id: derefInt32(p.Id)})
+					body.CopiedPolicies = append(body.CopiedPolicies, scp.IdentifierInt{Id: derefInt32(p.Id)})
 				}
 			}
 
@@ -418,7 +417,7 @@ func newFWPoliciesCreateCmd() *cobra.Command {
 			}
 			defer cleanup()
 
-			body := generated.FirewallPolicySave{Name: args[0]}
+			body := scp.FirewallPolicySave{Name: args[0]}
 			if description != "" {
 				body.Description = &description
 			}
@@ -459,10 +458,10 @@ func newFWPoliciesAddRuleCmd() *cobra.Command {
 				return fmt.Errorf("--direction, --protocol, and --action are required")
 			}
 
-			rule := generated.FirewallRule{
-				Direction: generated.FirewallRuleDirection(direction),
-				Protocol:  generated.FirewallProtocol(protocol),
-				Action:    generated.FirewallAction(action),
+			rule := scp.FirewallRule{
+				Direction: scp.FirewallRuleDirection(direction),
+				Protocol:  scp.FirewallProtocol(protocol),
+				Action:    scp.FirewallAction(action),
 			}
 			if description != "" {
 				rule.Description = &description
@@ -487,13 +486,13 @@ func newFWPoliciesAddRuleCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			var rules []generated.FirewallRule
+			var rules []scp.FirewallRule
 			if existing.Rules != nil {
 				rules = *existing.Rules
 			}
 			rules = append(rules, rule)
 
-			body := generated.FirewallPolicySave{
+			body := scp.FirewallPolicySave{
 				Name:        derefStr(existing.Name),
 				Description: existing.Description,
 				Rules:       &rules,
@@ -549,7 +548,7 @@ func newFWPoliciesUpdateCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			var body generated.FirewallPolicySave
+			var body scp.FirewallPolicySave
 			if err := readJSONStdin(&body); err != nil {
 				return err
 			}

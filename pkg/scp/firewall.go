@@ -21,6 +21,12 @@ import (
 	"github.com/digilolnet/go-netcup-scp/internal/generated"
 )
 
+// ServerFirewallSave is the request body for UpdateFirewall.
+type ServerFirewallSave = generated.ServerFirewallSave
+
+// IdentifierInt is an integer ID reference used in firewall policy lists.
+type IdentifierInt = generated.IdentifierInt
+
 // GetFirewallOptions configures the GetFirewall operation.
 type GetFirewallOptions struct {
 	// ConsistencyCheck verifies that the firewall rules have been applied, setting the
@@ -54,7 +60,7 @@ func (c *Client) GetFirewall(ctx context.Context, serverID int32, mac string, op
 // UpdateFirewall replaces the firewall configuration for a network interface.
 // The body must include all desired policies; omitted policies will be removed.
 // The operation is asynchronous; use the returned task to track progress.
-func (c *Client) UpdateFirewall(ctx context.Context, serverID int32, mac string, body generated.ServerFirewallSave) (*generated.TaskInfo, error) {
+func (c *Client) UpdateFirewall(ctx context.Context, serverID int32, mac string, body ServerFirewallSave) (*TaskInfo, error) {
 	resp, err := c.api.PutApiV1ServersServerIdInterfacesMacFirewallWithResponse(ctx, serverID, mac, body)
 	if err != nil {
 		return nil, fmt.Errorf("update firewall: %w", err)
@@ -70,7 +76,7 @@ func (c *Client) UpdateFirewall(ctx context.Context, serverID int32, mac string,
 // ReapplyFirewall re-applies the firewall rules to a network interface without changing the configuration.
 // Use this to recover from inconsistencies reported by GetFirewall.
 // The operation is asynchronous; use the returned task to track progress.
-func (c *Client) ReapplyFirewall(ctx context.Context, serverID int32, mac string) (*generated.TaskInfo, error) {
+func (c *Client) ReapplyFirewall(ctx context.Context, serverID int32, mac string) (*TaskInfo, error) {
 	resp, err := c.api.PostApiV1ServersServerIdInterfacesMacFirewallReapplyWithResponse(ctx, serverID, mac, setContentTypeJSON)
 	if err != nil {
 		return nil, fmt.Errorf("reapply firewall: %w", err)
@@ -85,7 +91,7 @@ func (c *Client) ReapplyFirewall(ctx context.Context, serverID int32, mac string
 
 // RestoreCopiedFirewallPolicies re-applies copied firewall policies for a network interface.
 // The operation is asynchronous; use the returned task to track progress.
-func (c *Client) RestoreCopiedFirewallPolicies(ctx context.Context, serverID int32, mac string) (*generated.TaskInfo, error) {
+func (c *Client) RestoreCopiedFirewallPolicies(ctx context.Context, serverID int32, mac string) (*TaskInfo, error) {
 	resp, err := c.api.PostApiV1ServersServerIdInterfacesMacFirewallRestoreCopiedPoliciesWithResponse(ctx, serverID, mac, setContentTypeJSON)
 	if err != nil {
 		return nil, fmt.Errorf("restore copied firewall policies: %w", err)

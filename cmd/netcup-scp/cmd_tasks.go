@@ -18,7 +18,6 @@ import (
 	"github.com/jedib0t/go-pretty/v6/table"
 	"github.com/spf13/cobra"
 
-	"github.com/digilolnet/go-netcup-scp/internal/generated"
 	"github.com/digilolnet/go-netcup-scp/pkg/scp"
 )
 
@@ -54,7 +53,7 @@ func newTasksListCmd() *cobra.Command {
 				opts.ServerId = ptr(int32(serverID))
 			}
 			if state != "" {
-				s := generated.TaskState(state)
+				s := scp.TaskState(state)
 				opts.State = &s
 			}
 			if q != "" {

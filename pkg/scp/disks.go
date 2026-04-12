@@ -23,6 +23,9 @@ import (
 	"github.com/digilolnet/go-netcup-scp/internal/generated"
 )
 
+// StorageDriver is the disk storage driver type.
+type StorageDriver = generated.StorageDriver
+
 // ListDisks retrieves all disks attached to a server.
 func (c *Client) ListDisks(ctx context.Context, serverID int32) ([]generated.Disk, error) {
 	resp, err := c.api.GetApiV1ServersServerIdDisksWithResponse(ctx, serverID)
@@ -93,7 +96,7 @@ func (c *Client) GetSupportedDiskDrivers(ctx context.Context, serverID int32) ([
 }
 
 // SetDiskDriver changes the storage driver for all disks on a server.
-func (c *Client) SetDiskDriver(ctx context.Context, serverID int32, driver generated.StorageDriver) error {
+func (c *Client) SetDiskDriver(ctx context.Context, serverID int32, driver StorageDriver) error {
 	patch := &generated.EditDisksDriver{Driver: driver}
 
 	body, err := json.Marshal(patch)

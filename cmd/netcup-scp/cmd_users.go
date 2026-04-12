@@ -18,7 +18,6 @@ import (
 	"github.com/jedib0t/go-pretty/v6/table"
 	"github.com/spf13/cobra"
 
-	"github.com/digilolnet/go-netcup-scp/internal/generated"
 	"github.com/digilolnet/go-netcup-scp/pkg/scp"
 )
 
@@ -87,7 +86,7 @@ func newUsersUpdateCmd() *cobra.Command {
 				return err
 			}
 
-			body := generated.UserSave{
+			body := scp.UserSave{
 				Language:         derefStr(user.Language),
 				TimeZone:         derefStr(user.TimeZone),
 				PasswordlessMode: user.PasswordlessMode,
@@ -222,7 +221,7 @@ func newSSHKeysCreateCmd() *cobra.Command {
 			}
 			defer cleanup()
 
-			key := generated.SSHKey{
+			key := scp.SSHKey{
 				Name: args[0],
 				Key:  args[1],
 			}

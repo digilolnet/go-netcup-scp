@@ -23,6 +23,12 @@ import (
 	"github.com/digilolnet/go-netcup-scp/internal/generated"
 )
 
+// ServerImageSetup is the request body for InstallImage.
+type ServerImageSetup = generated.ServerImageSetup
+
+// ServerUserImageSetup is the request body for InstallUserImage.
+type ServerUserImageSetup = generated.ServerUserImageSetup
+
 // ListServersOptions contains optional parameters for listing servers.
 type ListServersOptions struct {
 	// Ip filters servers by IP address.
@@ -357,7 +363,7 @@ func (c *Client) ListImageFlavours(ctx context.Context, serverID int32) ([]gener
 
 // InstallImage reinstalls the server with the specified OS image configuration.
 // The operation is asynchronous; use the returned task to track progress.
-func (c *Client) InstallImage(ctx context.Context, serverID int32, setup generated.ServerImageSetup) (*generated.TaskInfo, error) {
+func (c *Client) InstallImage(ctx context.Context, serverID int32, setup ServerImageSetup) (*TaskInfo, error) {
 	resp, err := c.api.PostApiV1ServersServerIdImageWithResponse(ctx, serverID, setup)
 	if err != nil {
 		return nil, fmt.Errorf("install image: %w", err)
@@ -372,7 +378,7 @@ func (c *Client) InstallImage(ctx context.Context, serverID int32, setup generat
 
 // InstallUserImage installs a user-uploaded image onto the server.
 // The operation is asynchronous; use the returned task to track progress.
-func (c *Client) InstallUserImage(ctx context.Context, serverID int32, setup generated.ServerUserImageSetup) (*generated.TaskInfo, error) {
+func (c *Client) InstallUserImage(ctx context.Context, serverID int32, setup ServerUserImageSetup) (*TaskInfo, error) {
 	resp, err := c.api.PostApiV1ServersServerIdUserImageWithResponse(ctx, serverID, setup)
 	if err != nil {
 		return nil, fmt.Errorf("install user image: %w", err)
@@ -387,7 +393,7 @@ func (c *Client) InstallUserImage(ctx context.Context, serverID int32, setup gen
 
 // OptimizeStorage runs storage optimization on a server's disks.
 // The operation is asynchronous; use the returned task to track progress.
-func (c *Client) OptimizeStorage(ctx context.Context, serverID int32, opts *OptimizeStorageOptions) (*generated.TaskInfo, error) {
+func (c *Client) OptimizeStorage(ctx context.Context, serverID int32, opts *OptimizeStorageOptions) (*TaskInfo, error) {
 	params := &generated.PostApiV1ServersServerIdStorageoptimizationParams{}
 	if opts != nil {
 		params.Disks = opts.Disks

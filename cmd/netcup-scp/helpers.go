@@ -23,7 +23,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/digilolnet/go-netcup-scp/internal/generated"
+	"github.com/digilolnet/go-netcup-scp/pkg/scp"
 )
 
 func ptr[T any](v T) *T { return &v }
@@ -80,13 +80,13 @@ func waitTask(cc *cmdContext, uuid string) error {
 			return err
 		}
 		switch derefStr((*string)(task.State)) {
-		case string(generated.TaskStateFINISHED):
+		case string(scp.TaskStateFINISHED):
 			fmt.Fprintln(os.Stderr, " done")
 			return nil
-		case string(generated.TaskStateERROR):
+		case string(scp.TaskStateERROR):
 			fmt.Fprintln(os.Stderr, " failed")
 			return fmt.Errorf("task failed: %s", derefStr(task.Message))
-		case string(generated.TaskStateCANCELED):
+		case string(scp.TaskStateCANCELED):
 			fmt.Fprintln(os.Stderr, " canceled")
 			return fmt.Errorf("task canceled")
 		default:
@@ -100,7 +100,7 @@ func waitTask(cc *cmdContext, uuid string) error {
 }
 
 // printTaskAndWait prints a task result and optionally waits for completion.
-func printTaskAndWait(cc *cmdContext, task *generated.TaskInfo, wait bool) error {
+func printTaskAndWait(cc *cmdContext, task *scp.TaskInfo, wait bool) error {
 	if err := printResult(cc, task, func() {
 		if task != nil {
 			printKV("Task UUID", derefStr(task.Uuid), "State", derefStr((*string)(task.State)))

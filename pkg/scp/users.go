@@ -21,6 +21,9 @@ import (
 	"github.com/digilolnet/go-netcup-scp/internal/generated"
 )
 
+// UserSave is the request/response body for UpdateUser.
+type UserSave = generated.UserSave
+
 // GetUserLogsOptions configures the GetUserLogs operation.
 type GetUserLogsOptions struct {
 	// Limit sets the maximum number of log entries to return.
@@ -49,7 +52,7 @@ func (c *Client) GetUser(ctx context.Context, userID int32) (*generated.User, er
 
 // UpdateUser updates account settings for the specified user.
 // Returns the updated user save data.
-func (c *Client) UpdateUser(ctx context.Context, userID int32, body generated.UserSave) (*generated.UserSave, error) {
+func (c *Client) UpdateUser(ctx context.Context, userID int32, body UserSave) (*UserSave, error) {
 	resp, err := c.api.PutApiV1UsersUserIdWithResponse(ctx, userID, body)
 	if err != nil {
 		return nil, fmt.Errorf("update user: %w", err)

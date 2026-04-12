@@ -21,8 +21,11 @@ import (
 	"github.com/digilolnet/go-netcup-scp/internal/generated"
 )
 
+// SSHKey represents an SSH public key stored in a user account.
+type SSHKey = generated.SSHKey
+
 // ListSSHKeys retrieves all SSH public keys stored for a user.
-func (c *Client) ListSSHKeys(ctx context.Context, userID int32) ([]generated.SSHKey, error) {
+func (c *Client) ListSSHKeys(ctx context.Context, userID int32) ([]SSHKey, error) {
 	resp, err := c.api.GetApiV1UsersUserIdSshKeysWithResponse(ctx, userID)
 	if err != nil {
 		return nil, fmt.Errorf("list ssh keys: %w", err)
@@ -41,7 +44,7 @@ func (c *Client) ListSSHKeys(ctx context.Context, userID int32) ([]generated.SSH
 
 // CreateSSHKey adds a new SSH public key to a user's account.
 // The key field must contain a valid OpenSSH public key string.
-func (c *Client) CreateSSHKey(ctx context.Context, userID int32, key generated.SSHKey) (*generated.SSHKey, error) {
+func (c *Client) CreateSSHKey(ctx context.Context, userID int32, key SSHKey) (*SSHKey, error) {
 	resp, err := c.api.PostApiV1UsersUserIdSshKeysWithResponse(ctx, userID, key)
 	if err != nil {
 		return nil, fmt.Errorf("create ssh key: %w", err)
