@@ -59,7 +59,7 @@ func newFirewallGetCmd() *cobra.Command {
 			}
 			opts := &scp.GetFirewallOptions{}
 			if checkConsistency {
-				opts.ConsistencyCheck = ptr(true)
+				opts.ConsistencyCheck = new(true)
 			}
 			fw, err := cc.client.GetFirewall(cc.ctx, serverID, args[1], opts)
 			if err != nil {
@@ -204,34 +204,14 @@ func newFirewallClearCmd() *cobra.Command {
 			}
 			mac := args[1]
 
-			// Check whether there are copied policies to restore before clearing.
-			hasCopied := false
-			if keepCopied {
-				fw, err := cc.client.GetFirewall(cc.ctx, serverID, mac, nil)
-				if err != nil {
-					return err
-				}
-				hasCopied = fw.CopiedPolicies != nil && len(*fw.CopiedPolicies) > 0
-			}
-
-			body := scp.ServerFirewallSave{
-				UserPolicies:   []scp.IdentifierInt{},
-				CopiedPolicies: []scp.IdentifierInt{},
-			}
-			task, err := cc.client.UpdateFirewall(cc.ctx, serverID, mac, body)
+			tasks, err := cc.client.ClearFirewall(cc.ctx, serverID, mac, keepCopied)
 			if err != nil {
 				return err
 			}
-			if err := printTaskAndWait(cc, task, wait); err != nil {
-				return err
-			}
-
-			if keepCopied && hasCopied {
-				task2, err := cc.client.RestoreCopiedFirewallPolicies(cc.ctx, serverID, mac)
-				if err != nil {
-					return fmt.Errorf("restore copied policies: %w", err)
+			for _, task := range tasks {
+				if err := printTaskAndWait(cc, task, wait); err != nil {
+					return err
 				}
-				return printTaskAndWait(cc, task2, wait)
 			}
 			return nil
 		},
@@ -265,28 +245,7 @@ func newFirewallActiveCmd() *cobra.Command {
 			}
 			mac := args[1]
 
-			fw, err := cc.client.GetFirewall(cc.ctx, serverID, mac, nil)
-			if err != nil {
-				return err
-			}
-
-			body := scp.ServerFirewallSave{
-				Active:         ptr(active),
-				UserPolicies:   []scp.IdentifierInt{},
-				CopiedPolicies: []scp.IdentifierInt{},
-			}
-			if fw.UserPolicies != nil {
-				for _, p := range *fw.UserPolicies {
-					body.UserPolicies = append(body.UserPolicies, scp.IdentifierInt{Id: derefInt32(p.Id)})
-				}
-			}
-			if fw.CopiedPolicies != nil {
-				for _, p := range *fw.CopiedPolicies {
-					body.CopiedPolicies = append(body.CopiedPolicies, scp.IdentifierInt{Id: derefInt32(p.Id)})
-				}
-			}
-
-			task, err := cc.client.UpdateFirewall(cc.ctx, serverID, mac, body)
+			task, err := cc.client.SetFirewallActive(cc.ctx, serverID, mac, active)
 			if err != nil {
 				return err
 			}
@@ -334,10 +293,10 @@ func newFWPoliciesListCmd() *cobra.Command {
 				opts.Q = &q
 			}
 			if limit > 0 {
-				opts.Limit = ptr(int32(limit))
+				opts.Limit = new(int32(limit))
 			}
 			if offset > 0 {
-				opts.Offset = ptr(int32(offset))
+				opts.Offset = new(int32(offset))
 			}
 			policies, err := cc.client.ListFirewallPolicies(cc.ctx, cc.userID, opts)
 			if err != nil {
@@ -481,23 +440,7 @@ func newFWPoliciesAddRuleCmd() *cobra.Command {
 				rule.Destinations = &parts
 			}
 
-			// Fetch existing policy to preserve current rules.
-			existing, err := cc.client.GetFirewallPolicy(cc.ctx, cc.userID, policyID)
-			if err != nil {
-				return err
-			}
-			var rules []scp.FirewallRule
-			if existing.Rules != nil {
-				rules = *existing.Rules
-			}
-			rules = append(rules, rule)
-
-			body := scp.FirewallPolicySave{
-				Name:        derefStr(existing.Name),
-				Description: existing.Description,
-				Rules:       &rules,
-			}
-			result, err := cc.client.UpdateFirewallPolicy(cc.ctx, cc.userID, policyID, body)
+			result, err := cc.client.AddFirewallRule(cc.ctx, cc.userID, policyID, rule)
 			if err != nil {
 				return err
 			}

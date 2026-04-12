@@ -89,6 +89,72 @@ func (c *Client) ReapplyFirewall(ctx context.Context, serverID int32, mac string
 	return resp.JSON202, nil
 }
 
+// SetFirewallActive enables or disables the firewall for a network interface while
+// preserving all existing user and copied policies. The API requires the full policy
+// list to be re-sent on every update, so this fetches the current config first.
+// The operation is asynchronous; use the returned task to track progress.
+func (c *Client) SetFirewallActive(ctx context.Context, serverID int32, mac string, active bool) (*TaskInfo, error) {
+	fw, err := c.GetFirewall(ctx, serverID, mac, nil)
+	if err != nil {
+		return nil, fmt.Errorf("set firewall active: %w", err)
+	}
+
+	body := ServerFirewallSave{
+		Active:         &active,
+		UserPolicies:   []IdentifierInt{},
+		CopiedPolicies: []IdentifierInt{},
+	}
+	if fw.UserPolicies != nil {
+		for _, p := range *fw.UserPolicies {
+			body.UserPolicies = append(body.UserPolicies, IdentifierInt{Id: deref(p.Id)})
+		}
+	}
+	if fw.CopiedPolicies != nil {
+		for _, p := range *fw.CopiedPolicies {
+			body.CopiedPolicies = append(body.CopiedPolicies, IdentifierInt{Id: deref(p.Id)})
+		}
+	}
+
+	task, err := c.UpdateFirewall(ctx, serverID, mac, body)
+	if err != nil {
+		return nil, fmt.Errorf("set firewall active: %w", err)
+	}
+	return task, nil
+}
+
+// ClearFirewall removes all user and copied policies from a network interface.
+// If restoreCopied is true, netcup's copied policies are restored afterwards.
+// Returns the tasks issued; two tasks are returned when restoreCopied is true and
+// copied policies existed. The operations are asynchronous.
+func (c *Client) ClearFirewall(ctx context.Context, serverID int32, mac string, restoreCopied bool) ([]*TaskInfo, error) {
+	var hasCopied bool
+	if restoreCopied {
+		fw, err := c.GetFirewall(ctx, serverID, mac, nil)
+		if err != nil {
+			return nil, fmt.Errorf("clear firewall: %w", err)
+		}
+		hasCopied = fw.CopiedPolicies != nil && len(*fw.CopiedPolicies) > 0
+	}
+
+	task, err := c.UpdateFirewall(ctx, serverID, mac, ServerFirewallSave{
+		UserPolicies:   []IdentifierInt{},
+		CopiedPolicies: []IdentifierInt{},
+	})
+	if err != nil {
+		return nil, fmt.Errorf("clear firewall: %w", err)
+	}
+	tasks := []*TaskInfo{task}
+
+	if restoreCopied && hasCopied {
+		task2, err := c.RestoreCopiedFirewallPolicies(ctx, serverID, mac)
+		if err != nil {
+			return tasks, fmt.Errorf("clear firewall: restore copied policies: %w", err)
+		}
+		tasks = append(tasks, task2)
+	}
+	return tasks, nil
+}
+
 // RestoreCopiedFirewallPolicies re-applies copied firewall policies for a network interface.
 // The operation is asynchronous; use the returned task to track progress.
 func (c *Client) RestoreCopiedFirewallPolicies(ctx context.Context, serverID int32, mac string) (*TaskInfo, error) {

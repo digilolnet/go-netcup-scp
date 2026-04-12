@@ -206,6 +206,15 @@ func (c *Client) GetMaintenance(ctx context.Context) ([]generated.Maintenance, e
 	return []generated.Maintenance{{StartAt: single.StartAt, FinishAt: single.FinishAt}}, nil
 }
 
+// deref returns the dereferenced value of p, or the zero value of T if p is nil.
+func deref[T any](p *T) T {
+	if p == nil {
+		var zero T
+		return zero
+	}
+	return *p
+}
+
 // checkResponse validates that the response status code matches one of the expected codes.
 // If the status code is unexpected and the response body contains a JSON error message, it is included in the error.
 func checkResponse(resp interface{ StatusCode() int }, expectedCodes ...int) error {

@@ -51,7 +51,7 @@ func newVLansListCmd() *cobra.Command {
 
 			opts := &scp.ListVLansOptions{}
 			if serverID > 0 {
-				opts.ServerId = ptr(int32(serverID))
+				opts.ServerId = new(int32(serverID))
 			}
 			vlans, err := cc.client.ListVLans(cc.ctx, cc.userID, opts)
 			if err != nil {

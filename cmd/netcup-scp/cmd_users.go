@@ -144,10 +144,10 @@ func newUsersLogsCmd() *cobra.Command {
 
 			opts := &scp.GetUserLogsOptions{}
 			if limit > 0 {
-				opts.Limit = ptr(int32(limit))
+				opts.Limit = new(int32(limit))
 			}
 			if offset > 0 {
-				opts.Offset = ptr(int32(offset))
+				opts.Offset = new(int32(offset))
 			}
 			logs, err := cc.client.GetUserLogs(cc.ctx, cc.userID, opts)
 			if err != nil {

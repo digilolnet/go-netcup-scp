@@ -59,7 +59,7 @@ func newInterfacesListCmd() *cobra.Command {
 			}
 			opts := &scp.ListInterfacesOptions{}
 			if loadRdns {
-				opts.LoadRdns = ptr(true)
+				opts.LoadRdns = new(true)
 			}
 			ifaces, err := cc.client.ListInterfaces(cc.ctx, id, opts)
 			if err != nil {
@@ -98,7 +98,7 @@ func newInterfacesGetCmd() *cobra.Command {
 			}
 			opts := &scp.GetInterfaceOptions{}
 			if loadRdns {
-				opts.LoadRdns = ptr(true)
+				opts.LoadRdns = new(true)
 			}
 			iface, err := cc.client.GetInterface(cc.ctx, id, args[1], opts)
 			if err != nil {
@@ -192,7 +192,7 @@ func newInterfacesDeleteCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			if isPrimaryInterface(iface) {
+			if scp.IsPrimaryInterface(iface) {
 				return fmt.Errorf("interface %s has provider-assigned IP addresses and cannot be recreated via the API — deletion blocked", args[1])
 			}
 
@@ -203,26 +203,6 @@ func newInterfacesDeleteCmd() *cobra.Command {
 			return nil
 		},
 	}
-}
-
-// isPrimaryInterface returns true if the interface has provider-assigned (non-editable) IP addresses.
-// Such interfaces cannot be recreated via the API if deleted.
-func isPrimaryInterface(iface *scp.Interface) bool {
-	if iface.Ipv4Addresses != nil {
-		for _, ip := range *iface.Ipv4Addresses {
-			if ip.Type != nil && *ip.Type == scp.ServerIpTypeIP && !deref(ip.Editable) {
-				return true
-			}
-		}
-	}
-	if iface.Ipv6Addresses != nil {
-		for _, ip := range *iface.Ipv6Addresses {
-			if ip.Type != nil && *ip.Type == scp.ServerIpTypeIP && !deref(ip.LinkLocal) && !deref(ip.Editable) {
-				return true
-			}
-		}
-	}
-	return false
 }
 
 func newInterfacesUpdateDriverCmd() *cobra.Command {

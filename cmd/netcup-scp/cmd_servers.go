@@ -66,10 +66,10 @@ func newServersListCmd() *cobra.Command {
 
 			opts := &scp.ListServersOptions{}
 			if limit > 0 {
-				opts.Limit = ptr(int32(limit))
+				opts.Limit = new(int32(limit))
 			}
 			if offset > 0 {
-				opts.Offset = ptr(int32(offset))
+				opts.Offset = new(int32(offset))
 			}
 			if name != "" {
 				opts.Name = &name
@@ -123,7 +123,7 @@ func newServersGetCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			server, err := cc.client.GetServer(cc.ctx, id, &scp.GetServerOptions{LoadServerLiveInfo: ptr(true)})
+			server, err := cc.client.GetServer(cc.ctx, id, &scp.GetServerOptions{LoadServerLiveInfo: new(true)})
 			if err != nil {
 				return err
 			}
@@ -433,10 +433,10 @@ func newServersLogsCmd() *cobra.Command {
 			}
 			opts := &scp.GetServerLogsOptions{}
 			if limit > 0 {
-				opts.Limit = ptr(int32(limit))
+				opts.Limit = new(int32(limit))
 			}
 			if offset > 0 {
-				opts.Offset = ptr(int32(offset))
+				opts.Offset = new(int32(offset))
 			}
 			logs, err := cc.client.GetServerLogs(cc.ctx, id, opts)
 			if err != nil {
@@ -634,7 +634,7 @@ func newServersInstallImageCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			setup := scp.ServerImageSetup{ImageFlavourId: ptr(flavourID)}
+			setup := scp.ServerImageSetup{ImageFlavourId: new(flavourID)}
 			if cmd.Flags().Changed("hostname") {
 				setup.Hostname = &hostname
 			}
@@ -766,7 +766,7 @@ func newServersOptimizeStorageCmd() *cobra.Command {
 				opts.Disks = &parts
 			}
 			if startAfter {
-				opts.StartAfterOptimization = ptr(true)
+				opts.StartAfterOptimization = new(true)
 			}
 			task, err := cc.client.OptimizeStorage(cc.ctx, id, opts)
 			if err != nil {

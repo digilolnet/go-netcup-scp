@@ -50,7 +50,7 @@ func newTasksListCmd() *cobra.Command {
 
 			opts := &scp.ListTasksOptions{}
 			if serverID > 0 {
-				opts.ServerId = ptr(int32(serverID))
+				opts.ServerId = new(int32(serverID))
 			}
 			if state != "" {
 				s := scp.TaskState(state)
@@ -60,10 +60,10 @@ func newTasksListCmd() *cobra.Command {
 				opts.Q = &q
 			}
 			if limit > 0 {
-				opts.Limit = ptr(int32(limit))
+				opts.Limit = new(int32(limit))
 			}
 			if offset > 0 {
-				opts.Offset = ptr(int32(offset))
+				opts.Offset = new(int32(offset))
 			}
 
 			tasks, err := cc.client.ListTasks(cc.ctx, opts)

@@ -204,6 +204,27 @@ func (c *Client) CreateVLanInterface(ctx context.Context, serverID int32, vlanID
 	return resp.JSON202, nil
 }
 
+// IsPrimaryInterface reports whether iface has provider-assigned (non-editable) IP
+// addresses. Such interfaces cannot be safely deleted because they cannot be
+// recreated via the API.
+func IsPrimaryInterface(iface *Interface) bool {
+	if iface.Ipv4Addresses != nil {
+		for _, ip := range *iface.Ipv4Addresses {
+			if ip.Type != nil && *ip.Type == ServerIpTypeIP && !deref(ip.Editable) {
+				return true
+			}
+		}
+	}
+	if iface.Ipv6Addresses != nil {
+		for _, ip := range *iface.Ipv6Addresses {
+			if ip.Type != nil && *ip.Type == ServerIpTypeIP && !deref(ip.LinkLocal) && !deref(ip.Editable) {
+				return true
+			}
+		}
+	}
+	return false
+}
+
 // DeleteInterface removes a network interface from a server.
 func (c *Client) DeleteInterface(ctx context.Context, serverID int32, mac string) error {
 	resp, err := c.api.DeleteApiV1ServersServerIdInterfacesMacWithResponse(ctx, serverID, mac)

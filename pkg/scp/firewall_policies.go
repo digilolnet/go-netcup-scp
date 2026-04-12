@@ -122,6 +122,32 @@ func (c *Client) UpdateFirewallPolicy(ctx context.Context, userID, policyID int3
 	return resp.JSON202, nil
 }
 
+// AddFirewallRule appends a rule to an existing firewall policy. The API always
+// requires the full rule list, so this fetches the current policy first and
+// re-sends all existing rules with the new one appended.
+func (c *Client) AddFirewallRule(ctx context.Context, userID, policyID int32, rule FirewallRule) (*generated.FirewallPolicyUpdateResult, error) {
+	existing, err := c.GetFirewallPolicy(ctx, userID, policyID)
+	if err != nil {
+		return nil, fmt.Errorf("add firewall rule: %w", err)
+	}
+
+	var rules []FirewallRule
+	if existing.Rules != nil {
+		rules = *existing.Rules
+	}
+	rules = append(rules, rule)
+
+	result, err := c.UpdateFirewallPolicy(ctx, userID, policyID, FirewallPolicySave{
+		Name:        deref(existing.Name),
+		Description: existing.Description,
+		Rules:       &rules,
+	})
+	if err != nil {
+		return nil, fmt.Errorf("add firewall rule: %w", err)
+	}
+	return result, nil
+}
+
 // DeleteFirewallPolicy permanently deletes a firewall policy.
 // The policy must not be in use by any server interface.
 func (c *Client) DeleteFirewallPolicy(ctx context.Context, userID, policyID int32) error {

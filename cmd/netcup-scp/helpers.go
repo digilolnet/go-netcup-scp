@@ -26,8 +26,6 @@ import (
 	"github.com/digilolnet/go-netcup-scp/pkg/scp"
 )
 
-func ptr[T any](v T) *T { return &v }
-
 // fmtTime formats a *time.Time as "2006-01-02 15:04:05" (UTC), or "" if nil.
 func fmtTime(t *time.Time) string {
 	if t == nil {

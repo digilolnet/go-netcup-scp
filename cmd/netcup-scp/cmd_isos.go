@@ -129,13 +129,13 @@ func newIsosAttachCmd() *cobra.Command {
 			}
 			opts := &scp.AttachISOOptions{}
 			if isoID > 0 {
-				opts.IsoID = ptr(int32(isoID))
+				opts.IsoID = new(int32(isoID))
 			}
 			if userIso != "" {
 				opts.UserIsoName = &userIso
 			}
 			if bootCdrom {
-				opts.ChangeBootDeviceToCdrom = ptr(true)
+				opts.ChangeBootDeviceToCdrom = new(true)
 			}
 			if err := cc.client.AttachISO(cc.ctx, id, opts); err != nil {
 				return err

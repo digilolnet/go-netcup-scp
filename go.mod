@@ -1,6 +1,6 @@
 module github.com/digilolnet/go-netcup-scp
 
-go 1.25.5
+go 1.26
 
 require (
 	github.com/getkin/kin-openapi v0.135.0

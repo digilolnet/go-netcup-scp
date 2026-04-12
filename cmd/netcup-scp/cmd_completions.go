@@ -18,6 +18,8 @@ import (
 	"fmt"
 
 	"github.com/spf13/cobra"
+
+	"github.com/digilolnet/go-netcup-scp/pkg/scp"
 )
 
 // posCompleter is a completion function for one positional argument position.
@@ -118,7 +120,7 @@ func deletableInterfaceMACCompletions(cc *cmdContext, args []string, _ string) (
 	}
 	out := make([]string, 0, len(ifaces))
 	for _, iface := range ifaces {
-		if !isPrimaryInterface(&iface) {
+		if !scp.IsPrimaryInterface(&iface) {
 			out = append(out, derefStr(iface.Mac))
 		}
 	}

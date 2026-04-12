@@ -55,7 +55,7 @@ func newFailoverV4ListCmd() *cobra.Command {
 				opts.Ip = &ip
 			}
 			if serverID > 0 {
-				opts.ServerId = ptr(int32(serverID))
+				opts.ServerId = new(int32(serverID))
 			}
 			ips, err := cc.client.ListFailoverIPv4(cc.ctx, cc.userID, opts)
 			if err != nil {
@@ -178,7 +178,7 @@ func newFailoverV6ListCmd() *cobra.Command {
 				opts.Ip = &ip
 			}
 			if serverID > 0 {
-				opts.ServerId = ptr(int32(serverID))
+				opts.ServerId = new(int32(serverID))
 			}
 			ips, err := cc.client.ListFailoverIPv6(cc.ctx, cc.userID, opts)
 			if err != nil {

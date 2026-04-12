@@ -57,7 +57,7 @@ func newMetricsCPUCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			data, err := cc.client.GetCPUMetrics(cc.ctx, id, &scp.MetricsOptions{Hours: ptr(int32(hours))})
+			data, err := cc.client.GetCPUMetrics(cc.ctx, id, &scp.MetricsOptions{Hours: new(int32(hours))})
 			if err != nil {
 				return err
 			}
@@ -88,7 +88,7 @@ func newMetricsDiskCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			data, err := cc.client.GetDiskMetrics(cc.ctx, id, &scp.MetricsOptions{Hours: ptr(int32(hours))})
+			data, err := cc.client.GetDiskMetrics(cc.ctx, id, &scp.MetricsOptions{Hours: new(int32(hours))})
 			if err != nil {
 				return err
 			}
@@ -119,7 +119,7 @@ func newMetricsNetworkCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			data, err := cc.client.GetNetworkMetrics(cc.ctx, id, &scp.MetricsOptions{Hours: ptr(int32(hours))})
+			data, err := cc.client.GetNetworkMetrics(cc.ctx, id, &scp.MetricsOptions{Hours: new(int32(hours))})
 			if err != nil {
 				return err
 			}
@@ -150,7 +150,7 @@ func newMetricsNetworkPacketsCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			data, err := cc.client.GetNetworkPacketMetrics(cc.ctx, id, &scp.MetricsOptions{Hours: ptr(int32(hours))})
+			data, err := cc.client.GetNetworkPacketMetrics(cc.ctx, id, &scp.MetricsOptions{Hours: new(int32(hours))})
 			if err != nil {
 				return err
 			}
