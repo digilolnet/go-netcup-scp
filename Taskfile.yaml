@@ -1,0 +1,66 @@
+version: "3"
+
+tasks:
+  generate:
+    desc: Regenerate client from OpenAPI spec
+    cmds:
+      - oapi-codegen -config oapi-codegen.yaml openapi.json
+
+  build:
+    desc: Build netcup-scp binary
+    cmds:
+      - go build ./cmd/netcup-scp/
+
+  test:
+    desc: Run tests
+    cmds:
+      - go test -v -race -cover ./...
+
+  test-unit:
+    desc: Run unit tests only
+    cmds:
+      - go test -v -short ./pkg/scp/...
+
+  install:
+    desc: Install netcup-scp to $GOBIN
+    cmds:
+      - go install ./cmd/netcup-scp
+
+  clean:
+    desc: Remove build caches
+    cmds:
+      - go clean -cache
+
+  install-tools:
+    desc: Install required tools
+    cmds:
+      - cmd: echo "Installing oapi-codegen..."
+        silent: true
+      - go install github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen@latest
+      - cmd: echo "Tools installed successfully!"
+        silent: true
+
+  godoc:
+    desc: Serve documentation and open in browser
+    cmds:
+      - cmd: |
+          if command -v open &> /dev/null; then
+            open http://localhost:6060/pkg/github.com/digilolnet/go-netcup-scp/
+          elif command -v xdg-open &> /dev/null; then
+            xdg-open http://localhost:6060/pkg/github.com/digilolnet/go-netcup-scp/
+          fi
+        silent: true
+      - godoc -http=:6060
+
+  check:
+    desc: Run all checks (build, test)
+    cmds:
+      - task: build
+      - task: test
+
+  all:
+    desc: Generate, build, and test
+    cmds:
+      - task: generate
+      - task: build
+      - task: test

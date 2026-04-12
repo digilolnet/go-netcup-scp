@@ -1,0 +1,69 @@
+# CLAUDE.md
+
+Go client library and CLI for the netcup SCP REST API.
+
+## Build
+
+```bash
+task build       # build netcup-scp binary
+task test        # run tests with race detection
+task generate    # regenerate client from openapi.json
+task check       # build + test
+```
+
+## Architecture
+
+Two-layer design:
+
+- **`internal/generated/client.gen.go`** — auto-generated from OpenAPI spec via oapi-codegen. **Never edit manually.** Regenerate with `task generate`.
+- **`pkg/scp/*.go`** — handwritten high-level wrappers with simplified signatures. One file per domain (`servers.go`, `disks.go`, `network.go`, etc.).
+- **`cmd/netcup-scp/`** — cobra CLI, single `main` package, one file per command group.
+
+## Wrapper pattern
+
+```go
+func (c *Client) ListServers(ctx context.Context, opts *ListServersOptions) ([]generated.ServerListMinimal, error) {
+    params := &generated.GetApiV1ServersParams{}
+    if opts != nil { /* map fields */ }
+
+    resp, err := c.api.GetApiV1ServersWithResponse(ctx, params)
+    if err != nil {
+        return nil, fmt.Errorf("list servers: %w", err)
+    }
+    if err := checkResponse(resp, 200); err != nil {
+        return nil, fmt.Errorf("list servers: %w", err)
+    }
+    if resp.JSON200 == nil {
+        return nil, fmt.Errorf("list servers: empty response")
+    }
+    return *resp.JSON200, nil
+}
+```
+
+Some endpoints return `application/hal+json` — check `HALJSON200` before `JSON200`.
+
+## Authentication
+
+`pkg/scp/auth/auth.go` implements OAuth2 device flow. `auth.Manager` handles token storage, auto-refresh (30s before expiry), and injects Bearer tokens into every request. See `Authentication.md`.
+
+The CLI stores tokens as JSON files and extracts the user ID from the JWT `sub` claim directly — no `/userinfo` call needed.
+
+## CLI conventions
+
+- `makeCompleter(fn...)` — positional arg autocomplete with `makeCmdContext` built in
+- `registerFlagCompleter(cmd, flag, fn)` — same for flag completions
+- `printResult(cc, data, textFn)` — prints JSON (`-j`) or calls `textFn` for human output
+- `fmtTime(*time.Time)` — formats UTC timestamps as `"2006-01-02 15:04:05"`; unit goes in column header, not value
+- `deref[T]`, `derefStr`, `derefInt32` — nil-safe pointer helpers
+
+## Tests
+
+Mock with `httptest.Server`. See `pkg/scp/servers_test.go`.
+
+## Updating the API
+
+```bash
+curl -o openapi.json https://www.servercontrolpanel.de/scp-core/api/v1/openapi
+task generate
+task check
+```
