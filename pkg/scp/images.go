@@ -107,8 +107,20 @@ func (c *Client) InitiateMultipartImageUpload(ctx context.Context, userID int32,
 
 // GetImageUploadPartURL retrieves a presigned URL for uploading a specific part of an image.
 // Part numbers start at 1.
-func (c *Client) GetImageUploadPartURL(ctx context.Context, userID int32, key, uploadID string, partNumber int32) (string, error) {
-	resp, err := c.api.GetApiV1UsersUserIdImagesKeyUploadIdPartsPartNumberWithResponse(ctx, userID, key, uploadID, partNumber)
+func (c *Client) GetImageUploadPartURL(
+	ctx context.Context,
+	userID int32,
+	key,
+	uploadID string,
+	partNumber int32,
+) (string, error) {
+	resp, err := c.api.GetApiV1UsersUserIdImagesKeyUploadIdPartsPartNumberWithResponse(
+		ctx,
+		userID,
+		key,
+		uploadID,
+		partNumber,
+	)
 	if err != nil {
 		return "", fmt.Errorf("get image upload part url: %w", err)
 	}
@@ -126,7 +138,13 @@ func (c *Client) GetImageUploadPartURL(ctx context.Context, userID int32, key, u
 
 // CompleteMultipartImageUpload completes a multipart upload with the list of uploaded parts.
 // The parts slice should contain all uploaded parts with their ETags and part numbers.
-func (c *Client) CompleteMultipartImageUpload(ctx context.Context, userID int32, key, uploadID string, parts []generated.S3CompletedPart) error {
+func (c *Client) CompleteMultipartImageUpload(
+	ctx context.Context,
+	userID int32,
+	key,
+	uploadID string,
+	parts []generated.S3CompletedPart,
+) error {
 	resp, err := c.api.PutApiV1UsersUserIdImagesKeyUploadIdWithResponse(ctx, userID, key, uploadID, parts)
 	if err != nil {
 		return fmt.Errorf("complete multipart image upload: %w", err)
@@ -143,7 +161,13 @@ func (c *Client) CompleteMultipartImageUpload(ctx context.Context, userID int32,
 // This is a convenience function that initiates the upload and performs the HTTP PUT in one call.
 // contentLength must be the exact size of the data: the S3-compatible storage
 // rejects chunked transfer encoding (HTTP 501), so the size is set explicitly.
-func (c *Client) UploadImage(ctx context.Context, userID int32, key string, reader io.Reader, contentLength int64) error {
+func (c *Client) UploadImage(
+	ctx context.Context,
+	userID int32,
+	key string,
+	reader io.Reader,
+	contentLength int64,
+) error {
 	presignedURL, err := c.InitiateImageUpload(ctx, userID, key)
 	if err != nil {
 		return err

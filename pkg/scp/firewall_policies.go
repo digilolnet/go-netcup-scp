@@ -47,7 +47,11 @@ type ListFirewallPoliciesOptions struct {
 }
 
 // ListFirewallPolicies retrieves all firewall policies for a user.
-func (c *Client) ListFirewallPolicies(ctx context.Context, userID int32, opts *ListFirewallPoliciesOptions) ([]generated.FirewallPolicy, error) {
+func (c *Client) ListFirewallPolicies(
+	ctx context.Context,
+	userID int32,
+	opts *ListFirewallPoliciesOptions,
+) ([]generated.FirewallPolicy, error) {
 	params := &generated.GetApiV1UsersUserIdFirewallPoliciesParams{}
 	if opts != nil {
 		params.Limit = opts.Limit
@@ -64,7 +68,11 @@ func (c *Client) ListFirewallPolicies(ctx context.Context, userID int32, opts *L
 }
 
 // CreateFirewallPolicy creates a new firewall policy for a user.
-func (c *Client) CreateFirewallPolicy(ctx context.Context, userID int32, policy FirewallPolicySave) (*generated.FirewallPolicy, error) {
+func (c *Client) CreateFirewallPolicy(
+	ctx context.Context,
+	userID int32,
+	policy FirewallPolicySave,
+) (*generated.FirewallPolicy, error) {
 	resp, err := c.api.PostApiV1UsersUserIdFirewallPoliciesWithResponse(ctx, userID, policy)
 	if err != nil {
 		return nil, fmt.Errorf("create firewall policy: %w", err)
@@ -85,7 +93,12 @@ func (c *Client) GetFirewallPolicy(ctx context.Context, userID, policyID int32) 
 
 // UpdateFirewallPolicy updates an existing firewall policy.
 // If the policy is applied to servers, the update is asynchronous and a task is returned.
-func (c *Client) UpdateFirewallPolicy(ctx context.Context, userID, policyID int32, policy FirewallPolicySave) (*generated.FirewallPolicyUpdateResult, error) {
+func (c *Client) UpdateFirewallPolicy(
+	ctx context.Context,
+	userID,
+	policyID int32,
+	policy FirewallPolicySave,
+) (*generated.FirewallPolicyUpdateResult, error) {
 	resp, err := c.api.PutApiV1UsersUserIdFirewallPoliciesIdWithResponse(ctx, userID, policyID, policy)
 	if err != nil {
 		return nil, fmt.Errorf("update firewall policy: %w", err)
@@ -97,7 +110,12 @@ func (c *Client) UpdateFirewallPolicy(ctx context.Context, userID, policyID int3
 // AddFirewallRule appends a rule to an existing firewall policy. The API always
 // requires the full rule list, so this fetches the current policy first and
 // re-sends all existing rules with the new one appended.
-func (c *Client) AddFirewallRule(ctx context.Context, userID, policyID int32, rule FirewallRule) (*generated.FirewallPolicyUpdateResult, error) {
+func (c *Client) AddFirewallRule(
+	ctx context.Context,
+	userID,
+	policyID int32,
+	rule FirewallRule,
+) (*generated.FirewallPolicyUpdateResult, error) {
 	existing, err := c.GetFirewallPolicy(ctx, userID, policyID)
 	if err != nil {
 		return nil, fmt.Errorf("add firewall rule: %w", err)

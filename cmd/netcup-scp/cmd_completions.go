@@ -30,7 +30,9 @@ type posCompleter func(cc *cmdContext, args []string, toComplete string) ([]stri
 // It handles makeCmdContext setup/teardown, mirroring how makeCompleter works
 // for positional arguments.
 func registerFlagCompleter(cmd *cobra.Command, flag string, fn posCompleter) {
-	_ = cmd.RegisterFlagCompletionFunc(flag, func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	_ = cmd.RegisterFlagCompletionFunc(flag, func(
+		cmd *cobra.Command, args []string, toComplete string,
+	) ([]string, cobra.ShellCompDirective) {
 		cc, cleanup, err := makeCmdContext(false)
 		if err != nil {
 			return nil, cobra.ShellCompDirectiveNoFileComp
@@ -236,7 +238,10 @@ func failoverV6IDCompletions(cc *cmdContext, _ []string, _ string) ([]string, co
 		}
 		out := make([]string, 0, len(ips))
 		for _, f := range ips {
-			out = append(out, fmt.Sprintf("%d\t%s/%d", derefInt32(f.Id), derefStr(f.NetworkPrefix), derefInt32(f.NetworkPrefixLength)))
+			out = append(
+				out,
+				fmt.Sprintf("%d\t%s/%d", derefInt32(f.Id), derefStr(f.NetworkPrefix), derefInt32(f.NetworkPrefixLength)),
+			)
 		}
 		return out, nil
 	})

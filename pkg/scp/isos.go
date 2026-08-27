@@ -202,8 +202,20 @@ func (c *Client) InitiateMultipartISOUpload(ctx context.Context, userID int32, k
 
 // GetISOUploadPartURL retrieves a presigned URL for uploading a specific part.
 // Part numbers start at 1.
-func (c *Client) GetISOUploadPartURL(ctx context.Context, userID int32, key string, uploadID string, partNumber int32) (string, error) {
-	resp, err := c.api.GetApiV1UsersUserIdIsosKeyUploadIdPartsPartNumberWithResponse(ctx, userID, key, uploadID, partNumber)
+func (c *Client) GetISOUploadPartURL(
+	ctx context.Context,
+	userID int32,
+	key string,
+	uploadID string,
+	partNumber int32,
+) (string, error) {
+	resp, err := c.api.GetApiV1UsersUserIdIsosKeyUploadIdPartsPartNumberWithResponse(
+		ctx,
+		userID,
+		key,
+		uploadID,
+		partNumber,
+	)
 	if err != nil {
 		return "", fmt.Errorf("get iso upload part url: %w", err)
 	}
@@ -221,7 +233,13 @@ func (c *Client) GetISOUploadPartURL(ctx context.Context, userID int32, key stri
 
 // CompleteMultipartISOUpload completes a multipart upload with the list of uploaded parts.
 // The parts slice should contain all uploaded parts with their ETags and part numbers.
-func (c *Client) CompleteMultipartISOUpload(ctx context.Context, userID int32, key string, uploadID string, parts []generated.S3CompletedPart) error {
+func (c *Client) CompleteMultipartISOUpload(
+	ctx context.Context,
+	userID int32,
+	key string,
+	uploadID string,
+	parts []generated.S3CompletedPart,
+) error {
 	resp, err := c.api.PutApiV1UsersUserIdIsosKeyUploadIdWithResponse(ctx, userID, key, uploadID, parts)
 	if err != nil {
 		return fmt.Errorf("complete multipart iso upload: %w", err)
@@ -238,7 +256,15 @@ func (c *Client) CompleteMultipartISOUpload(ctx context.Context, userID int32, k
 // partSize is the size of each part in bytes (S3 minimum is 5 MiB; use 50+ MiB in practice).
 // totalSize is the file size and is used only for progress reporting (pass 0 if unknown).
 // progress is called after each part completes and may be nil.
-func (c *Client) UploadISOMultipart(ctx context.Context, userID int32, key string, r io.Reader, totalSize, partSize int64, progress UploadProgress) error {
+func (c *Client) UploadISOMultipart(
+	ctx context.Context,
+	userID int32,
+	key string,
+	r io.Reader,
+	totalSize,
+	partSize int64,
+	progress UploadProgress,
+) error {
 	uploadID, err := c.InitiateMultipartISOUpload(ctx, userID, key)
 	if err != nil {
 		return err

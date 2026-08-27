@@ -301,7 +301,11 @@ func (c *Client) GetGuestAgentStatus(ctx context.Context, serverID int32) (*gene
 }
 
 // GetServerLogs retrieves the event log for a server.
-func (c *Client) GetServerLogs(ctx context.Context, serverID int32, opts *GetServerLogsOptions) ([]generated.Log, error) {
+func (c *Client) GetServerLogs(
+	ctx context.Context,
+	serverID int32,
+	opts *GetServerLogsOptions,
+) ([]generated.Log, error) {
 	params := &generated.GetApiV1ServersServerIdLogsParams{}
 	if opts != nil {
 		params.Limit = opts.Limit

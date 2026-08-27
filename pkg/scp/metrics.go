@@ -77,7 +77,11 @@ func (c *Client) GetNetworkMetrics(ctx context.Context, serverID int32, opts *Me
 
 // GetNetworkPacketMetrics retrieves network packet count metrics for a server.
 // The response schema is untyped (map[string]any) as it varies by API version.
-func (c *Client) GetNetworkPacketMetrics(ctx context.Context, serverID int32, opts *MetricsOptions) (map[string]any, error) {
+func (c *Client) GetNetworkPacketMetrics(
+	ctx context.Context,
+	serverID int32,
+	opts *MetricsOptions,
+) (map[string]any, error) {
 	params := &generated.GetApiV1ServersServerIdMetricsNetworkPacketParams{}
 	if opts != nil {
 		params.Hours = opts.Hours

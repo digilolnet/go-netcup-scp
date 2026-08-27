@@ -95,7 +95,14 @@ func newServersListCmd() *cobra.Command {
 					if s.Template != nil {
 						tmpl = s.Template.Name
 					}
-					t.AppendRow(table.Row{derefInt32(s.Id), derefStr(s.Name), derefStr(s.Nickname), derefStr(s.Hostname), tmpl, deref(s.Disabled)})
+					t.AppendRow(table.Row{
+						derefInt32(s.Id),
+						derefStr(s.Name),
+						derefStr(s.Nickname),
+						derefStr(s.Hostname),
+						tmpl,
+						deref(s.Disabled),
+					})
 				}
 				t.Render()
 			})
@@ -107,7 +114,10 @@ func newServersListCmd() *cobra.Command {
 	cmd.Flags().StringVar(&ip, "ip", "", "filter by IP address")
 	cmd.Flags().StringVar(&q, "q", "", "search query (name, nickname, IPv4)")
 	cmd.Flags().StringSliceVar(&sort, "sort", nil, "sort by field(s): name, nickname; prefix with '-' for descending")
-	_ = cmd.RegisterFlagCompletionFunc("sort", cobra.FixedCompletions([]string{"name", "nickname", "-name", "-nickname"}, cobra.ShellCompDirectiveNoFileComp))
+	_ = cmd.RegisterFlagCompletionFunc(
+		"sort",
+		cobra.FixedCompletions([]string{"name", "nickname", "-name", "-nickname"}, cobra.ShellCompDirectiveNoFileComp),
+	)
 	return cmd
 }
 
@@ -161,7 +171,13 @@ func newServersGetCmd() *cobra.Command {
 					fmt.Println("\nIPv4 Addresses:")
 					t := newTable("ID", "IP", "NETMASK", "BROADCAST", "GATEWAY")
 					for _, ip := range *v4 {
-						t.AppendRow(table.Row{derefInt32(ip.Id), derefStr(ip.Ip), derefStr(ip.Netmask), derefStr(ip.Broadcast), derefStr(ip.Gateway)})
+						t.AppendRow(table.Row{
+							derefInt32(ip.Id),
+							derefStr(ip.Ip),
+							derefStr(ip.Netmask),
+							derefStr(ip.Broadcast),
+							derefStr(ip.Gateway),
+						})
 					}
 					t.Render()
 				}
@@ -170,7 +186,12 @@ func newServersGetCmd() *cobra.Command {
 					fmt.Println("\nIPv6 Addresses:")
 					t := newTable("ID", "PREFIX", "PREFIX LENGTH", "GATEWAY")
 					for _, ip := range *v6 {
-						t.AppendRow(table.Row{derefInt32(ip.Id), derefStr(ip.NetworkPrefix), derefInt32(ip.NetworkPrefixLength), derefStr(ip.Gateway)})
+						t.AppendRow(table.Row{
+							derefInt32(ip.Id),
+							derefStr(ip.NetworkPrefix),
+							derefInt32(ip.NetworkPrefixLength),
+							derefStr(ip.Gateway),
+						})
 					}
 					t.Render()
 				}

@@ -62,7 +62,12 @@ func newDisksListCmd() *cobra.Command {
 			return printResult(cc, disks, func() {
 				t := newTable("NAME", "CAPACITY (MiB)", "ALLOCATION (MiB)", "DRIVER")
 				for _, d := range disks {
-					t.AppendRow(table.Row{derefStr(d.Name), deref(d.CapacityInMiB), deref(d.AllocationInMiB), derefStr((*string)(d.StorageDriver))})
+					t.AppendRow(table.Row{
+						derefStr(d.Name),
+						deref(d.CapacityInMiB),
+						deref(d.AllocationInMiB),
+						derefStr((*string)(d.StorageDriver)),
+					})
 				}
 				t.Render()
 			})

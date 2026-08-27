@@ -71,7 +71,13 @@ func newRootCmd() *cobra.Command {
 	}
 
 	cmd.PersistentFlags().StringVar(&rootFlags.tokenFile, "token-file", "", "token file path (overrides context)")
-	cmd.PersistentFlags().BoolVarP(&rootFlags.jsonOut, "json", "j", false, "output in JSON format (also: NETCUP_SCP_JSON=1)")
+	cmd.PersistentFlags().BoolVarP(
+		&rootFlags.jsonOut,
+		"json",
+		"j",
+		false,
+		"output in JSON format (also: NETCUP_SCP_JSON=1)",
+	)
 	cmd.PersistentFlags().StringVar(&rootFlags.contextName, "context", "", "named context to use for this invocation")
 	cmd.PersistentFlags().StringVar(&rootFlags.configFile, "config", defaultConfigFilePath(), "path to config file")
 

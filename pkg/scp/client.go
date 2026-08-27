@@ -148,7 +148,11 @@ func NewClient(authManager *auth.Manager, opts ...ClientOption) (*Client, error)
 		return nil
 	}
 
-	api, err := generated.NewClientWithResponses(client.baseURL, generated.WithHTTPClient(client.httpClient), generated.WithRequestEditorFn(requestEditor))
+	api, err := generated.NewClientWithResponses(
+		client.baseURL,
+		generated.WithHTTPClient(client.httpClient),
+		generated.WithRequestEditorFn(requestEditor),
+	)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create API client: %w", err)
 	}

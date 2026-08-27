@@ -73,14 +73,25 @@ func newTasksListCmd() *cobra.Command {
 			return printResult(cc, tasks, func() {
 				tbl := newTable("UUID", "STATE", "NAME", "STARTED (UTC)", "FINISHED (UTC)")
 				for _, t := range tasks {
-					tbl.AppendRow(table.Row{derefStr(t.Uuid), derefStr((*string)(t.State)), derefStr(t.Name), fmtTime(t.StartedAt), fmtTime(t.FinishedAt)})
+					tbl.AppendRow(table.Row{
+						derefStr(t.Uuid),
+						derefStr((*string)(t.State)),
+						derefStr(t.Name),
+						fmtTime(t.StartedAt),
+						fmtTime(t.FinishedAt),
+					})
 				}
 				tbl.Render()
 			})
 		},
 	}
 	cmd.Flags().IntVar(&serverID, "server-id", 0, "filter by server ID")
-	cmd.Flags().StringVar(&state, "state", "", "filter by state (PENDING, RUNNING, FINISHED, ERROR, CANCELED, ROLLBACK, WAITING_FOR_CANCEL)")
+	cmd.Flags().StringVar(
+		&state,
+		"state",
+		"",
+		"filter by state (PENDING, RUNNING, FINISHED, ERROR, CANCELED, ROLLBACK, WAITING_FOR_CANCEL)",
+	)
 	cmd.Flags().StringVar(&q, "q", "", "search query")
 	cmd.Flags().IntVar(&limit, "limit", 0, "max results")
 	cmd.Flags().IntVar(&offset, "offset", 0, "pagination offset")

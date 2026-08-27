@@ -101,7 +101,10 @@ func (cc *cmdContext) invalidateCompletionCache(keys ...string) {
 
 // completionWithCache fetches completion entries via fetch, caching the result under key
 // for completionCacheTTL. Cache misses and errors in fetch are transparent to callers.
-func (cc *cmdContext) completionWithCache(key string, fetch func() ([]string, error)) ([]string, cobra.ShellCompDirective) {
+func (cc *cmdContext) completionWithCache(
+	key string,
+	fetch func() ([]string, error),
+) ([]string, cobra.ShellCompDirective) {
 	cache := newCompletionCache(cc.tokenFile)
 	if entries, ok := cache.get(key); ok {
 		return entries, cobra.ShellCompDirectiveNoFileComp

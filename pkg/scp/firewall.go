@@ -35,7 +35,12 @@ type GetFirewallOptions struct {
 }
 
 // GetFirewall retrieves the firewall configuration for a network interface.
-func (c *Client) GetFirewall(ctx context.Context, serverID int32, mac string, opts *GetFirewallOptions) (*generated.ServerFirewall, error) {
+func (c *Client) GetFirewall(
+	ctx context.Context,
+	serverID int32,
+	mac string,
+	opts *GetFirewallOptions,
+) (*generated.ServerFirewall, error) {
 	params := &generated.GetApiV1ServersServerIdInterfacesMacFirewallParams{}
 	if opts != nil {
 		params.ConsistencyCheck = opts.ConsistencyCheck
@@ -52,7 +57,12 @@ func (c *Client) GetFirewall(ctx context.Context, serverID int32, mac string, op
 // UpdateFirewall replaces the firewall configuration for a network interface.
 // The body must include all desired policies; omitted policies will be removed.
 // The operation is asynchronous; use the returned task to track progress.
-func (c *Client) UpdateFirewall(ctx context.Context, serverID int32, mac string, body ServerFirewallSave) (*TaskInfo, error) {
+func (c *Client) UpdateFirewall(
+	ctx context.Context,
+	serverID int32,
+	mac string,
+	body ServerFirewallSave,
+) (*TaskInfo, error) {
 	resp, err := c.api.PutApiV1ServersServerIdInterfacesMacFirewallWithResponse(ctx, serverID, mac, body)
 	if err != nil {
 		return nil, fmt.Errorf("update firewall: %w", err)
@@ -65,7 +75,12 @@ func (c *Client) UpdateFirewall(ctx context.Context, serverID int32, mac string,
 // Use this to recover from inconsistencies reported by GetFirewall.
 // The operation is asynchronous; use the returned task to track progress.
 func (c *Client) ReapplyFirewall(ctx context.Context, serverID int32, mac string) (*TaskInfo, error) {
-	resp, err := c.api.PostApiV1ServersServerIdInterfacesMacFirewallReapplyWithResponse(ctx, serverID, mac, setContentTypeJSON)
+	resp, err := c.api.PostApiV1ServersServerIdInterfacesMacFirewallReapplyWithResponse(
+		ctx,
+		serverID,
+		mac,
+		setContentTypeJSON,
+	)
 	if err != nil {
 		return nil, fmt.Errorf("reapply firewall: %w", err)
 	}
@@ -115,7 +130,12 @@ func (c *Client) SetFirewallActive(ctx context.Context, serverID int32, mac stri
 // If restoreCopied is true, netcup's copied policies are restored afterwards.
 // Returns the tasks issued; two tasks are returned when restoreCopied is true and
 // copied policies existed. The operations are asynchronous.
-func (c *Client) ClearFirewall(ctx context.Context, serverID int32, mac string, restoreCopied bool) ([]*TaskInfo, error) {
+func (c *Client) ClearFirewall(
+	ctx context.Context,
+	serverID int32,
+	mac string,
+	restoreCopied bool,
+) ([]*TaskInfo, error) {
 	var hasCopied bool
 	if restoreCopied {
 		fw, err := c.GetFirewall(ctx, serverID, mac, nil)
@@ -147,7 +167,12 @@ func (c *Client) ClearFirewall(ctx context.Context, serverID int32, mac string, 
 // RestoreCopiedFirewallPolicies re-applies copied firewall policies for a network interface.
 // The operation is asynchronous; use the returned task to track progress.
 func (c *Client) RestoreCopiedFirewallPolicies(ctx context.Context, serverID int32, mac string) (*TaskInfo, error) {
-	resp, err := c.api.PostApiV1ServersServerIdInterfacesMacFirewallRestoreCopiedPoliciesWithResponse(ctx, serverID, mac, setContentTypeJSON)
+	resp, err := c.api.PostApiV1ServersServerIdInterfacesMacFirewallRestoreCopiedPoliciesWithResponse(
+		ctx,
+		serverID,
+		mac,
+		setContentTypeJSON,
+	)
 	if err != nil {
 		return nil, fmt.Errorf("restore copied firewall policies: %w", err)
 	}

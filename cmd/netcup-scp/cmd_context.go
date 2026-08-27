@@ -149,7 +149,12 @@ func newContextAddCmd() *cobra.Command {
 			return nil
 		},
 	}
-	cmd.Flags().StringVar(&tokenFile, "token-file", "", "token file path (default: ~/.config/netcup-scp/contexts/<name>.json)")
+	cmd.Flags().StringVar(
+		&tokenFile,
+		"token-file",
+		"",
+		"token file path (default: ~/.config/netcup-scp/contexts/<name>.json)",
+	)
 	return cmd
 }
 

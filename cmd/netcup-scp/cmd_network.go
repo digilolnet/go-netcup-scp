@@ -195,7 +195,10 @@ func newInterfacesDeleteCmd() *cobra.Command {
 				return err
 			}
 			if scp.IsPrimaryInterface(iface) {
-				return fmt.Errorf("interface %s has provider-assigned IP addresses and cannot be recreated via the API — deletion blocked", args[1])
+				return fmt.Errorf(
+					"interface %s has provider-assigned IP addresses and cannot be recreated via the API — deletion blocked",
+					args[1],
+				)
 			}
 
 			task, err := cc.client.DeleteInterface(cc.ctx, id, args[1])
@@ -218,9 +221,13 @@ func newInterfacesUpdateDriverCmd() *cobra.Command {
 		Use:   "update-driver <server-id> <mac> <driver>",
 		Short: "Change interface driver",
 		Args:  cobra.ExactArgs(3),
-		ValidArgsFunction: makeCompleter(serverIDCompletions, macCompletions, func(_ *cmdContext, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
-			return networkDriverCompletions(), cobra.ShellCompDirectiveNoFileComp
-		}),
+		ValidArgsFunction: makeCompleter(
+			serverIDCompletions,
+			macCompletions,
+			func(_ *cmdContext, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
+				return networkDriverCompletions(), cobra.ShellCompDirectiveNoFileComp
+			},
+		),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			cc, cleanup, err := makeCmdContext(false)
 			if err != nil {

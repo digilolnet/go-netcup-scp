@@ -57,7 +57,11 @@ type ListInterfacesOptions struct {
 }
 
 // ListInterfaces retrieves all network interfaces for a server.
-func (c *Client) ListInterfaces(ctx context.Context, serverID int32, opts *ListInterfacesOptions) ([]generated.Interface, error) {
+func (c *Client) ListInterfaces(
+	ctx context.Context,
+	serverID int32,
+	opts *ListInterfacesOptions,
+) ([]generated.Interface, error) {
 	params := &generated.GetApiV1ServersServerIdInterfacesParams{}
 	if opts != nil {
 		params.LoadRdns = opts.LoadRdns
@@ -78,7 +82,12 @@ type GetInterfaceOptions struct {
 }
 
 // GetInterface retrieves information about a specific network interface.
-func (c *Client) GetInterface(ctx context.Context, serverID int32, mac string, opts *GetInterfaceOptions) (*generated.Interface, error) {
+func (c *Client) GetInterface(
+	ctx context.Context,
+	serverID int32,
+	mac string,
+	opts *GetInterfaceOptions,
+) (*generated.Interface, error) {
 	if err := requireID("get interface", "mac", mac); err != nil {
 		return nil, err
 	}
@@ -164,7 +173,12 @@ func (c *Client) DeleteRDNSv6(ctx context.Context, ip string) error {
 }
 
 // CreateVLanInterface creates a new VLAN network interface for a server.
-func (c *Client) CreateVLanInterface(ctx context.Context, serverID int32, vlanID int32, driver NetworkDriver) (*TaskInfo, error) {
+func (c *Client) CreateVLanInterface(
+	ctx context.Context,
+	serverID int32,
+	vlanID int32,
+	driver NetworkDriver,
+) (*TaskInfo, error) {
 	patch := generated.ServerCreateNicVlan{
 		VlanId:        vlanID,
 		NetworkDriver: driver,
@@ -225,7 +239,12 @@ func (c *Client) DeleteInterface(ctx context.Context, serverID int32, mac string
 // UpdateInterfaceDriver updates a network interface's driver.
 // Returns a TaskInfo when the API responds with 202 (driver actually changed,
 // applied asynchronously), or nil for a 204 no-op.
-func (c *Client) UpdateInterfaceDriver(ctx context.Context, serverID int32, mac string, driver NetworkDriver) (*TaskInfo, error) {
+func (c *Client) UpdateInterfaceDriver(
+	ctx context.Context,
+	serverID int32,
+	mac string,
+	driver NetworkDriver,
+) (*TaskInfo, error) {
 	update := generated.ServerInterfaceUpdate{
 		Driver: &driver,
 	}

@@ -30,7 +30,11 @@ type ListFailoverIPsOptions struct {
 }
 
 // ListFailoverIPv4 retrieves all IPv4 failover addresses for a user.
-func (c *Client) ListFailoverIPv4(ctx context.Context, userID int32, opts *ListFailoverIPsOptions) ([]generated.FailoverIPv4, error) {
+func (c *Client) ListFailoverIPv4(
+	ctx context.Context,
+	userID int32,
+	opts *ListFailoverIPsOptions,
+) ([]generated.FailoverIPv4, error) {
 	params := &generated.GetApiV1UsersUserIdFailoveripsV4Params{}
 	if opts != nil {
 		params.Ip = opts.Ip
@@ -47,7 +51,12 @@ func (c *Client) ListFailoverIPv4(ctx context.Context, userID int32, opts *ListF
 
 // RouteFailoverIPv4 routes a failover IPv4 address to a different server.
 // The operation is asynchronous; use the returned task to track progress.
-func (c *Client) RouteFailoverIPv4(ctx context.Context, userID, failoverID, serverID int32) (*generated.TaskInfo, error) {
+func (c *Client) RouteFailoverIPv4(
+	ctx context.Context,
+	userID,
+	failoverID,
+	serverID int32,
+) (*generated.TaskInfo, error) {
 	body := generated.RouteFailoverIp{ServerId: &serverID}
 
 	resp, err := c.api.PatchApiV1UsersUserIdFailoveripsV4IdWithResponse(ctx, userID, failoverID, body)
@@ -72,7 +81,11 @@ func (c *Client) UnrouteFailoverIPv4(ctx context.Context, userID, failoverID int
 }
 
 // ListFailoverIPv6 retrieves all IPv6 failover prefixes for a user.
-func (c *Client) ListFailoverIPv6(ctx context.Context, userID int32, opts *ListFailoverIPsOptions) ([]generated.FailoverIPv6, error) {
+func (c *Client) ListFailoverIPv6(
+	ctx context.Context,
+	userID int32,
+	opts *ListFailoverIPsOptions,
+) ([]generated.FailoverIPv6, error) {
 	params := &generated.GetApiV1UsersUserIdFailoveripsV6Params{}
 	if opts != nil {
 		params.Ip = opts.Ip
@@ -89,7 +102,12 @@ func (c *Client) ListFailoverIPv6(ctx context.Context, userID int32, opts *ListF
 
 // RouteFailoverIPv6 routes a failover IPv6 prefix to a different server.
 // The operation is asynchronous; use the returned task to track progress.
-func (c *Client) RouteFailoverIPv6(ctx context.Context, userID, failoverID, serverID int32) (*generated.TaskInfo, error) {
+func (c *Client) RouteFailoverIPv6(
+	ctx context.Context,
+	userID,
+	failoverID,
+	serverID int32,
+) (*generated.TaskInfo, error) {
 	body := generated.RouteFailoverIp{ServerId: &serverID}
 
 	resp, err := c.api.PatchApiV1UsersUserIdFailoveripsV6IdWithResponse(ctx, userID, failoverID, body)

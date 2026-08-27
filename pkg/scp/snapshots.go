@@ -97,7 +97,12 @@ func (c *Client) RevertSnapshot(ctx context.Context, serverID int32, name string
 
 // DryRunSnapshot checks whether a snapshot can be created without actually creating one.
 // Returns a list of blocking errors; an empty slice means the snapshot can be created.
-func (c *Client) DryRunSnapshot(ctx context.Context, serverID int32, onlineSnapshot bool, diskName *string) ([]generated.ResponseError, error) {
+func (c *Client) DryRunSnapshot(
+	ctx context.Context,
+	serverID int32,
+	onlineSnapshot bool,
+	diskName *string,
+) ([]generated.ResponseError, error) {
 	body := generated.ServerSnapshotCreateCheck{
 		OnlineSnapshot: &onlineSnapshot,
 		DiskName:       diskName,
