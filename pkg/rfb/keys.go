@@ -22,6 +22,7 @@ import (
 	"context"
 	"encoding/binary"
 	"fmt"
+	"io"
 	"net"
 	"time"
 )
@@ -52,7 +53,7 @@ const (
 // ownership of conn.
 func SendChord(conn net.Conn, key uint32, modifiers ...uint32) error {
 	_ = conn.SetDeadline(time.Now().Add(30 * time.Second))
-	if _, err := Connect(conn); err != nil {
+	if _, err := connect(conn); err != nil {
 		return err
 	}
 	for _, m := range modifiers {
@@ -85,7 +86,7 @@ func SendKeys(ctx context.Context, conn net.Conn, delay time.Duration, keys ...u
 	} else {
 		_ = conn.SetDeadline(time.Now().Add(60 * time.Second))
 	}
-	if _, err := Connect(conn); err != nil {
+	if _, err := connect(conn); err != nil {
 		return err
 	}
 	if delay <= 0 {
@@ -107,14 +108,14 @@ func SendKeys(ctx context.Context, conn net.Conn, delay time.Duration, keys ...u
 	return nil
 }
 
-func writeKeyEvent(conn interface{ Write([]byte) (int, error) }, keysym uint32, down bool) error {
+func writeKeyEvent(w io.Writer, keysym uint32, down bool) error {
 	msg := make([]byte, 8)
 	msg[0] = 4 // KeyEvent
 	if down {
 		msg[1] = 1
 	}
 	binary.BigEndian.PutUint32(msg[4:8], keysym)
-	if _, err := conn.Write(msg); err != nil {
+	if _, err := w.Write(msg); err != nil {
 		return fmt.Errorf("rfb: write key event: %w", err)
 	}
 	return nil

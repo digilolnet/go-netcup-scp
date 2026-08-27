@@ -131,7 +131,12 @@ func (c *Client) VNCScreenshot(ctx context.Context, serverID int32) (image.Image
 // VNCWatchFrames streams the server's console via rfb.WatchFrames: it invokes
 // onFrame with the current framebuffer no more often than minInterval until
 // onFrame reports done or ctx expires.
-func (c *Client) VNCWatchFrames(ctx context.Context, serverID int32, minInterval time.Duration, onFrame func(image.Image) (done bool)) error {
+func (c *Client) VNCWatchFrames(
+	ctx context.Context,
+	serverID int32,
+	minInterval time.Duration,
+	onFrame func(image.Image) (done bool),
+) error {
 	conn, err := c.DialVNC(ctx, serverID)
 	if err != nil {
 		return err

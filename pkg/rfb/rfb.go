@@ -40,10 +40,10 @@ type pixelFormat struct {
 	blueShift    uint8
 }
 
-// Conn is a minimal RFB (VNC) client over an already-connected stream: it
+// rfbConn is a minimal RFB (VNC) client over an already-connected stream: it
 // performs the RFB 3.8 handshake, advertises Raw encoding only, and decodes
 // FramebufferUpdate messages into a persistent image.
-type Conn struct {
+type rfbConn struct {
 	conn   net.Conn
 	width  int
 	height int
@@ -53,9 +53,9 @@ type Conn struct {
 	img    *image.RGBA
 }
 
-// Connect runs the RFB 3.8 handshake (ProtocolVersion, None security,
+// connect runs the RFB 3.8 handshake (ProtocolVersion, None security,
 // ClientInit, ServerInit) and selects Raw encoding.
-func Connect(conn net.Conn) (*Conn, error) {
+func connect(conn net.Conn) (*rfbConn, error) {
 	ver := make([]byte, 12)
 	if _, err := io.ReadFull(conn, ver); err != nil {
 		return nil, fmt.Errorf("rfb: read protocol version: %w", err)
@@ -133,7 +133,7 @@ func Connect(conn net.Conn) (*Conn, error) {
 	if pf.bigEndian != 0 {
 		order = binary.BigEndian
 	}
-	return &Conn{
+	return &rfbConn{
 		conn: conn, width: width, height: height, pf: pf,
 		bpp: int(pf.bitsPerPixel) / 8, order: order,
 		img: image.NewRGBA(image.Rect(0, 0, width, height)),
@@ -141,7 +141,7 @@ func Connect(conn net.Conn) (*Conn, error) {
 }
 
 // requestUpdate sends a FramebufferUpdateRequest for the whole screen.
-func (r *Conn) requestUpdate(incremental bool) error {
+func (r *rfbConn) requestUpdate(incremental bool) error {
 	req := make([]byte, 10)
 	req[0] = 3
 	if incremental {
@@ -155,7 +155,7 @@ func (r *Conn) requestUpdate(incremental bool) error {
 
 // readUpdate reads one FramebufferUpdate (skipping other server messages),
 // applies its Raw rectangles to the image, and returns the pixels covered.
-func (r *Conn) readUpdate() (int, error) {
+func (r *rfbConn) readUpdate() (int, error) {
 	for {
 		msgType := make([]byte, 1)
 		if _, err := io.ReadFull(r.conn, msgType); err != nil {
@@ -190,7 +190,8 @@ func (r *Conn) readUpdate() (int, error) {
 			if _, err := io.ReadFull(r.conn, buf); err != nil {
 				return covered, fmt.Errorf("rfb: read rect pixels: %w", err)
 			}
-			decodeRaw(r.img, rx, ry, rw, rhh, buf, r.pf, r.order, r.bpp)
+			// rx/ry/rw/rhh are one rectangle-geometry tuple; kept inline.
+			r.decodeRaw(rx, ry, rw, rhh, buf)
 			covered += rw * rhh
 		}
 		return covered, nil
@@ -205,7 +206,7 @@ func Screenshot(ctx context.Context, conn net.Conn) (image.Image, error) {
 	} else {
 		_ = conn.SetDeadline(time.Now().Add(30 * time.Second))
 	}
-	r, err := Connect(conn)
+	r, err := connect(conn)
 	if err != nil {
 		return nil, err
 	}
@@ -229,10 +230,15 @@ func Screenshot(ctx context.Context, conn net.Conn) (image.Image, error) {
 // ctx's error on timeout. This reliably captures transient content (e.g. a log
 // line that scrolls past) that a single screenshot would miss. The caller
 // retains ownership of conn.
-func WatchFrames(ctx context.Context, conn net.Conn, minInterval time.Duration, onFrame func(image.Image) (done bool)) error {
+func WatchFrames(
+	ctx context.Context,
+	conn net.Conn,
+	minInterval time.Duration,
+	onFrame func(image.Image) (done bool),
+) error {
 	dbg := os.Getenv("FP_DEBUG") != ""
 	_ = conn.SetDeadline(time.Now().Add(30 * time.Second))
-	r, err := Connect(conn)
+	r, err := connect(conn)
 	if err != nil {
 		return err
 	}
@@ -300,7 +306,7 @@ func skipServerMessage(conn io.Reader, msgType byte) error {
 	}
 }
 
-func decodeRaw(img *image.RGBA, x0, y0, w, h int, buf []byte, pf pixelFormat, order binary.ByteOrder, bpp int) {
+func (r *rfbConn) decodeRaw(x0, y0, w, h int, buf []byte) {
 	scale := func(v uint32, max uint16) uint8 {
 		if max == 0 {
 			return 0
@@ -311,19 +317,19 @@ func decodeRaw(img *image.RGBA, x0, y0, w, h int, buf []byte, pf pixelFormat, or
 	for y := 0; y < h; y++ {
 		for x := 0; x < w; x++ {
 			var raw uint32
-			switch bpp {
+			switch r.bpp {
 			case 4:
-				raw = order.Uint32(buf[i : i+4])
+				raw = r.order.Uint32(buf[i : i+4])
 			case 2:
-				raw = uint32(order.Uint16(buf[i : i+2]))
+				raw = uint32(r.order.Uint16(buf[i : i+2]))
 			case 1:
 				raw = uint32(buf[i])
 			}
-			i += bpp
-			r := scale((raw>>pf.redShift)&uint32(pf.redMax), pf.redMax)
-			g := scale((raw>>pf.greenShift)&uint32(pf.greenMax), pf.greenMax)
-			b := scale((raw>>pf.blueShift)&uint32(pf.blueMax), pf.blueMax)
-			img.Set(x0+x, y0+y, color.RGBA{R: r, G: g, B: b, A: 255})
+			i += r.bpp
+			red := scale((raw>>r.pf.redShift)&uint32(r.pf.redMax), r.pf.redMax)
+			green := scale((raw>>r.pf.greenShift)&uint32(r.pf.greenMax), r.pf.greenMax)
+			blue := scale((raw>>r.pf.blueShift)&uint32(r.pf.blueMax), r.pf.blueMax)
+			r.img.Set(x0+x, y0+y, color.RGBA{R: red, G: green, B: blue, A: 255})
 		}
 	}
 }
