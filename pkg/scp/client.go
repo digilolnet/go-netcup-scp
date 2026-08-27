@@ -20,6 +20,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"os"
 	"reflect"
 	"slices"
 	"sync"
@@ -39,6 +40,7 @@ type Client struct {
 	httpClient *http.Client
 	api        *generated.ClientWithResponses
 	baseURL    string
+	traceDir   string
 	mu         sync.RWMutex
 }
 
@@ -111,9 +113,16 @@ func NewClient(authManager *auth.Manager, opts ...ClientOption) (*Client, error)
 		opt(client)
 	}
 
+	base := http.RoundTripper(http.DefaultTransport)
+	if client.traceDir != "" {
+		if err := os.MkdirAll(client.traceDir, 0o755); err != nil {
+			return nil, fmt.Errorf("create trace dir: %w", err)
+		}
+		base = &traceTransport{base: base, dir: client.traceDir}
+	}
 	client.httpClient = &http.Client{
 		Transport: &retryTransport{
-			base: http.DefaultTransport,
+			base: base,
 			auth: authManager,
 		},
 	}

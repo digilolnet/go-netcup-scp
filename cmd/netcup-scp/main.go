@@ -20,6 +20,7 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"strconv"
 
 	"github.com/spf13/cobra"
 
@@ -60,6 +61,11 @@ func newRootCmd() *cobra.Command {
 		SilenceUsage:  true,
 		SilenceErrors: true,
 		PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
+			if !cmd.Flags().Changed("json") {
+				if v, err := strconv.ParseBool(os.Getenv("NETCUP_SCP_JSON")); err == nil {
+					rootFlags.jsonOut = v
+				}
+			}
 			return resolveTokenFile()
 		},
 	}
@@ -182,7 +188,11 @@ func makeCmdContext(noAuth bool) (*cmdContext, func(), error) {
 		}
 		cc.userID = userID
 
-		client, err := scp.NewClient(authMgr)
+		var clientOpts []scp.ClientOption
+		if dir := os.Getenv("NETCUP_SCP_TRACE_DIR"); dir != "" {
+			clientOpts = append(clientOpts, scp.WithTraceDir(dir))
+		}
+		client, err := scp.NewClient(authMgr, clientOpts...)
 		if err != nil {
 			cleanup()
 			return nil, nil, fmt.Errorf("create client: %w", err)
