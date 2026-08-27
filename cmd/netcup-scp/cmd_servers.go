@@ -54,6 +54,7 @@ func newServersCmd() *cobra.Command {
 func newServersListCmd() *cobra.Command {
 	var limit, offset int
 	var name, ip, q string
+	var sort []string
 	cmd := &cobra.Command{
 		Use:   "list",
 		Short: "List servers",
@@ -80,6 +81,9 @@ func newServersListCmd() *cobra.Command {
 			if q != "" {
 				opts.Q = &q
 			}
+			if len(sort) > 0 {
+				opts.Sort = &sort
+			}
 
 			servers, err := cc.client.ListServers(cc.ctx, opts)
 			if err != nil {
@@ -103,6 +107,8 @@ func newServersListCmd() *cobra.Command {
 	cmd.Flags().StringVar(&name, "name", "", "filter by name")
 	cmd.Flags().StringVar(&ip, "ip", "", "filter by IP address")
 	cmd.Flags().StringVar(&q, "q", "", "search query (name, nickname, IPv4)")
+	cmd.Flags().StringSliceVar(&sort, "sort", nil, "sort by field(s): name, nickname; prefix with '-' for descending")
+	_ = cmd.RegisterFlagCompletionFunc("sort", cobra.FixedCompletions([]string{"name", "nickname", "-name", "-nickname"}, cobra.ShellCompDirectiveNoFileComp))
 	return cmd
 }
 

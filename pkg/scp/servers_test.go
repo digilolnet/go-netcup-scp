@@ -318,6 +318,29 @@ func TestGetGuestAgent(t *testing.T) {
 	}
 }
 
+func TestGetGuestAgentStatus(t *testing.T) {
+	available := true
+	client, cleanup := newTestClient(t, func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path == "/api/v1/servers/123/guest-agent/status" && r.Method == http.MethodGet {
+			w.Header().Set("Content-Type", "application/hal+json")
+			w.WriteHeader(http.StatusOK)
+			_ = json.NewEncoder(w).Encode(generated.GuestAgentStatus{Available: &available})
+			return
+		}
+		w.WriteHeader(http.StatusNotFound)
+	})
+	defer cleanup()
+
+	status, err := client.GetGuestAgentStatus(context.Background(), 123)
+	if err != nil {
+		t.Fatalf("GetGuestAgentStatus() error = %v", err)
+	}
+
+	if status.Available == nil || !*status.Available {
+		t.Errorf("expected Available=true, got %v", status.Available)
+	}
+}
+
 func TestListImageFlavours(t *testing.T) {
 	client, cleanup := newTestClient(t, func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path == "/api/v1/servers/123/imageflavours" && r.Method == http.MethodGet {

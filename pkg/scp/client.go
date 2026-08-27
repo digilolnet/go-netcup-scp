@@ -166,6 +166,8 @@ func (c *Client) Close() {
 
 // GetMaintenance retrieves upcoming maintenance windows.
 // Returns an empty slice if no maintenance is scheduled.
+//
+// Deprecated: the upstream endpoint is deprecated and will be removed by 2026-12-31.
 // Note: the generated parser expects a JSON array but the live API returns a single
 // object, so we bypass the generated parser and handle both formats here.
 func (c *Client) GetMaintenance(ctx context.Context) ([]generated.Maintenance, error) {

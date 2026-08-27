@@ -59,7 +59,6 @@ func newUsersGetCmd() *cobra.Command {
 					"Email", derefStr(user.Email),
 					"Language", derefStr(user.Language),
 					"Timezone", derefStr(user.TimeZone),
-					"Secure mode", deref(user.SecureMode),
 					"Passwordless mode", deref(user.PasswordlessMode),
 				)
 			})
@@ -69,7 +68,7 @@ func newUsersGetCmd() *cobra.Command {
 
 func newUsersUpdateCmd() *cobra.Command {
 	var language, timezone string
-	var secureMode, passwordlessMode string // "true"/"false"/"" (unset)
+	var passwordlessMode string // "true"/"false"/"" (unset)
 	cmd := &cobra.Command{
 		Use:   "update",
 		Short: "Update your user account settings",
@@ -90,7 +89,6 @@ func newUsersUpdateCmd() *cobra.Command {
 				Language:         derefStr(user.Language),
 				TimeZone:         derefStr(user.TimeZone),
 				PasswordlessMode: user.PasswordlessMode,
-				SecureMode:       user.SecureMode,
 			}
 
 			if cmd.Flags().Changed("language") {
@@ -98,10 +96,6 @@ func newUsersUpdateCmd() *cobra.Command {
 			}
 			if cmd.Flags().Changed("timezone") {
 				body.TimeZone = timezone
-			}
-			if cmd.Flags().Changed("secure-mode") {
-				v := secureMode == "true"
-				body.SecureMode = &v
 			}
 			if cmd.Flags().Changed("passwordless-mode") {
 				v := passwordlessMode == "true"
@@ -116,7 +110,6 @@ func newUsersUpdateCmd() *cobra.Command {
 				printKV(
 					"Language", result.Language,
 					"Timezone", result.TimeZone,
-					"Secure mode", deref(result.SecureMode),
 					"Passwordless mode", deref(result.PasswordlessMode),
 				)
 			})
@@ -124,7 +117,6 @@ func newUsersUpdateCmd() *cobra.Command {
 	}
 	cmd.Flags().StringVar(&language, "language", "", "language code (e.g. en, de)")
 	cmd.Flags().StringVar(&timezone, "timezone", "", "timezone (e.g. Europe/Berlin)")
-	cmd.Flags().StringVar(&secureMode, "secure-mode", "", "enable secure mode (true/false)")
 	cmd.Flags().StringVar(&passwordlessMode, "passwordless-mode", "", "enable passwordless mode (true/false)")
 	return cmd
 }

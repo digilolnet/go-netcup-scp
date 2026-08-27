@@ -41,6 +41,9 @@ type ListServersOptions struct {
 	Offset *int32
 	// Q searches within name, nickname, or IPv4 addresses (case-insensitive).
 	Q *string
+	// Sort orders results by one or more fields (name, nickname).
+	// Prefix a field with '-' for descending order, e.g. []string{"-nickname", "name"}.
+	Sort *[]string
 }
 
 // GetServerOptions contains optional parameters for getting a server.
@@ -59,6 +62,7 @@ func (c *Client) ListServers(ctx context.Context, opts *ListServersOptions) ([]g
 		params.Name = opts.Name
 		params.Offset = opts.Offset
 		params.Q = opts.Q
+		params.Sort = opts.Sort
 	}
 
 	resp, err := c.api.GetApiV1ServersWithResponse(ctx, params)
@@ -337,6 +341,28 @@ func (c *Client) GetGuestAgent(ctx context.Context, serverID int32) (*generated.
 
 	if resp.JSON200 == nil {
 		return nil, fmt.Errorf("get guest agent: empty response")
+	}
+
+	return resp.JSON200, nil
+}
+
+// GetGuestAgentStatus reports whether the guest agent is available on the server.
+// This is a lightweight alternative to GetGuestAgent.
+func (c *Client) GetGuestAgentStatus(ctx context.Context, serverID int32) (*generated.GuestAgentStatus, error) {
+	resp, err := c.api.GetApiV1ServersServerIdGuestAgentStatusWithResponse(ctx, serverID)
+	if err != nil {
+		return nil, fmt.Errorf("get guest agent status: %w", err)
+	}
+
+	if err := checkResponse(resp, 200); err != nil {
+		return nil, fmt.Errorf("get guest agent status: %w", err)
+	}
+
+	if resp.HALJSON200 != nil {
+		return resp.HALJSON200, nil
+	}
+	if resp.JSON200 == nil {
+		return nil, fmt.Errorf("get guest agent status: empty response")
 	}
 
 	return resp.JSON200, nil
