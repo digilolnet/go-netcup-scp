@@ -17,6 +17,7 @@ package rfb
 import (
 	"context"
 	"encoding/binary"
+	"errors"
 	"fmt"
 	"image"
 	"image/color"
@@ -186,6 +187,13 @@ func (r *rfbConn) readUpdate() (int, error) {
 			if enc != 0 {
 				return covered, fmt.Errorf("rfb: server used unsupported encoding %d", enc)
 			}
+			// The rect geometry is wire-controlled: without this check a
+			// hostile server could demand a 65535x65535x4 ≈ 17 GiB
+			// allocation in a single rectangle.
+			if rx+rw > r.width || ry+rhh > r.height {
+				return covered, fmt.Errorf("rfb: rect %dx%d+%d+%d exceeds framebuffer %dx%d",
+					rw, rhh, rx, ry, r.width, r.height)
+			}
 			buf := make([]byte, rw*rhh*r.bpp)
 			if _, err := io.ReadFull(r.conn, buf); err != nil {
 				return covered, fmt.Errorf("rfb: read rect pixels: %w", err)
@@ -224,6 +232,10 @@ func Screenshot(ctx context.Context, conn net.Conn) (image.Image, error) {
 	return r.img, nil
 }
 
+// watchIdleDeadline is the rolling read deadline WatchFrames uses when ctx
+// carries no deadline of its own; a variable so tests can shorten it.
+var watchIdleDeadline = 20 * time.Second
+
 // WatchFrames streams the framebuffer: it runs the handshake on conn, keeps
 // requesting incremental updates and, no more often than minInterval, invokes
 // onFrame with the current image. It returns nil when onFrame reports done, or
@@ -259,10 +271,21 @@ func WatchFrames(
 		if dl, ok := ctx.Deadline(); ok {
 			_ = conn.SetDeadline(dl)
 		} else {
-			_ = conn.SetDeadline(time.Now().Add(20 * time.Second))
+			_ = conn.SetDeadline(time.Now().Add(watchIdleDeadline))
 		}
 		n, err := r.readUpdate()
 		if err != nil {
+			// A static screen produces no update for the outstanding
+			// incremental request; the rolling deadline then fires with a
+			// timeout even though the session is healthy. Keep watching —
+			// only ctx decides when waiting is over.
+			var nerr net.Error
+			if errors.As(err, &nerr) && nerr.Timeout() {
+				if ctx.Err() != nil {
+					return ctx.Err()
+				}
+				continue
+			}
 			return err
 		}
 		if dbg {
