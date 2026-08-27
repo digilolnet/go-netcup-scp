@@ -33,15 +33,7 @@ func (c *Client) ListDisks(ctx context.Context, serverID int32) ([]generated.Dis
 		return nil, fmt.Errorf("list disks: %w", err)
 	}
 
-	if err := checkResponse(resp, 200); err != nil {
-		return nil, fmt.Errorf("list disks: %w", err)
-	}
-
-	if resp.JSON200 == nil {
-		return nil, fmt.Errorf("list disks: empty response")
-	}
-
-	return *resp.JSON200, nil
+	return pickBodyVal("list disks", resp, resp.JSON200, resp.HALJSON200, 200)
 }
 
 // GetDisk retrieves information about a specific disk.
@@ -54,15 +46,7 @@ func (c *Client) GetDisk(ctx context.Context, serverID int32, diskName string) (
 		return nil, fmt.Errorf("get disk: %w", err)
 	}
 
-	if err := checkResponse(resp, 200); err != nil {
-		return nil, fmt.Errorf("get disk: %w", err)
-	}
-
-	if resp.JSON200 == nil {
-		return nil, fmt.Errorf("get disk: empty response")
-	}
-
-	return resp.JSON200, nil
+	return pickBody("get disk", resp, resp.JSON200, resp.HALJSON200, 200)
 }
 
 // FormatDisk formats a disk, destroying all data on it.
@@ -74,14 +58,7 @@ func (c *Client) FormatDisk(ctx context.Context, serverID int32, diskName string
 		return nil, fmt.Errorf("format disk: %w", err)
 	}
 
-	if err := checkResponse(resp, 200, 202); err != nil {
-		return nil, fmt.Errorf("format disk: %w", err)
-	}
-
-	if resp.JSON202 != nil {
-		return resp.JSON202, nil
-	}
-	return resp.HALJSON202, nil
+	return taskBody("format disk", resp, resp.JSON202, resp.HALJSON202, 200, 202)
 }
 
 // GetSupportedDiskDrivers retrieves the list of storage drivers supported by a server.
@@ -91,15 +68,7 @@ func (c *Client) GetSupportedDiskDrivers(ctx context.Context, serverID int32) ([
 		return nil, fmt.Errorf("get supported disk drivers: %w", err)
 	}
 
-	if err := checkResponse(resp, 200); err != nil {
-		return nil, fmt.Errorf("get supported disk drivers: %w", err)
-	}
-
-	if resp.JSON200 == nil {
-		return nil, fmt.Errorf("get supported disk drivers: empty response")
-	}
-
-	return *resp.JSON200, nil
+	return pickBodyVal("get supported disk drivers", resp, resp.JSON200, resp.HALJSON200, 200)
 }
 
 // SetDiskDriver changes the storage driver for all disks on a server.
@@ -122,12 +91,5 @@ func (c *Client) SetDiskDriver(ctx context.Context, serverID int32, driver Stora
 		return nil, fmt.Errorf("set disk driver: %w", err)
 	}
 
-	if err := checkResponse(resp, 200, 202); err != nil {
-		return nil, fmt.Errorf("set disk driver: %w", err)
-	}
-
-	if resp.JSON202 != nil {
-		return resp.JSON202, nil
-	}
-	return resp.HALJSON202, nil
+	return taskBody("set disk driver", resp, resp.JSON202, resp.HALJSON202, 200, 202)
 }

@@ -64,15 +64,7 @@ func (c *Client) ListTasks(ctx context.Context, opts *ListTasksOptions) ([]gener
 		return nil, fmt.Errorf("list tasks: %w", err)
 	}
 
-	if err := checkResponse(resp, 200); err != nil {
-		return nil, fmt.Errorf("list tasks: %w", err)
-	}
-
-	if resp.JSON200 == nil {
-		return nil, fmt.Errorf("list tasks: empty response")
-	}
-
-	return *resp.JSON200, nil
+	return pickBodyVal("list tasks", resp, resp.JSON200, resp.HALJSON200, 200)
 }
 
 // GetTask retrieves detailed information about a specific async task.
@@ -82,15 +74,7 @@ func (c *Client) GetTask(ctx context.Context, uuid string) (*TaskInfo, error) {
 		return nil, fmt.Errorf("get task: %w", err)
 	}
 
-	if err := checkResponse(resp, 200); err != nil {
-		return nil, fmt.Errorf("get task: %w", err)
-	}
-
-	if resp.JSON200 == nil {
-		return nil, fmt.Errorf("get task: empty response")
-	}
-
-	return resp.JSON200, nil
+	return pickBody("get task", resp, resp.JSON200, resp.HALJSON200, 200)
 }
 
 // CancelTask cancels a running async task.

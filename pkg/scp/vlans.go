@@ -39,15 +39,7 @@ func (c *Client) ListVLans(ctx context.Context, userID int32, opts *ListVLansOpt
 		return nil, fmt.Errorf("list vlans: %w", err)
 	}
 
-	if err := checkResponse(resp, 200); err != nil {
-		return nil, fmt.Errorf("list vlans: %w", err)
-	}
-
-	if resp.JSON200 == nil {
-		return nil, fmt.Errorf("list vlans: empty response")
-	}
-
-	return *resp.JSON200, nil
+	return pickBodyVal("list vlans", resp, resp.JSON200, resp.HALJSON200, 200)
 }
 
 // GetVLan retrieves information about a specific VLAN.
@@ -57,15 +49,7 @@ func (c *Client) GetVLan(ctx context.Context, userID int32, vlanID int32) (*gene
 		return nil, fmt.Errorf("get vlan: %w", err)
 	}
 
-	if err := checkResponse(resp, 200); err != nil {
-		return nil, fmt.Errorf("get vlan: %w", err)
-	}
-
-	if resp.JSON200 == nil {
-		return nil, fmt.Errorf("get vlan: empty response")
-	}
-
-	return resp.JSON200, nil
+	return pickBody("get vlan", resp, resp.JSON200, resp.HALJSON200, 200)
 }
 
 // GetVLanByID retrieves VLAN information by VLAN ID (without user ID).
@@ -75,15 +59,7 @@ func (c *Client) GetVLanByID(ctx context.Context, vlanID int32) (*generated.VLan
 		return nil, fmt.Errorf("get vlan by id: %w", err)
 	}
 
-	if err := checkResponse(resp, 200); err != nil {
-		return nil, fmt.Errorf("get vlan by id: %w", err)
-	}
-
-	if resp.JSON200 == nil {
-		return nil, fmt.Errorf("get vlan by id: empty response")
-	}
-
-	return resp.JSON200, nil
+	return pickBody("get vlan by id", resp, resp.JSON200, resp.HALJSON200, 200)
 }
 
 // UpdateVLan updates a VLAN's properties (currently only name).

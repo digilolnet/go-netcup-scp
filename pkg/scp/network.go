@@ -68,15 +68,7 @@ func (c *Client) ListInterfaces(ctx context.Context, serverID int32, opts *ListI
 		return nil, fmt.Errorf("list interfaces: %w", err)
 	}
 
-	if err := checkResponse(resp, 200); err != nil {
-		return nil, fmt.Errorf("list interfaces: %w", err)
-	}
-
-	if resp.JSON200 == nil {
-		return nil, fmt.Errorf("list interfaces: empty response")
-	}
-
-	return *resp.JSON200, nil
+	return pickBodyVal("list interfaces", resp, resp.JSON200, resp.HALJSON200, 200)
 }
 
 // GetInterfaceOptions configures the GetInterface operation.
@@ -100,15 +92,7 @@ func (c *Client) GetInterface(ctx context.Context, serverID int32, mac string, o
 		return nil, fmt.Errorf("get interface: %w", err)
 	}
 
-	if err := checkResponse(resp, 200); err != nil {
-		return nil, fmt.Errorf("get interface: %w", err)
-	}
-
-	if resp.JSON200 == nil {
-		return nil, fmt.Errorf("get interface: empty response")
-	}
-
-	return resp.JSON200, nil
+	return pickBody("get interface", resp, resp.JSON200, resp.HALJSON200, 200)
 }
 
 // SetRDNSv4 sets the reverse DNS entry for an IPv4 address.
@@ -200,11 +184,7 @@ func (c *Client) CreateVLanInterface(ctx context.Context, serverID int32, vlanID
 		return nil, fmt.Errorf("create vlan interface: %w", err)
 	}
 
-	if err := checkResponse(resp, 202); err != nil {
-		return nil, fmt.Errorf("create vlan interface: %w", err)
-	}
-
-	return resp.JSON202, nil
+	return taskBody("create vlan interface", resp, resp.JSON202, resp.HALJSON202, 202)
 }
 
 // IsPrimaryInterface reports whether iface has provider-assigned (non-editable) IP
@@ -239,14 +219,7 @@ func (c *Client) DeleteInterface(ctx context.Context, serverID int32, mac string
 		return nil, fmt.Errorf("delete interface: %w", err)
 	}
 
-	if err := checkResponse(resp, 200, 202, 204); err != nil {
-		return nil, fmt.Errorf("delete interface: %w", err)
-	}
-
-	if resp.JSON202 != nil {
-		return resp.JSON202, nil
-	}
-	return resp.HALJSON202, nil
+	return taskBody("delete interface", resp, resp.JSON202, resp.HALJSON202, 200, 202, 204)
 }
 
 // UpdateInterfaceDriver updates a network interface's driver.
@@ -262,14 +235,7 @@ func (c *Client) UpdateInterfaceDriver(ctx context.Context, serverID int32, mac 
 		return nil, fmt.Errorf("update interface driver: %w", err)
 	}
 
-	if err := checkResponse(resp, 200, 202, 204); err != nil {
-		return nil, fmt.Errorf("update interface driver: %w", err)
-	}
-
-	if resp.JSON202 != nil {
-		return resp.JSON202, nil
-	}
-	return resp.HALJSON202, nil
+	return taskBody("update interface driver", resp, resp.JSON202, resp.HALJSON202, 200, 202, 204)
 }
 
 // GetRDNSv4 retrieves the reverse DNS entry for an IPv4 address.
@@ -279,15 +245,7 @@ func (c *Client) GetRDNSv4(ctx context.Context, ip string) (*generated.Rdns, err
 		return nil, fmt.Errorf("get rdns ipv4: %w", err)
 	}
 
-	if err := checkResponse(resp, 200); err != nil {
-		return nil, fmt.Errorf("get rdns ipv4: %w", err)
-	}
-
-	if resp.JSON200 == nil {
-		return nil, fmt.Errorf("get rdns ipv4: empty response")
-	}
-
-	return resp.JSON200, nil
+	return pickBody("get rdns ipv4", resp, resp.JSON200, resp.HALJSON200, 200)
 }
 
 // GetRDNSv6 retrieves the reverse DNS entry for an IPv6 address.
@@ -297,13 +255,5 @@ func (c *Client) GetRDNSv6(ctx context.Context, ip string) (*generated.Rdns, err
 		return nil, fmt.Errorf("get rdns ipv6: %w", err)
 	}
 
-	if err := checkResponse(resp, 200); err != nil {
-		return nil, fmt.Errorf("get rdns ipv6: %w", err)
-	}
-
-	if resp.JSON200 == nil {
-		return nil, fmt.Errorf("get rdns ipv6: empty response")
-	}
-
-	return resp.JSON200, nil
+	return pickBody("get rdns ipv6", resp, resp.JSON200, resp.HALJSON200, 200)
 }

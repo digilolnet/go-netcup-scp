@@ -30,15 +30,7 @@ func (c *Client) ListUserImages(ctx context.Context, userID int32) ([]generated.
 		return nil, fmt.Errorf("list user images: %w", err)
 	}
 
-	if err := checkResponse(resp, 200); err != nil {
-		return nil, fmt.Errorf("list user images: %w", err)
-	}
-
-	if resp.JSON200 == nil {
-		return nil, fmt.Errorf("list user images: empty response")
-	}
-
-	return *resp.JSON200, nil
+	return pickBodyVal("list user images", resp, resp.JSON200, resp.HALJSON200, 200)
 }
 
 // GetUserImage retrieves download information for a specific user-uploaded image.
@@ -48,15 +40,7 @@ func (c *Client) GetUserImage(ctx context.Context, userID int32, key string) (*g
 		return nil, fmt.Errorf("get user image: %w", err)
 	}
 
-	if err := checkResponse(resp, 200); err != nil {
-		return nil, fmt.Errorf("get user image: %w", err)
-	}
-
-	if resp.JSON200 == nil {
-		return nil, fmt.Errorf("get user image: empty response")
-	}
-
-	return resp.JSON200, nil
+	return pickBody("get user image", resp, resp.JSON200, resp.HALJSON200, 200)
 }
 
 // DeleteUserImage deletes a user-uploaded disk image.

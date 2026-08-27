@@ -42,15 +42,7 @@ func (c *Client) ListFailoverIPv4(ctx context.Context, userID int32, opts *ListF
 		return nil, fmt.Errorf("list failover ipv4: %w", err)
 	}
 
-	if err := checkResponse(resp, 200); err != nil {
-		return nil, fmt.Errorf("list failover ipv4: %w", err)
-	}
-
-	if resp.JSON200 == nil {
-		return nil, fmt.Errorf("list failover ipv4: empty response")
-	}
-
-	return *resp.JSON200, nil
+	return pickBodyVal("list failover ipv4", resp, resp.JSON200, resp.HALJSON200, 200)
 }
 
 // RouteFailoverIPv4 routes a failover IPv4 address to a different server.
@@ -63,11 +55,7 @@ func (c *Client) RouteFailoverIPv4(ctx context.Context, userID, failoverID, serv
 		return nil, fmt.Errorf("route failover ipv4: %w", err)
 	}
 
-	if err := checkResponse(resp, 202); err != nil {
-		return nil, fmt.Errorf("route failover ipv4: %w", err)
-	}
-
-	return resp.JSON202, nil
+	return taskBody("route failover ipv4", resp, resp.JSON202, resp.HALJSON202, 202)
 }
 
 // UnrouteFailoverIPv4 removes the routing of a failover IPv4 address.
@@ -80,11 +68,7 @@ func (c *Client) UnrouteFailoverIPv4(ctx context.Context, userID, failoverID int
 		return nil, fmt.Errorf("unroute failover ipv4: %w", err)
 	}
 
-	if err := checkResponse(resp, 202); err != nil {
-		return nil, fmt.Errorf("unroute failover ipv4: %w", err)
-	}
-
-	return resp.JSON202, nil
+	return taskBody("unroute failover ipv4", resp, resp.JSON202, resp.HALJSON202, 202)
 }
 
 // ListFailoverIPv6 retrieves all IPv6 failover prefixes for a user.
@@ -100,15 +84,7 @@ func (c *Client) ListFailoverIPv6(ctx context.Context, userID int32, opts *ListF
 		return nil, fmt.Errorf("list failover ipv6: %w", err)
 	}
 
-	if err := checkResponse(resp, 200); err != nil {
-		return nil, fmt.Errorf("list failover ipv6: %w", err)
-	}
-
-	if resp.JSON200 == nil {
-		return nil, fmt.Errorf("list failover ipv6: empty response")
-	}
-
-	return *resp.JSON200, nil
+	return pickBodyVal("list failover ipv6", resp, resp.JSON200, resp.HALJSON200, 200)
 }
 
 // RouteFailoverIPv6 routes a failover IPv6 prefix to a different server.
@@ -121,11 +97,7 @@ func (c *Client) RouteFailoverIPv6(ctx context.Context, userID, failoverID, serv
 		return nil, fmt.Errorf("route failover ipv6: %w", err)
 	}
 
-	if err := checkResponse(resp, 202); err != nil {
-		return nil, fmt.Errorf("route failover ipv6: %w", err)
-	}
-
-	return resp.JSON202, nil
+	return taskBody("route failover ipv6", resp, resp.JSON202, resp.HALJSON202, 202)
 }
 
 // UnrouteFailoverIPv6 removes the routing of a failover IPv6 prefix.
@@ -138,9 +110,5 @@ func (c *Client) UnrouteFailoverIPv6(ctx context.Context, userID, failoverID int
 		return nil, fmt.Errorf("unroute failover ipv6: %w", err)
 	}
 
-	if err := checkResponse(resp, 202); err != nil {
-		return nil, fmt.Errorf("unroute failover ipv6: %w", err)
-	}
-
-	return resp.JSON202, nil
+	return taskBody("unroute failover ipv6", resp, resp.JSON202, resp.HALJSON202, 202)
 }

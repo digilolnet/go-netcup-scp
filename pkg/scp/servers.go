@@ -70,15 +70,7 @@ func (c *Client) ListServers(ctx context.Context, opts *ListServersOptions) ([]g
 		return nil, fmt.Errorf("list servers: %w", err)
 	}
 
-	if err := checkResponse(resp, 200); err != nil {
-		return nil, fmt.Errorf("list servers: %w", err)
-	}
-
-	if resp.JSON200 == nil {
-		return nil, fmt.Errorf("list servers: empty response")
-	}
-
-	return *resp.JSON200, nil
+	return pickBodyVal("list servers", resp, resp.JSON200, resp.HALJSON200, 200)
 }
 
 // GetServer retrieves detailed information about a specific server.
@@ -93,15 +85,7 @@ func (c *Client) GetServer(ctx context.Context, serverID int32, opts *GetServerO
 		return nil, fmt.Errorf("get server: %w", err)
 	}
 
-	if err := checkResponse(resp, 200); err != nil {
-		return nil, fmt.Errorf("get server: %w", err)
-	}
-
-	if resp.JSON200 == nil {
-		return nil, fmt.Errorf("get server: empty response")
-	}
-
-	return resp.JSON200, nil
+	return pickBody("get server", resp, resp.JSON200, resp.HALJSON200, 200)
 }
 
 // StartServer powers on the server.
@@ -128,14 +112,7 @@ func (c *Client) StartServer(ctx context.Context, serverID int32) (*TaskInfo, er
 		return nil, fmt.Errorf("start server: %w", err)
 	}
 
-	if err := checkResponse(resp, 200, 202); err != nil {
-		return nil, fmt.Errorf("start server: %w", err)
-	}
-
-	if resp.JSON202 != nil {
-		return resp.JSON202, nil
-	}
-	return resp.HALJSON202, nil
+	return taskBody("start server", resp, resp.JSON202, resp.HALJSON202, 200, 202)
 }
 
 // StopServer shuts down the server.
@@ -169,14 +146,7 @@ func (c *Client) StopServer(ctx context.Context, serverID int32, powerOff bool) 
 		return nil, fmt.Errorf("stop server: %w", err)
 	}
 
-	if err := checkResponse(resp, 200, 202); err != nil {
-		return nil, fmt.Errorf("stop server: %w", err)
-	}
-
-	if resp.JSON202 != nil {
-		return resp.JSON202, nil
-	}
-	return resp.HALJSON202, nil
+	return taskBody("stop server", resp, resp.JSON202, resp.HALJSON202, 200, 202)
 }
 
 // RestartServer reboots the server.
@@ -212,14 +182,7 @@ func (c *Client) RestartServer(ctx context.Context, serverID int32, reset bool) 
 		return nil, fmt.Errorf("restart server: %w", err)
 	}
 
-	if err := checkResponse(resp, 200, 202); err != nil {
-		return nil, fmt.Errorf("restart server: %w", err)
-	}
-
-	if resp.JSON202 != nil {
-		return resp.JSON202, nil
-	}
-	return resp.HALJSON202, nil
+	return taskBody("restart server", resp, resp.JSON202, resp.HALJSON202, 200, 202)
 }
 
 // SetAutostart configures whether the server starts automatically.
@@ -243,14 +206,7 @@ func (c *Client) SetAutostart(ctx context.Context, serverID int32, enabled bool)
 		return nil, fmt.Errorf("set autostart: %w", err)
 	}
 
-	if err := checkResponse(resp, 200, 202); err != nil {
-		return nil, fmt.Errorf("set autostart: %w", err)
-	}
-
-	if resp.JSON202 != nil {
-		return resp.JSON202, nil
-	}
-	return resp.HALJSON202, nil
+	return taskBody("set autostart", resp, resp.JSON202, resp.HALJSON202, 200, 202)
 }
 
 // SetUEFI configures whether the server uses UEFI boot mode.
@@ -274,14 +230,7 @@ func (c *Client) SetUEFI(ctx context.Context, serverID int32, enabled bool) (*Ta
 		return nil, fmt.Errorf("set uefi: %w", err)
 	}
 
-	if err := checkResponse(resp, 200, 202); err != nil {
-		return nil, fmt.Errorf("set uefi: %w", err)
-	}
-
-	if resp.JSON202 != nil {
-		return resp.JSON202, nil
-	}
-	return resp.HALJSON202, nil
+	return taskBody("set uefi", resp, resp.JSON202, resp.HALJSON202, 200, 202)
 }
 
 // UpdateNickname sets a custom nickname for the server.
@@ -335,15 +284,7 @@ func (c *Client) GetGuestAgent(ctx context.Context, serverID int32) (*generated.
 		return nil, fmt.Errorf("get guest agent: %w", err)
 	}
 
-	if err := checkResponse(resp, 200); err != nil {
-		return nil, fmt.Errorf("get guest agent: %w", err)
-	}
-
-	if resp.JSON200 == nil {
-		return nil, fmt.Errorf("get guest agent: empty response")
-	}
-
-	return resp.JSON200, nil
+	return pickBody("get guest agent", resp, resp.JSON200, resp.HALJSON200, 200)
 }
 
 // GetGuestAgentStatus reports whether the guest agent is available on the server.
@@ -354,18 +295,7 @@ func (c *Client) GetGuestAgentStatus(ctx context.Context, serverID int32) (*gene
 		return nil, fmt.Errorf("get guest agent status: %w", err)
 	}
 
-	if err := checkResponse(resp, 200); err != nil {
-		return nil, fmt.Errorf("get guest agent status: %w", err)
-	}
-
-	if resp.HALJSON200 != nil {
-		return resp.HALJSON200, nil
-	}
-	if resp.JSON200 == nil {
-		return nil, fmt.Errorf("get guest agent status: empty response")
-	}
-
-	return resp.JSON200, nil
+	return pickBody("get guest agent status", resp, resp.JSON200, resp.HALJSON200, 200)
 }
 
 // GetServerLogs retrieves the event log for a server.
@@ -381,15 +311,7 @@ func (c *Client) GetServerLogs(ctx context.Context, serverID int32, opts *GetSer
 		return nil, fmt.Errorf("get server logs: %w", err)
 	}
 
-	if err := checkResponse(resp, 200); err != nil {
-		return nil, fmt.Errorf("get server logs: %w", err)
-	}
-
-	if resp.JSON200 == nil {
-		return nil, fmt.Errorf("get server logs: empty response")
-	}
-
-	return *resp.JSON200, nil
+	return pickBodyVal("get server logs", resp, resp.JSON200, resp.HALJSON200, 200)
 }
 
 // ListImageFlavours retrieves the available OS image flavours for a server.
@@ -399,15 +321,7 @@ func (c *Client) ListImageFlavours(ctx context.Context, serverID int32) ([]gener
 		return nil, fmt.Errorf("list image flavours: %w", err)
 	}
 
-	if err := checkResponse(resp, 200); err != nil {
-		return nil, fmt.Errorf("list image flavours: %w", err)
-	}
-
-	if resp.JSON200 == nil {
-		return nil, fmt.Errorf("list image flavours: empty response")
-	}
-
-	return *resp.JSON200, nil
+	return pickBodyVal("list image flavours", resp, resp.JSON200, resp.HALJSON200, 200)
 }
 
 // InstallImage reinstalls the server with the specified OS image configuration.
@@ -418,11 +332,7 @@ func (c *Client) InstallImage(ctx context.Context, serverID int32, setup ServerI
 		return nil, fmt.Errorf("install image: %w", err)
 	}
 
-	if err := checkResponse(resp, 202); err != nil {
-		return nil, fmt.Errorf("install image: %w", err)
-	}
-
-	return resp.JSON202, nil
+	return taskBody("install image", resp, resp.JSON202, resp.HALJSON202, 202)
 }
 
 // InstallUserImage installs a user-uploaded image onto the server.
@@ -433,11 +343,7 @@ func (c *Client) InstallUserImage(ctx context.Context, serverID int32, setup Ser
 		return nil, fmt.Errorf("install user image: %w", err)
 	}
 
-	if err := checkResponse(resp, 202); err != nil {
-		return nil, fmt.Errorf("install user image: %w", err)
-	}
-
-	return resp.JSON202, nil
+	return taskBody("install user image", resp, resp.JSON202, resp.HALJSON202, 202)
 }
 
 // OptimizeStorage runs storage optimization on a server's disks.
@@ -454,11 +360,7 @@ func (c *Client) OptimizeStorage(ctx context.Context, serverID int32, opts *Opti
 		return nil, fmt.Errorf("optimize storage: %w", err)
 	}
 
-	if err := checkResponse(resp, 202); err != nil {
-		return nil, fmt.Errorf("optimize storage: %w", err)
-	}
-
-	return resp.JSON202, nil
+	return taskBody("optimize storage", resp, resp.JSON202, resp.HALJSON202, 202)
 }
 
 // SetCPUTopology configures the CPU topology (sockets and cores per socket).
@@ -486,14 +388,7 @@ func (c *Client) SetCPUTopology(ctx context.Context, serverID int32, sockets, co
 		return nil, fmt.Errorf("set cpu topology: %w", err)
 	}
 
-	if err := checkResponse(resp, 200, 202); err != nil {
-		return nil, fmt.Errorf("set cpu topology: %w", err)
-	}
-
-	if resp.JSON202 != nil {
-		return resp.JSON202, nil
-	}
-	return resp.HALJSON202, nil
+	return taskBody("set cpu topology", resp, resp.JSON202, resp.HALJSON202, 200, 202)
 }
 
 // GetGPUDriver retrieves a presigned S3 download URL for the GPU driver for a server.
@@ -503,15 +398,5 @@ func (c *Client) GetGPUDriver(ctx context.Context, serverID int32) (*generated.S
 		return nil, fmt.Errorf("get gpu driver: %w", err)
 	}
 
-	if err := checkResponse(resp, 200); err != nil {
-		return nil, fmt.Errorf("get gpu driver: %w", err)
-	}
-
-	if resp.HALJSON200 != nil {
-		return resp.HALJSON200, nil
-	}
-	if resp.JSON200 != nil {
-		return resp.JSON200, nil
-	}
-	return nil, fmt.Errorf("get gpu driver: empty response")
+	return pickBody("get gpu driver", resp, resp.JSON200, resp.HALJSON200, 200)
 }

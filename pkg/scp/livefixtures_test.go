@@ -381,3 +381,34 @@ func TestLiveFixtures(t *testing.T) {
 		})
 	}
 }
+
+// TestHALContentTypeNegotiation replays a real fixture with the content type
+// flipped to application/hal+json. The generated parser then populates
+// HALJSON200 instead of JSON200 — before the pickBody/taskBody helpers, ~50
+// wrappers only checked JSON200 and would fail with "empty response" (or
+// silently drop task handles) if the server's content negotiation ever chose
+// hal+json, which the spec declares for every body-bearing response.
+func TestHALContentTypeNegotiation(t *testing.T) {
+	data, err := os.ReadFile(filepath.Join("testdata", "live", "GET_servers.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	var fx liveFixture
+	if err := json.Unmarshal(data, &fx); err != nil {
+		t.Fatal(err)
+	}
+	client, cleanup := newTestClient(t, func(w http.ResponseWriter, _ *http.Request) {
+		w.Header().Set("Content-Type", "application/hal+json")
+		w.WriteHeader(fx.Status)
+		_, _ = w.Write(fx.ResponseBody)
+	})
+	defer cleanup()
+
+	servers, err := client.ListServers(context.Background(), nil)
+	if err != nil {
+		t.Fatalf("ListServers with hal+json response: %v", err)
+	}
+	if len(servers) != 8 {
+		t.Errorf("want 8 servers, got %d", len(servers))
+	}
+}

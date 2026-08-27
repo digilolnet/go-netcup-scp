@@ -31,15 +31,7 @@ func (c *Client) ListSSHKeys(ctx context.Context, userID int32) ([]SSHKey, error
 		return nil, fmt.Errorf("list ssh keys: %w", err)
 	}
 
-	if err := checkResponse(resp, 200); err != nil {
-		return nil, fmt.Errorf("list ssh keys: %w", err)
-	}
-
-	if resp.JSON200 == nil {
-		return nil, fmt.Errorf("list ssh keys: empty response")
-	}
-
-	return *resp.JSON200, nil
+	return pickBodyVal("list ssh keys", resp, resp.JSON200, resp.HALJSON200, 200)
 }
 
 // CreateSSHKey adds a new SSH public key to a user's account.
@@ -50,15 +42,7 @@ func (c *Client) CreateSSHKey(ctx context.Context, userID int32, key SSHKey) (*S
 		return nil, fmt.Errorf("create ssh key: %w", err)
 	}
 
-	if err := checkResponse(resp, 201); err != nil {
-		return nil, fmt.Errorf("create ssh key: %w", err)
-	}
-
-	if resp.JSON201 == nil {
-		return nil, fmt.Errorf("create ssh key: empty response")
-	}
-
-	return resp.JSON201, nil
+	return pickBody("create ssh key", resp, resp.JSON201, resp.HALJSON201, 201)
 }
 
 // DeleteSSHKey removes an SSH public key from a user's account.

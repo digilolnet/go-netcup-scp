@@ -60,15 +60,7 @@ func (c *Client) ListFirewallPolicies(ctx context.Context, userID int32, opts *L
 		return nil, fmt.Errorf("list firewall policies: %w", err)
 	}
 
-	if err := checkResponse(resp, 200); err != nil {
-		return nil, fmt.Errorf("list firewall policies: %w", err)
-	}
-
-	if resp.JSON200 == nil {
-		return nil, fmt.Errorf("list firewall policies: empty response")
-	}
-
-	return *resp.JSON200, nil
+	return pickBodyVal("list firewall policies", resp, resp.JSON200, resp.HALJSON200, 200)
 }
 
 // CreateFirewallPolicy creates a new firewall policy for a user.
@@ -78,15 +70,7 @@ func (c *Client) CreateFirewallPolicy(ctx context.Context, userID int32, policy 
 		return nil, fmt.Errorf("create firewall policy: %w", err)
 	}
 
-	if err := checkResponse(resp, 201); err != nil {
-		return nil, fmt.Errorf("create firewall policy: %w", err)
-	}
-
-	if resp.JSON201 == nil {
-		return nil, fmt.Errorf("create firewall policy: empty response")
-	}
-
-	return resp.JSON201, nil
+	return pickBody("create firewall policy", resp, resp.JSON201, resp.HALJSON201, 201)
 }
 
 // GetFirewallPolicy retrieves a specific firewall policy by ID.
@@ -96,15 +80,7 @@ func (c *Client) GetFirewallPolicy(ctx context.Context, userID, policyID int32) 
 		return nil, fmt.Errorf("get firewall policy: %w", err)
 	}
 
-	if err := checkResponse(resp, 200); err != nil {
-		return nil, fmt.Errorf("get firewall policy: %w", err)
-	}
-
-	if resp.JSON200 == nil {
-		return nil, fmt.Errorf("get firewall policy: empty response")
-	}
-
-	return resp.JSON200, nil
+	return pickBody("get firewall policy", resp, resp.JSON200, resp.HALJSON200, 200)
 }
 
 // UpdateFirewallPolicy updates an existing firewall policy.
@@ -115,11 +91,7 @@ func (c *Client) UpdateFirewallPolicy(ctx context.Context, userID, policyID int3
 		return nil, fmt.Errorf("update firewall policy: %w", err)
 	}
 
-	if err := checkResponse(resp, 202); err != nil {
-		return nil, fmt.Errorf("update firewall policy: %w", err)
-	}
-
-	return resp.JSON202, nil
+	return taskBody("update firewall policy", resp, resp.JSON202, resp.HALJSON202, 202)
 }
 
 // AddFirewallRule appends a rule to an existing firewall policy. The API always

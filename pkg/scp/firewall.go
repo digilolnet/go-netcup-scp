@@ -46,15 +46,7 @@ func (c *Client) GetFirewall(ctx context.Context, serverID int32, mac string, op
 		return nil, fmt.Errorf("get firewall: %w", err)
 	}
 
-	if err := checkResponse(resp, 200); err != nil {
-		return nil, fmt.Errorf("get firewall: %w", err)
-	}
-
-	if resp.JSON200 == nil {
-		return nil, fmt.Errorf("get firewall: empty response")
-	}
-
-	return resp.JSON200, nil
+	return pickBody("get firewall", resp, resp.JSON200, resp.HALJSON200, 200)
 }
 
 // UpdateFirewall replaces the firewall configuration for a network interface.
@@ -66,11 +58,7 @@ func (c *Client) UpdateFirewall(ctx context.Context, serverID int32, mac string,
 		return nil, fmt.Errorf("update firewall: %w", err)
 	}
 
-	if err := checkResponse(resp, 202); err != nil {
-		return nil, fmt.Errorf("update firewall: %w", err)
-	}
-
-	return resp.JSON202, nil
+	return taskBody("update firewall", resp, resp.JSON202, resp.HALJSON202, 202)
 }
 
 // ReapplyFirewall re-applies the firewall rules to a network interface without changing the configuration.
@@ -82,11 +70,7 @@ func (c *Client) ReapplyFirewall(ctx context.Context, serverID int32, mac string
 		return nil, fmt.Errorf("reapply firewall: %w", err)
 	}
 
-	if err := checkResponse(resp, 202); err != nil {
-		return nil, fmt.Errorf("reapply firewall: %w", err)
-	}
-
-	return resp.JSON202, nil
+	return taskBody("reapply firewall", resp, resp.JSON202, resp.HALJSON202, 202)
 }
 
 // SetFirewallActive enables or disables the firewall for a network interface while
@@ -163,9 +147,5 @@ func (c *Client) RestoreCopiedFirewallPolicies(ctx context.Context, serverID int
 		return nil, fmt.Errorf("restore copied firewall policies: %w", err)
 	}
 
-	if err := checkResponse(resp, 202); err != nil {
-		return nil, fmt.Errorf("restore copied firewall policies: %w", err)
-	}
-
-	return resp.JSON202, nil
+	return taskBody("restore copied firewall policies", resp, resp.JSON202, resp.HALJSON202, 202)
 }

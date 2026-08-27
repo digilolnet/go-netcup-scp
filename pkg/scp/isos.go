@@ -30,15 +30,7 @@ func (c *Client) ListAvailableISOs(ctx context.Context, serverID int32) ([]gener
 		return nil, fmt.Errorf("list available isos: %w", err)
 	}
 
-	if err := checkResponse(resp, 200); err != nil {
-		return nil, fmt.Errorf("list available isos: %w", err)
-	}
-
-	if resp.JSON200 == nil {
-		return nil, fmt.Errorf("list available isos: empty response")
-	}
-
-	return *resp.JSON200, nil
+	return pickBodyVal("list available isos", resp, resp.JSON200, resp.HALJSON200, 200)
 }
 
 // GetAttachedISO retrieves information about the currently attached ISO for a server.
@@ -49,15 +41,7 @@ func (c *Client) GetAttachedISO(ctx context.Context, serverID int32) (*generated
 		return nil, fmt.Errorf("get attached iso: %w", err)
 	}
 
-	if err := checkResponse(resp, 200); err != nil {
-		return nil, fmt.Errorf("get attached iso: %w", err)
-	}
-
-	if resp.JSON200 == nil {
-		return nil, fmt.Errorf("get attached iso: empty response")
-	}
-
-	return resp.JSON200, nil
+	return pickBody("get attached iso", resp, resp.JSON200, resp.HALJSON200, 200)
 }
 
 // AttachISOOptions configures the AttachISO operation.
@@ -128,15 +112,7 @@ func (c *Client) ListUserISOs(ctx context.Context, userID int32) ([]generated.S3
 		return nil, fmt.Errorf("list user isos: %w", err)
 	}
 
-	if err := checkResponse(resp, 200); err != nil {
-		return nil, fmt.Errorf("list user isos: %w", err)
-	}
-
-	if resp.JSON200 == nil {
-		return nil, fmt.Errorf("list user isos: empty response")
-	}
-
-	return *resp.JSON200, nil
+	return pickBodyVal("list user isos", resp, resp.JSON200, resp.HALJSON200, 200)
 }
 
 // GetUserISO retrieves information about a specific user-uploaded ISO.
@@ -146,15 +122,7 @@ func (c *Client) GetUserISO(ctx context.Context, userID int32, key string) (*gen
 		return nil, fmt.Errorf("get user iso: %w", err)
 	}
 
-	if err := checkResponse(resp, 200); err != nil {
-		return nil, fmt.Errorf("get user iso: %w", err)
-	}
-
-	if resp.JSON200 == nil {
-		return nil, fmt.Errorf("get user iso: empty response")
-	}
-
-	return resp.JSON200, nil
+	return pickBody("get user iso", resp, resp.JSON200, resp.HALJSON200, 200)
 }
 
 // DeleteUserISO deletes a user-uploaded ISO.

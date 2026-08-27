@@ -39,15 +39,7 @@ func (c *Client) GetUser(ctx context.Context, userID int32) (*generated.User, er
 		return nil, fmt.Errorf("get user: %w", err)
 	}
 
-	if err := checkResponse(resp, 200); err != nil {
-		return nil, fmt.Errorf("get user: %w", err)
-	}
-
-	if resp.JSON200 == nil {
-		return nil, fmt.Errorf("get user: empty response")
-	}
-
-	return resp.JSON200, nil
+	return pickBody("get user", resp, resp.JSON200, resp.HALJSON200, 200)
 }
 
 // UpdateUser updates account settings for the specified user.
@@ -58,15 +50,7 @@ func (c *Client) UpdateUser(ctx context.Context, userID int32, body UserSave) (*
 		return nil, fmt.Errorf("update user: %w", err)
 	}
 
-	if err := checkResponse(resp, 200); err != nil {
-		return nil, fmt.Errorf("update user: %w", err)
-	}
-
-	if resp.JSON200 == nil {
-		return nil, fmt.Errorf("update user: empty response")
-	}
-
-	return resp.JSON200, nil
+	return pickBody("update user", resp, resp.JSON200, resp.HALJSON200, 200)
 }
 
 // GetUserLogs retrieves the audit log for the specified user.
@@ -82,13 +66,5 @@ func (c *Client) GetUserLogs(ctx context.Context, userID int32, opts *GetUserLog
 		return nil, fmt.Errorf("get user logs: %w", err)
 	}
 
-	if err := checkResponse(resp, 200); err != nil {
-		return nil, fmt.Errorf("get user logs: %w", err)
-	}
-
-	if resp.JSON200 == nil {
-		return nil, fmt.Errorf("get user logs: empty response")
-	}
-
-	return *resp.JSON200, nil
+	return pickBodyVal("get user logs", resp, resp.JSON200, resp.HALJSON200, 200)
 }

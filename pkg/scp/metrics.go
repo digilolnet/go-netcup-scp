@@ -40,17 +40,7 @@ func (c *Client) GetCPUMetrics(ctx context.Context, serverID int32, opts *Metric
 		return nil, fmt.Errorf("get cpu metrics: %w", err)
 	}
 
-	if err := checkResponse(resp, 200); err != nil {
-		return nil, fmt.Errorf("get cpu metrics: %w", err)
-	}
-
-	if resp.HALJSON200 != nil {
-		return *resp.HALJSON200, nil
-	}
-	if resp.JSON200 != nil {
-		return *resp.JSON200, nil
-	}
-	return nil, fmt.Errorf("get cpu metrics: empty response")
+	return pickBodyVal("get cpu metrics", resp, resp.JSON200, resp.HALJSON200, 200)
 }
 
 // GetDiskMetrics retrieves disk I/O metrics for a server.
@@ -66,17 +56,7 @@ func (c *Client) GetDiskMetrics(ctx context.Context, serverID int32, opts *Metri
 		return nil, fmt.Errorf("get disk metrics: %w", err)
 	}
 
-	if err := checkResponse(resp, 200); err != nil {
-		return nil, fmt.Errorf("get disk metrics: %w", err)
-	}
-
-	if resp.HALJSON200 != nil {
-		return *resp.HALJSON200, nil
-	}
-	if resp.JSON200 != nil {
-		return *resp.JSON200, nil
-	}
-	return nil, fmt.Errorf("get disk metrics: empty response")
+	return pickBodyVal("get disk metrics", resp, resp.JSON200, resp.HALJSON200, 200)
 }
 
 // GetNetworkMetrics retrieves network throughput metrics for a server.
@@ -92,17 +72,7 @@ func (c *Client) GetNetworkMetrics(ctx context.Context, serverID int32, opts *Me
 		return nil, fmt.Errorf("get network metrics: %w", err)
 	}
 
-	if err := checkResponse(resp, 200); err != nil {
-		return nil, fmt.Errorf("get network metrics: %w", err)
-	}
-
-	if resp.HALJSON200 != nil {
-		return *resp.HALJSON200, nil
-	}
-	if resp.JSON200 != nil {
-		return *resp.JSON200, nil
-	}
-	return nil, fmt.Errorf("get network metrics: empty response")
+	return pickBodyVal("get network metrics", resp, resp.JSON200, resp.HALJSON200, 200)
 }
 
 // GetNetworkPacketMetrics retrieves network packet count metrics for a server.
@@ -118,15 +88,5 @@ func (c *Client) GetNetworkPacketMetrics(ctx context.Context, serverID int32, op
 		return nil, fmt.Errorf("get network packet metrics: %w", err)
 	}
 
-	if err := checkResponse(resp, 200); err != nil {
-		return nil, fmt.Errorf("get network packet metrics: %w", err)
-	}
-
-	if resp.HALJSON200 != nil {
-		return *resp.HALJSON200, nil
-	}
-	if resp.JSON200 != nil {
-		return *resp.JSON200, nil
-	}
-	return nil, fmt.Errorf("get network packet metrics: empty response")
+	return pickBodyVal("get network packet metrics", resp, resp.JSON200, resp.HALJSON200, 200)
 }

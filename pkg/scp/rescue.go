@@ -28,15 +28,7 @@ func (c *Client) GetRescueSystem(ctx context.Context, serverID int32) (*generate
 		return nil, fmt.Errorf("get rescue system: %w", err)
 	}
 
-	if err := checkResponse(resp, 200); err != nil {
-		return nil, fmt.Errorf("get rescue system: %w", err)
-	}
-
-	if resp.JSON200 == nil {
-		return nil, fmt.Errorf("get rescue system: empty response")
-	}
-
-	return resp.JSON200, nil
+	return pickBody("get rescue system", resp, resp.JSON200, resp.HALJSON200, 200)
 }
 
 // ActivateRescueSystem boots the server into rescue mode.
@@ -48,11 +40,7 @@ func (c *Client) ActivateRescueSystem(ctx context.Context, serverID int32) (*gen
 		return nil, fmt.Errorf("activate rescue system: %w", err)
 	}
 
-	if err := checkResponse(resp, 202); err != nil {
-		return nil, fmt.Errorf("activate rescue system: %w", err)
-	}
-
-	return resp.JSON202, nil
+	return taskBody("activate rescue system", resp, resp.JSON202, resp.HALJSON202, 202)
 }
 
 // DeactivateRescueSystem exits rescue mode and boots the server normally.
@@ -63,9 +51,5 @@ func (c *Client) DeactivateRescueSystem(ctx context.Context, serverID int32) (*g
 		return nil, fmt.Errorf("deactivate rescue system: %w", err)
 	}
 
-	if err := checkResponse(resp, 202); err != nil {
-		return nil, fmt.Errorf("deactivate rescue system: %w", err)
-	}
-
-	return resp.JSON202, nil
+	return taskBody("deactivate rescue system", resp, resp.JSON202, resp.HALJSON202, 202)
 }

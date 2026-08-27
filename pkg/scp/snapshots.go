@@ -39,14 +39,7 @@ func (c *Client) CreateSnapshot(ctx context.Context, serverID int32, name, descr
 		return nil, fmt.Errorf("create snapshot: %w", err)
 	}
 
-	if err := checkResponse(resp, 200, 201, 202); err != nil {
-		return nil, fmt.Errorf("create snapshot: %w", err)
-	}
-
-	if resp.JSON202 != nil {
-		return resp.JSON202, nil
-	}
-	return resp.HALJSON202, nil
+	return taskBody("create snapshot", resp, resp.JSON202, resp.HALJSON202, 200, 201, 202)
 }
 
 // ListSnapshots retrieves all snapshots for a server.
@@ -56,15 +49,7 @@ func (c *Client) ListSnapshots(ctx context.Context, serverID int32) ([]generated
 		return nil, fmt.Errorf("list snapshots: %w", err)
 	}
 
-	if err := checkResponse(resp, 200); err != nil {
-		return nil, fmt.Errorf("list snapshots: %w", err)
-	}
-
-	if resp.JSON200 == nil {
-		return nil, fmt.Errorf("list snapshots: empty response")
-	}
-
-	return *resp.JSON200, nil
+	return pickBodyVal("list snapshots", resp, resp.JSON200, resp.HALJSON200, 200)
 }
 
 // GetSnapshot retrieves information about a specific snapshot.
@@ -77,15 +62,7 @@ func (c *Client) GetSnapshot(ctx context.Context, serverID int32, name string) (
 		return nil, fmt.Errorf("get snapshot: %w", err)
 	}
 
-	if err := checkResponse(resp, 200); err != nil {
-		return nil, fmt.Errorf("get snapshot: %w", err)
-	}
-
-	if resp.JSON200 == nil {
-		return nil, fmt.Errorf("get snapshot: empty response")
-	}
-
-	return resp.JSON200, nil
+	return pickBody("get snapshot", resp, resp.JSON200, resp.HALJSON200, 200)
 }
 
 // DeleteSnapshot deletes a snapshot.
@@ -100,14 +77,7 @@ func (c *Client) DeleteSnapshot(ctx context.Context, serverID int32, name string
 		return nil, fmt.Errorf("delete snapshot: %w", err)
 	}
 
-	if err := checkResponse(resp, 200, 202, 204); err != nil {
-		return nil, fmt.Errorf("delete snapshot: %w", err)
-	}
-
-	if resp.JSON202 != nil {
-		return resp.JSON202, nil
-	}
-	return resp.HALJSON202, nil
+	return taskBody("delete snapshot", resp, resp.JSON202, resp.HALJSON202, 200, 202, 204)
 }
 
 // RevertSnapshot reverts a server to a previous snapshot state.
@@ -122,14 +92,7 @@ func (c *Client) RevertSnapshot(ctx context.Context, serverID int32, name string
 		return nil, fmt.Errorf("revert snapshot: %w", err)
 	}
 
-	if err := checkResponse(resp, 200, 202); err != nil {
-		return nil, fmt.Errorf("revert snapshot: %w", err)
-	}
-
-	if resp.JSON202 != nil {
-		return resp.JSON202, nil
-	}
-	return resp.HALJSON202, nil
+	return taskBody("revert snapshot", resp, resp.JSON202, resp.HALJSON202, 200, 202)
 }
 
 // DryRunSnapshot checks whether a snapshot can be created without actually creating one.
@@ -145,15 +108,7 @@ func (c *Client) DryRunSnapshot(ctx context.Context, serverID int32, onlineSnaps
 		return nil, fmt.Errorf("dry run snapshot: %w", err)
 	}
 
-	if err := checkResponse(resp, 200); err != nil {
-		return nil, fmt.Errorf("dry run snapshot: %w", err)
-	}
-
-	if resp.JSON200 == nil {
-		return nil, fmt.Errorf("dry run snapshot: empty response")
-	}
-
-	return *resp.JSON200, nil
+	return pickBodyVal("dry run snapshot", resp, resp.JSON200, resp.HALJSON200, 200)
 }
 
 // ExportSnapshot exports a snapshot.
@@ -167,9 +122,5 @@ func (c *Client) ExportSnapshot(ctx context.Context, serverID int32, name string
 		return nil, fmt.Errorf("export snapshot: %w", err)
 	}
 
-	if err := checkResponse(resp, 202); err != nil {
-		return nil, fmt.Errorf("export snapshot: %w", err)
-	}
-
-	return resp.JSON202, nil
+	return taskBody("export snapshot", resp, resp.JSON202, resp.HALJSON202, 202)
 }

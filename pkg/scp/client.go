@@ -278,3 +278,43 @@ func responseBody(resp interface{ StatusCode() int }) []byte {
 	}
 	return nil
 }
+
+// pickBody validates the status code and returns the response body of a 2xx
+// response, which the API may serve as either application/json or
+// application/hal+json (server-side content negotiation): whichever of the two
+// generated body fields is populated wins. A successful status with neither
+// body set is an error.
+func pickBody[T any](op string, resp interface{ StatusCode() int }, jsonBody, halBody *T, codes ...int) (*T, error) {
+	if err := checkResponse(resp, codes...); err != nil {
+		return nil, fmt.Errorf("%s: %w", op, err)
+	}
+	if halBody != nil {
+		return halBody, nil
+	}
+	if jsonBody != nil {
+		return jsonBody, nil
+	}
+	return nil, fmt.Errorf("%s: empty response", op)
+}
+
+// pickBodyVal is pickBody for wrappers that return the dereferenced value.
+func pickBodyVal[T any](op string, resp interface{ StatusCode() int }, jsonBody, halBody *T, codes ...int) (T, error) {
+	body, err := pickBody(op, resp, jsonBody, halBody, codes...)
+	if err != nil {
+		var zero T
+		return zero, err
+	}
+	return *body, nil
+}
+
+// taskBody is pickBody for task-returning mutations, where a bodiless success
+// (e.g. 204 no-op) legitimately yields a nil result.
+func taskBody[T any](op string, resp interface{ StatusCode() int }, jsonBody, halBody *T, codes ...int) (*T, error) {
+	if err := checkResponse(resp, codes...); err != nil {
+		return nil, fmt.Errorf("%s: %w", op, err)
+	}
+	if halBody != nil {
+		return halBody, nil
+	}
+	return jsonBody, nil
+}
