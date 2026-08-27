@@ -298,17 +298,17 @@ func newRDNSv4Cmd() *cobra.Command {
 		Short: "Manage IPv4 reverse DNS entries",
 	}
 	cmd.AddCommand(
-		newRDNSGetCmd("rdns-v4 get <ip>", func(cc *cmdContext, ip string) (string, error) {
+		newRDNSGetCmd(func(cc *cmdContext, ip string) (string, error) {
 			rdns, err := cc.client.GetRDNSv4(cc.ctx, ip)
 			if err != nil {
 				return "", err
 			}
 			return derefStr(rdns.Rdns), nil
 		}),
-		newRDNSSetCmd("rdns-v4 set <ip> <hostname>", func(cc *cmdContext, ip, hostname string) error {
+		newRDNSSetCmd(func(cc *cmdContext, ip, hostname string) error {
 			return cc.client.SetRDNSv4(cc.ctx, ip, hostname)
 		}),
-		newRDNSDeleteCmd("rdns-v4 delete <ip>", func(cc *cmdContext, ip string) error {
+		newRDNSDeleteCmd(func(cc *cmdContext, ip string) error {
 			return cc.client.DeleteRDNSv4(cc.ctx, ip)
 		}),
 	)
@@ -323,24 +323,24 @@ func newRDNSv6Cmd() *cobra.Command {
 		Short: "Manage IPv6 reverse DNS entries",
 	}
 	cmd.AddCommand(
-		newRDNSGetCmd("rdns-v6 get <ip>", func(cc *cmdContext, ip string) (string, error) {
+		newRDNSGetCmd(func(cc *cmdContext, ip string) (string, error) {
 			rdns, err := cc.client.GetRDNSv6(cc.ctx, ip)
 			if err != nil {
 				return "", err
 			}
 			return derefStr(rdns.Rdns), nil
 		}),
-		newRDNSSetCmd("rdns-v6 set <ip> <hostname>", func(cc *cmdContext, ip, hostname string) error {
+		newRDNSSetCmd(func(cc *cmdContext, ip, hostname string) error {
 			return cc.client.SetRDNSv6(cc.ctx, ip, hostname)
 		}),
-		newRDNSDeleteCmd("rdns-v6 delete <ip>", func(cc *cmdContext, ip string) error {
+		newRDNSDeleteCmd(func(cc *cmdContext, ip string) error {
 			return cc.client.DeleteRDNSv6(cc.ctx, ip)
 		}),
 	)
 	return cmd
 }
 
-func newRDNSGetCmd(_ string, fn func(*cmdContext, string) (string, error)) *cobra.Command {
+func newRDNSGetCmd(fn func(*cmdContext, string) (string, error)) *cobra.Command {
 	return &cobra.Command{
 		Use:   "get <ip>",
 		Short: "Get rDNS entry",
@@ -365,7 +365,7 @@ func newRDNSGetCmd(_ string, fn func(*cmdContext, string) (string, error)) *cobr
 	}
 }
 
-func newRDNSSetCmd(_ string, fn func(*cmdContext, string, string) error) *cobra.Command {
+func newRDNSSetCmd(fn func(*cmdContext, string, string) error) *cobra.Command {
 	return &cobra.Command{
 		Use:   "set <ip> <hostname>",
 		Short: "Set rDNS entry",
@@ -386,7 +386,7 @@ func newRDNSSetCmd(_ string, fn func(*cmdContext, string, string) error) *cobra.
 	}
 }
 
-func newRDNSDeleteCmd(_ string, fn func(*cmdContext, string) error) *cobra.Command {
+func newRDNSDeleteCmd(fn func(*cmdContext, string) error) *cobra.Command {
 	return &cobra.Command{
 		Use:   "delete <ip>",
 		Short: "Delete rDNS entry",

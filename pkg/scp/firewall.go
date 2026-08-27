@@ -106,6 +106,11 @@ func (c *Client) SetFirewallActive(ctx context.Context, serverID int32, mac stri
 	return task, nil
 }
 
+// ClearFirewall removes all policies from an interface.
+//
+// Contract note: on partial failure (the clear succeeded but restoring copied
+// policies did not) it returns BOTH the tasks already issued and a non-nil
+// error — discard neither: the wipe is in flight even though the call failed.
 // ClearFirewall removes all user and copied policies from a network interface.
 // If restoreCopied is true, netcup's copied policies are restored afterwards.
 // Returns the tasks issued; two tasks are returned when restoreCopied is true and

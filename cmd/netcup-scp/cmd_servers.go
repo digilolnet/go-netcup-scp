@@ -82,9 +82,7 @@ func newServersListCmd() *cobra.Command {
 			if q != "" {
 				opts.Q = &q
 			}
-			if len(sort) > 0 {
-				opts.Sort = &sort
-			}
+			opts.Sort = sort
 
 			servers, err := cc.client.ListServers(cc.ctx, opts)
 			if err != nil {
@@ -785,7 +783,7 @@ func newServersOptimizeStorageCmd() *cobra.Command {
 			opts := &scp.OptimizeStorageOptions{}
 			if disksFlag != "" {
 				parts := strings.Split(disksFlag, ",")
-				opts.Disks = &parts
+				opts.Disks = parts
 			}
 			if startAfter {
 				opts.StartAfterOptimization = new(true)

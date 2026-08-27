@@ -34,14 +34,19 @@ func (c *Client) ListAvailableISOs(ctx context.Context, serverID int32) ([]gener
 }
 
 // GetAttachedISO retrieves information about the currently attached ISO for a server.
-// Returns nil if no ISO is attached.
+// Returns (nil, nil) if no ISO is attached (the API answers 200 with
+// {"iso": null, "isoAttached": false}).
 func (c *Client) GetAttachedISO(ctx context.Context, serverID int32) (*generated.Iso, error) {
 	resp, err := c.api.GetApiV1ServersServerIdIsoWithResponse(ctx, serverID)
 	if err != nil {
 		return nil, fmt.Errorf("get attached iso: %w", err)
 	}
 
-	return pickBody("get attached iso", resp, resp.JSON200, resp.HALJSON200, 200)
+	iso, err := pickBody("get attached iso", resp, resp.JSON200, resp.HALJSON200, 200)
+	if err != nil || !deref(iso.IsoAttached) {
+		return nil, err
+	}
+	return iso, nil
 }
 
 // AttachISOOptions configures the AttachISO operation.

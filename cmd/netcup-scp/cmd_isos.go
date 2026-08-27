@@ -100,6 +100,13 @@ func newIsosGetAttachedCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
+			if iso == nil {
+				if cc.jsonOut {
+					return printJSON(nil)
+				}
+				fmt.Println("no ISO attached")
+				return nil
+			}
 			return printResult(cc, iso, func() {
 				printKV("ISO", derefStr(iso.Iso), "Attached", deref(iso.IsoAttached))
 			})

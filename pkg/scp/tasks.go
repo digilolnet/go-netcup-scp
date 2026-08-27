@@ -78,20 +78,13 @@ func (c *Client) GetTask(ctx context.Context, uuid string) (*TaskInfo, error) {
 }
 
 // CancelTask cancels a running async task.
-// Returns the updated task info; the task may still be in progress if cancellation is pending.
+// Returns the updated task info for a 202 answer, or nil for a bodiless 204;
+// the task may still be in progress if cancellation is pending.
 func (c *Client) CancelTask(ctx context.Context, uuid string) (*TaskInfo, error) {
 	resp, err := c.api.PutApiV1TasksUuidCancelWithResponse(ctx, uuid)
 	if err != nil {
 		return nil, fmt.Errorf("cancel task: %w", err)
 	}
 
-	if err := checkResponse(resp, 202, 204); err != nil {
-		return nil, fmt.Errorf("cancel task: %w", err)
-	}
-
-	if resp.JSON202 != nil {
-		return resp.JSON202, nil
-	}
-
-	return resp.JSON204, nil
+	return taskBody("cancel task", resp, resp.JSON202, resp.HALJSON202, 202, 204)
 }

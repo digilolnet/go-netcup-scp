@@ -43,7 +43,7 @@ type ListServersOptions struct {
 	Q *string
 	// Sort orders results by one or more fields (name, nickname).
 	// Prefix a field with '-' for descending order, e.g. []string{"-nickname", "name"}.
-	Sort *[]string
+	Sort []string
 }
 
 // GetServerOptions contains optional parameters for getting a server.
@@ -62,7 +62,9 @@ func (c *Client) ListServers(ctx context.Context, opts *ListServersOptions) ([]g
 		params.Name = opts.Name
 		params.Offset = opts.Offset
 		params.Q = opts.Q
-		params.Sort = opts.Sort
+		if len(opts.Sort) > 0 {
+			params.Sort = &opts.Sort
+		}
 	}
 
 	resp, err := c.api.GetApiV1ServersWithResponse(ctx, params)
@@ -271,7 +273,7 @@ type GetServerLogsOptions struct {
 // OptimizeStorageOptions configures the OptimizeStorage operation.
 type OptimizeStorageOptions struct {
 	// Disks restricts optimization to specific disk names; nil means all disks.
-	Disks *[]string
+	Disks []string
 	// StartAfterOptimization starts the server after the optimization completes.
 	StartAfterOptimization *bool
 }
@@ -351,7 +353,9 @@ func (c *Client) InstallUserImage(ctx context.Context, serverID int32, setup Ser
 func (c *Client) OptimizeStorage(ctx context.Context, serverID int32, opts *OptimizeStorageOptions) (*TaskInfo, error) {
 	params := &generated.PostApiV1ServersServerIdStorageoptimizationParams{}
 	if opts != nil {
-		params.Disks = opts.Disks
+		if len(opts.Disks) > 0 {
+			params.Disks = &opts.Disks
+		}
 		params.StartAfterOptimization = opts.StartAfterOptimization
 	}
 

@@ -52,6 +52,18 @@ type rfbConn struct {
 	bpp    int
 	order  binary.ByteOrder
 	img    *image.RGBA
+	// scratch is reused for protocol reads (headers and rect pixels): WatchFrames
+	// is a steady-state loop, and per-rect allocations otherwise accumulate.
+	scratch []byte
+}
+
+// buf returns an n-byte slice backed by the reusable scratch buffer. Callers
+// must fully consume it before the next buf call.
+func (r *rfbConn) buf(n int) []byte {
+	if cap(r.scratch) < n {
+		r.scratch = make([]byte, n)
+	}
+	return r.scratch[:n]
 }
 
 // connect runs the RFB 3.8 handshake (ProtocolVersion, None security,
@@ -158,7 +170,7 @@ func (r *rfbConn) requestUpdate(incremental bool) error {
 // applies its Raw rectangles to the image, and returns the pixels covered.
 func (r *rfbConn) readUpdate() (int, error) {
 	for {
-		msgType := make([]byte, 1)
+		msgType := r.buf(1)
 		if _, err := io.ReadFull(r.conn, msgType); err != nil {
 			return 0, fmt.Errorf("rfb: read message type: %w", err)
 		}
@@ -168,14 +180,14 @@ func (r *rfbConn) readUpdate() (int, error) {
 			}
 			continue
 		}
-		hdr := make([]byte, 3)
+		hdr := r.buf(3)
 		if _, err := io.ReadFull(r.conn, hdr); err != nil {
 			return 0, fmt.Errorf("rfb: read update header: %w", err)
 		}
 		nRects := int(binary.BigEndian.Uint16(hdr[1:3]))
 		covered := 0
 		for i := 0; i < nRects; i++ {
-			rh := make([]byte, 12)
+			rh := r.buf(12)
 			if _, err := io.ReadFull(r.conn, rh); err != nil {
 				return covered, fmt.Errorf("rfb: read rect header: %w", err)
 			}
@@ -194,7 +206,7 @@ func (r *rfbConn) readUpdate() (int, error) {
 				return covered, fmt.Errorf("rfb: rect %dx%d+%d+%d exceeds framebuffer %dx%d",
 					rw, rhh, rx, ry, r.width, r.height)
 			}
-			buf := make([]byte, rw*rhh*r.bpp)
+			buf := r.buf(rw * rhh * r.bpp)
 			if _, err := io.ReadFull(r.conn, buf); err != nil {
 				return covered, fmt.Errorf("rfb: read rect pixels: %w", err)
 			}

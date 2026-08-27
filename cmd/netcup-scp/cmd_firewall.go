@@ -414,10 +414,6 @@ func newFWPoliciesAddRuleCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			if direction == "" || protocol == "" || action == "" {
-				return fmt.Errorf("--direction, --protocol, and --action are required")
-			}
-
 			rule := scp.FirewallRule{
 				Direction: scp.FirewallRuleDirection(direction),
 				Protocol:  scp.FirewallProtocol(protocol),
@@ -465,6 +461,9 @@ func newFWPoliciesAddRuleCmd() *cobra.Command {
 	cmd.Flags().StringVar(&direction, "direction", "", "INGRESS or EGRESS (required)")
 	cmd.Flags().StringVar(&protocol, "protocol", "", "TCP, UDP, ICMP, or ICMPv6 (required)")
 	cmd.Flags().StringVar(&action, "action", "", "ACCEPT or DROP (required)")
+	for _, f := range []string{"direction", "protocol", "action"} {
+		_ = cmd.MarkFlagRequired(f)
+	}
 	cmd.Flags().StringVar(&description, "description", "", "rule description")
 	cmd.Flags().StringVar(&srcPorts, "src-ports", "", "source ports (e.g. 22 or 1024-65535)")
 	cmd.Flags().StringVar(&dstPorts, "dst-ports", "", "destination ports (e.g. 443 or 8080-8090)")

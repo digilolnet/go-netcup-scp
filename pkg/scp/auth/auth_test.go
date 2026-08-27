@@ -245,6 +245,10 @@ func TestPollForToken_ContextCancelled(t *testing.T) {
 }
 
 func TestPollForToken_SlowDown(t *testing.T) {
+	old := slowDownIncrement
+	slowDownIncrement = 20 * time.Millisecond
+	defer func() { slowDownIncrement = old }()
+
 	callCount := 0
 	mux := http.NewServeMux()
 	mux.HandleFunc("/token", func(w http.ResponseWriter, r *http.Request) {

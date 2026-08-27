@@ -46,7 +46,7 @@ Some endpoints return `application/hal+json` — check `HALJSON200` before `JSON
 
 `pkg/scp/auth/auth.go` implements OAuth2 device flow. `auth.Manager` handles token storage, auto-refresh (30s before expiry), and injects Bearer tokens into every request. See `Authentication.md`.
 
-The CLI stores tokens as JSON files and extracts the user ID from the JWT `sub` claim directly — no `/userinfo` call needed.
+The CLI stores tokens as JSON files and extracts the user ID from the JWT `id` claim directly — no `/userinfo` call needed.
 
 ## CLI conventions
 

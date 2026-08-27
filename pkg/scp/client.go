@@ -23,7 +23,6 @@ import (
 	"os"
 	"reflect"
 	"slices"
-	"sync"
 	"time"
 
 	"github.com/digilolnet/go-netcup-scp/internal/generated"
@@ -41,7 +40,6 @@ type Client struct {
 	api        *generated.ClientWithResponses
 	baseURL    string
 	traceDir   string
-	mu         sync.RWMutex
 }
 
 type ClientOption func(*Client)
@@ -160,8 +158,6 @@ func NewClient(authManager *auth.Manager, opts ...ClientOption) (*Client, error)
 }
 
 func (c *Client) API() *generated.ClientWithResponses {
-	c.mu.RLock()
-	defer c.mu.RUnlock()
 	return c.api
 }
 
@@ -175,8 +171,8 @@ func (c *Client) Ping(ctx context.Context) error {
 		return fmt.Errorf("ping failed: %w", err)
 	}
 
-	if resp.StatusCode() != http.StatusOK {
-		return fmt.Errorf("ping failed with status: %d", resp.StatusCode())
+	if err := checkResponse(resp, 200); err != nil {
+		return fmt.Errorf("ping: %w", err)
 	}
 
 	return nil
@@ -211,6 +207,9 @@ func (c *Client) GetMaintenance(ctx context.Context) ([]generated.Maintenance, e
 	// Try array first (spec says it should be an array).
 	var windows []generated.Maintenance
 	if err := json.Unmarshal(bodyBytes, &windows); err == nil {
+		if windows == nil {
+			windows = []generated.Maintenance{}
+		}
 		return windows, nil
 	}
 
@@ -225,7 +224,7 @@ func (c *Client) GetMaintenance(ctx context.Context) ([]generated.Maintenance, e
 		return nil, fmt.Errorf("get maintenance: parse response: %w", err)
 	}
 	if single.StartAt == nil || single.FinishAt == nil {
-		return nil, nil
+		return []generated.Maintenance{}, nil
 	}
 	return []generated.Maintenance{{StartAt: single.StartAt, FinishAt: single.FinishAt}}, nil
 }

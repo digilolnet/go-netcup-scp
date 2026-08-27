@@ -194,6 +194,17 @@ func TestLiveFixtures(t *testing.T) {
 			},
 		},
 		{
+			// No ISO attached: 200 with {"iso": null, "isoAttached": false} —
+			// the wrapper returns (nil, nil) per its documented contract.
+			fixture: "GET_servers_111007_iso_none.json",
+			call:    func(c *Client) (any, error) { return c.GetAttachedISO(ctx, 111007) },
+			check: func(t *testing.T, got any) {
+				if got.(*generated.Iso) != nil {
+					t.Error("want nil for no attached ISO")
+				}
+			},
+		},
+		{
 			fixture: "GET_servers_111007_iso.json",
 			call:    func(c *Client) (any, error) { return c.GetAttachedISO(ctx, 111007) },
 		},

@@ -136,6 +136,10 @@ func newTasksCancelCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
+			if task == nil {
+				printOK(cc)
+				return nil
+			}
 			return printTaskAndWait(cc, task, wait)
 		},
 	}

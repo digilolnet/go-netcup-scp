@@ -73,7 +73,7 @@ func newTable(headers ...any) table.Writer {
 	return t
 }
 
-// printKV prints "key: value\n" lines. Values with nil pointers are printed as "-".
+// printKV prints aligned "key: value" lines; callers pre-deref pointers.
 func printKV(pairs ...any) {
 	for i := 0; i+1 < len(pairs); i += 2 {
 		fmt.Printf("%-24s %v\n", fmt.Sprintf("%v:", pairs[i]), pairs[i+1])

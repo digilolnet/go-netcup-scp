@@ -264,3 +264,26 @@ func printMetricsSparklines(data map[string]any, baseUnit string, siBase float64
 	)
 	fmt.Println(graph)
 }
+
+// scaleMetricValues multiplies every numeric sample by factor, leaving the
+// timestamp/series structure untouched.
+func scaleMetricValues(data map[string]any, factor float64) map[string]any {
+	out := make(map[string]any, len(data))
+	for k, v := range data {
+		nested, ok := v.(map[string]any)
+		if !ok {
+			out[k] = v
+			continue
+		}
+		scaled := make(map[string]any, len(nested))
+		for nk, nv := range nested {
+			if f, ok := nv.(float64); ok {
+				scaled[nk] = f * factor
+			} else {
+				scaled[nk] = nv
+			}
+		}
+		out[k] = scaled
+	}
+	return out
+}

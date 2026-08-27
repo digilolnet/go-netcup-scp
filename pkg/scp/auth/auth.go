@@ -34,6 +34,10 @@ const (
 	clientID = "scp"
 )
 
+// slowDownIncrement is how much each slow_down response grows the polling
+// interval (RFC 8628 §3.5 mandates 5 seconds); a variable so tests can shrink it.
+var slowDownIncrement = 5 * time.Second
+
 var (
 	ErrDeviceAuthorizationFailed = errors.New("device authorization failed")
 	ErrTokenRefreshFailed        = errors.New("token refresh failed")
@@ -163,7 +167,8 @@ func (am *Manager) PollForToken(ctx context.Context, deviceCode string, interval
 					case "authorization_pending":
 						continue
 					case "slow_down":
-						ticker.Reset(interval * 2)
+						interval += slowDownIncrement
+						ticker.Reset(interval)
 						continue
 					default:
 						return nil, err
