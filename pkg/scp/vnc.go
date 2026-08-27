@@ -17,12 +17,16 @@ package scp
 import (
 	"context"
 	"fmt"
+	"image"
 	"net"
 	"net/http"
 	"net/url"
 	"strings"
+	"time"
 
 	"github.com/coder/websocket"
+
+	"github.com/digilolnet/go-netcup-scp/pkg/rfb"
 )
 
 // VNCWebSocketURL builds the wss:// URL for a server's VNC console, embedding a
@@ -111,4 +115,52 @@ func (c *Client) originURL() string {
 		return c.baseURL
 	}
 	return u.Scheme + "://" + u.Host
+}
+
+// VNCScreenshot connects to the server's VNC console and returns a single full
+// framebuffer as an image.
+func (c *Client) VNCScreenshot(ctx context.Context, serverID int32) (image.Image, error) {
+	conn, err := c.DialVNC(ctx, serverID)
+	if err != nil {
+		return nil, err
+	}
+	defer conn.Close()
+	return rfb.Screenshot(ctx, conn)
+}
+
+// VNCWatchFrames streams the server's console via rfb.WatchFrames: it invokes
+// onFrame with the current framebuffer no more often than minInterval until
+// onFrame reports done or ctx expires.
+func (c *Client) VNCWatchFrames(ctx context.Context, serverID int32, minInterval time.Duration, onFrame func(image.Image) (done bool)) error {
+	conn, err := c.DialVNC(ctx, serverID)
+	if err != nil {
+		return err
+	}
+	defer conn.Close()
+	return rfb.WatchFrames(ctx, conn, minInterval, onFrame)
+}
+
+// SendVNCChord opens the server's VNC console and sends a single chord: it
+// holds the modifier keysyms down, presses+releases key, then releases the
+// modifiers. e.g. Ctrl+B = SendVNCChord(ctx, id, key='b', rfb.KeyCtrlLeft).
+func (c *Client) SendVNCChord(ctx context.Context, serverID int32, key uint32, modifiers ...uint32) error {
+	conn, err := c.DialVNC(ctx, serverID)
+	if err != nil {
+		return err
+	}
+	defer conn.Close()
+	return rfb.SendChord(conn, key, modifiers...)
+}
+
+// SendVNCKeys opens the server's VNC console and sends the given keysyms as
+// press+release KeyEvent messages, pausing delay (default ~120ms) between
+// each. Printable ASCII runes can be passed as their code point; use the
+// rfb.Key* constants for the rest.
+func (c *Client) SendVNCKeys(ctx context.Context, serverID int32, delay time.Duration, keys ...uint32) error {
+	conn, err := c.DialVNC(ctx, serverID)
+	if err != nil {
+		return err
+	}
+	defer conn.Close()
+	return rfb.SendKeys(ctx, conn, delay, keys...)
 }

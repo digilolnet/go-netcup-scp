@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package scp
+package rfb
 
 import (
 	"context"
@@ -40,10 +40,10 @@ type pixelFormat struct {
 	blueShift    uint8
 }
 
-// rfbConn is a minimal RFB (VNC) client over an already-connected stream: it
+// Conn is a minimal RFB (VNC) client over an already-connected stream: it
 // performs the RFB 3.8 handshake, advertises Raw encoding only, and decodes
 // FramebufferUpdate messages into a persistent image.
-type rfbConn struct {
+type Conn struct {
 	conn   net.Conn
 	width  int
 	height int
@@ -53,27 +53,27 @@ type rfbConn struct {
 	img    *image.RGBA
 }
 
-// rfbConnect runs the RFB 3.8 handshake (ProtocolVersion, None security,
+// Connect runs the RFB 3.8 handshake (ProtocolVersion, None security,
 // ClientInit, ServerInit) and selects Raw encoding.
-func rfbConnect(conn net.Conn) (*rfbConn, error) {
+func Connect(conn net.Conn) (*Conn, error) {
 	ver := make([]byte, 12)
 	if _, err := io.ReadFull(conn, ver); err != nil {
-		return nil, fmt.Errorf("vnc: read protocol version: %w", err)
+		return nil, fmt.Errorf("rfb: read protocol version: %w", err)
 	}
 	if _, err := conn.Write([]byte("RFB 003.008\n")); err != nil {
-		return nil, fmt.Errorf("vnc: write protocol version: %w", err)
+		return nil, fmt.Errorf("rfb: write protocol version: %w", err)
 	}
 
 	nSec := make([]byte, 1)
 	if _, err := io.ReadFull(conn, nSec); err != nil {
-		return nil, fmt.Errorf("vnc: read security count: %w", err)
+		return nil, fmt.Errorf("rfb: read security count: %w", err)
 	}
 	if nSec[0] == 0 {
-		return nil, fmt.Errorf("vnc: server rejected connection during security handshake")
+		return nil, fmt.Errorf("rfb: server rejected connection during security handshake")
 	}
 	secTypes := make([]byte, nSec[0])
 	if _, err := io.ReadFull(conn, secTypes); err != nil {
-		return nil, fmt.Errorf("vnc: read security types: %w", err)
+		return nil, fmt.Errorf("rfb: read security types: %w", err)
 	}
 	hasNone := false
 	for _, t := range secTypes {
@@ -82,26 +82,26 @@ func rfbConnect(conn net.Conn) (*rfbConn, error) {
 		}
 	}
 	if !hasNone {
-		return nil, fmt.Errorf("vnc: server requires auth (types %v); only None supported", secTypes)
+		return nil, fmt.Errorf("rfb: server requires auth (types %v); only None supported", secTypes)
 	}
 	if _, err := conn.Write([]byte{1}); err != nil {
-		return nil, fmt.Errorf("vnc: select security type: %w", err)
+		return nil, fmt.Errorf("rfb: select security type: %w", err)
 	}
 	secResult := make([]byte, 4)
 	if _, err := io.ReadFull(conn, secResult); err != nil {
-		return nil, fmt.Errorf("vnc: read security result: %w", err)
+		return nil, fmt.Errorf("rfb: read security result: %w", err)
 	}
 	if binary.BigEndian.Uint32(secResult) != 0 {
-		return nil, fmt.Errorf("vnc: security handshake failed")
+		return nil, fmt.Errorf("rfb: security handshake failed")
 	}
 
 	if _, err := conn.Write([]byte{1}); err != nil { // ClientInit (shared)
-		return nil, fmt.Errorf("vnc: client init: %w", err)
+		return nil, fmt.Errorf("rfb: client init: %w", err)
 	}
 
 	head := make([]byte, 24)
 	if _, err := io.ReadFull(conn, head); err != nil {
-		return nil, fmt.Errorf("vnc: read server init: %w", err)
+		return nil, fmt.Errorf("rfb: read server init: %w", err)
 	}
 	width := int(binary.BigEndian.Uint16(head[0:2]))
 	height := int(binary.BigEndian.Uint16(head[2:4]))
@@ -115,25 +115,25 @@ func rfbConnect(conn net.Conn) (*rfbConn, error) {
 	nameLen := binary.BigEndian.Uint32(head[20:24])
 	if nameLen > 0 {
 		if _, err := io.CopyN(io.Discard, conn, int64(nameLen)); err != nil {
-			return nil, fmt.Errorf("vnc: read server name: %w", err)
+			return nil, fmt.Errorf("rfb: read server name: %w", err)
 		}
 	}
 	if pf.trueColor == 0 || (pf.bitsPerPixel != 32 && pf.bitsPerPixel != 16 && pf.bitsPerPixel != 8) {
-		return nil, fmt.Errorf("vnc: unsupported pixel format (bpp=%d trueColor=%d)", pf.bitsPerPixel, pf.trueColor)
+		return nil, fmt.Errorf("rfb: unsupported pixel format (bpp=%d trueColor=%d)", pf.bitsPerPixel, pf.trueColor)
 	}
 	if width == 0 || height == 0 || width > 8192 || height > 8192 {
-		return nil, fmt.Errorf("vnc: implausible framebuffer size %dx%d", width, height)
+		return nil, fmt.Errorf("rfb: implausible framebuffer size %dx%d", width, height)
 	}
 
 	if _, err := conn.Write([]byte{2, 0, 0, 1, 0, 0, 0, 0}); err != nil { // SetEncodings [Raw]
-		return nil, fmt.Errorf("vnc: set encodings: %w", err)
+		return nil, fmt.Errorf("rfb: set encodings: %w", err)
 	}
 
 	order := binary.ByteOrder(binary.LittleEndian)
 	if pf.bigEndian != 0 {
 		order = binary.BigEndian
 	}
-	return &rfbConn{
+	return &Conn{
 		conn: conn, width: width, height: height, pf: pf,
 		bpp: int(pf.bitsPerPixel) / 8, order: order,
 		img: image.NewRGBA(image.Rect(0, 0, width, height)),
@@ -141,7 +141,7 @@ func rfbConnect(conn net.Conn) (*rfbConn, error) {
 }
 
 // requestUpdate sends a FramebufferUpdateRequest for the whole screen.
-func (r *rfbConn) requestUpdate(incremental bool) error {
+func (r *Conn) requestUpdate(incremental bool) error {
 	req := make([]byte, 10)
 	req[0] = 3
 	if incremental {
@@ -155,11 +155,11 @@ func (r *rfbConn) requestUpdate(incremental bool) error {
 
 // readUpdate reads one FramebufferUpdate (skipping other server messages),
 // applies its Raw rectangles to the image, and returns the pixels covered.
-func (r *rfbConn) readUpdate() (int, error) {
+func (r *Conn) readUpdate() (int, error) {
 	for {
 		msgType := make([]byte, 1)
 		if _, err := io.ReadFull(r.conn, msgType); err != nil {
-			return 0, fmt.Errorf("vnc: read message type: %w", err)
+			return 0, fmt.Errorf("rfb: read message type: %w", err)
 		}
 		if msgType[0] != 0 {
 			if err := skipServerMessage(r.conn, msgType[0]); err != nil {
@@ -169,14 +169,14 @@ func (r *rfbConn) readUpdate() (int, error) {
 		}
 		hdr := make([]byte, 3)
 		if _, err := io.ReadFull(r.conn, hdr); err != nil {
-			return 0, fmt.Errorf("vnc: read update header: %w", err)
+			return 0, fmt.Errorf("rfb: read update header: %w", err)
 		}
 		nRects := int(binary.BigEndian.Uint16(hdr[1:3]))
 		covered := 0
 		for i := 0; i < nRects; i++ {
 			rh := make([]byte, 12)
 			if _, err := io.ReadFull(r.conn, rh); err != nil {
-				return covered, fmt.Errorf("vnc: read rect header: %w", err)
+				return covered, fmt.Errorf("rfb: read rect header: %w", err)
 			}
 			rx := int(binary.BigEndian.Uint16(rh[0:2]))
 			ry := int(binary.BigEndian.Uint16(rh[2:4]))
@@ -184,11 +184,11 @@ func (r *rfbConn) readUpdate() (int, error) {
 			rhh := int(binary.BigEndian.Uint16(rh[6:8]))
 			enc := int32(binary.BigEndian.Uint32(rh[8:12]))
 			if enc != 0 {
-				return covered, fmt.Errorf("vnc: server used unsupported encoding %d", enc)
+				return covered, fmt.Errorf("rfb: server used unsupported encoding %d", enc)
 			}
 			buf := make([]byte, rw*rhh*r.bpp)
 			if _, err := io.ReadFull(r.conn, buf); err != nil {
-				return covered, fmt.Errorf("vnc: read rect pixels: %w", err)
+				return covered, fmt.Errorf("rfb: read rect pixels: %w", err)
 			}
 			decodeRaw(r.img, rx, ry, rw, rhh, buf, r.pf, r.order, r.bpp)
 			covered += rw * rhh
@@ -197,25 +197,20 @@ func (r *rfbConn) readUpdate() (int, error) {
 	}
 }
 
-// VNCScreenshot connects to the server's VNC console and returns a single full
-// framebuffer as an image.
-func (c *Client) VNCScreenshot(ctx context.Context, serverID int32) (image.Image, error) {
-	conn, err := c.DialVNC(ctx, serverID)
-	if err != nil {
-		return nil, err
-	}
-	defer conn.Close()
+// Screenshot runs the RFB handshake on conn and returns a single full
+// framebuffer as an image. The caller retains ownership of conn.
+func Screenshot(ctx context.Context, conn net.Conn) (image.Image, error) {
 	if dl, ok := ctx.Deadline(); ok {
 		_ = conn.SetDeadline(dl)
 	} else {
 		_ = conn.SetDeadline(time.Now().Add(30 * time.Second))
 	}
-	r, err := rfbConnect(conn)
+	r, err := Connect(conn)
 	if err != nil {
 		return nil, err
 	}
 	if err := r.requestUpdate(false); err != nil {
-		return nil, fmt.Errorf("vnc: framebuffer request: %w", err)
+		return nil, fmt.Errorf("rfb: framebuffer request: %w", err)
 	}
 	target := r.width * r.height
 	for covered := 0; covered < target; {
@@ -228,21 +223,16 @@ func (c *Client) VNCScreenshot(ctx context.Context, serverID int32) (image.Image
 	return r.img, nil
 }
 
-// VNCWatchFrames streams the console: it keeps requesting incremental framebuffer
-// updates and, no more often than minInterval, invokes onFrame with the current
-// image. It returns nil when onFrame reports done, or ctx's error on timeout.
-// This reliably captures transient content (e.g. a log line that scrolls past)
-// that a single screenshot would miss.
-func (c *Client) VNCWatchFrames(ctx context.Context, serverID int32, minInterval time.Duration, onFrame func(image.Image) (done bool)) error {
-	conn, err := c.DialVNC(ctx, serverID)
-	if err != nil {
-		return err
-	}
-	defer conn.Close()
-
+// WatchFrames streams the framebuffer: it runs the handshake on conn, keeps
+// requesting incremental updates and, no more often than minInterval, invokes
+// onFrame with the current image. It returns nil when onFrame reports done, or
+// ctx's error on timeout. This reliably captures transient content (e.g. a log
+// line that scrolls past) that a single screenshot would miss. The caller
+// retains ownership of conn.
+func WatchFrames(ctx context.Context, conn net.Conn, minInterval time.Duration, onFrame func(image.Image) (done bool)) error {
 	dbg := os.Getenv("FP_DEBUG") != ""
 	_ = conn.SetDeadline(time.Now().Add(30 * time.Second))
-	r, err := rfbConnect(conn)
+	r, err := Connect(conn)
 	if err != nil {
 		return err
 	}
@@ -306,7 +296,7 @@ func skipServerMessage(conn io.Reader, msgType byte) error {
 		_, err := io.CopyN(io.Discard, conn, int64(n))
 		return err
 	default:
-		return fmt.Errorf("vnc: unknown server message type %d", msgType)
+		return fmt.Errorf("rfb: unknown server message type %d", msgType)
 	}
 }
 

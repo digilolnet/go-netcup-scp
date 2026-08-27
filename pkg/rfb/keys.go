@@ -12,12 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package scp
+// Package rfb is a minimal RFB (VNC) client for driving machine consoles
+// over any net.Conn: RFB 3.8 handshake, security type None, Raw-encoding
+// framebuffer capture and keyboard input. It is transport-agnostic — pair it
+// with scp.Client.DialVNC for netcup consoles or any plain VNC server socket.
+package rfb
 
 import (
 	"context"
 	"encoding/binary"
 	"fmt"
+	"net"
 	"time"
 )
 
@@ -41,17 +46,13 @@ const (
 	KeyShiftLeft uint32 = 0xFFE1
 )
 
-// SendVNCChord opens the VNC console and sends a single chord: it holds the
-// modifier keysyms down, presses+releases key, then releases the modifiers.
-// e.g. Ctrl+B = SendVNCChord(ctx, id, key='b', KeyCtrlLeft).
-func (c *Client) SendVNCChord(ctx context.Context, serverID int32, key uint32, modifiers ...uint32) error {
-	conn, err := c.DialVNC(ctx, serverID)
-	if err != nil {
-		return err
-	}
-	defer conn.Close()
+// SendChord runs the RFB handshake on conn and sends a single chord: it holds
+// the modifier keysyms down, presses+releases key, then releases the modifiers.
+// e.g. Ctrl+B = SendChord(conn, key='b', KeyCtrlLeft). The caller retains
+// ownership of conn.
+func SendChord(conn net.Conn, key uint32, modifiers ...uint32) error {
 	_ = conn.SetDeadline(time.Now().Add(30 * time.Second))
-	if _, err := rfbConnect(conn); err != nil {
+	if _, err := Connect(conn); err != nil {
 		return err
 	}
 	for _, m := range modifiers {
@@ -73,22 +74,18 @@ func (c *Client) SendVNCChord(ctx context.Context, serverID int32, key uint32, m
 	return nil
 }
 
-// SendVNCKeys opens the server's VNC console and sends the given keysyms as
+// SendKeys runs the RFB handshake on conn and sends the given keysyms as
 // press+release KeyEvent messages (RFC 6143 §7.5.4), pausing delay between each.
 // A delay of ~120ms is a safe default for firmware/boot menus. Printable ASCII
 // runes can be passed as their code point; use the Key* constants for the rest.
-func (c *Client) SendVNCKeys(ctx context.Context, serverID int32, delay time.Duration, keys ...uint32) error {
-	conn, err := c.DialVNC(ctx, serverID)
-	if err != nil {
-		return err
-	}
-	defer conn.Close()
+// The caller retains ownership of conn.
+func SendKeys(ctx context.Context, conn net.Conn, delay time.Duration, keys ...uint32) error {
 	if dl, ok := ctx.Deadline(); ok {
 		_ = conn.SetDeadline(dl)
 	} else {
 		_ = conn.SetDeadline(time.Now().Add(60 * time.Second))
 	}
-	if _, err := rfbConnect(conn); err != nil {
+	if _, err := Connect(conn); err != nil {
 		return err
 	}
 	if delay <= 0 {
@@ -118,7 +115,7 @@ func writeKeyEvent(conn interface{ Write([]byte) (int, error) }, keysym uint32, 
 	}
 	binary.BigEndian.PutUint32(msg[4:8], keysym)
 	if _, err := conn.Write(msg); err != nil {
-		return fmt.Errorf("vnc: write key event: %w", err)
+		return fmt.Errorf("rfb: write key event: %w", err)
 	}
 	return nil
 }
