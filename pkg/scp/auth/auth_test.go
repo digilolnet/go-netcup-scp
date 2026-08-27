@@ -77,6 +77,7 @@ func TestLoadToken_GetAccessToken(t *testing.T) {
 		AccessToken:  "access-abc",
 		RefreshToken: "refresh-xyz",
 		ExpiresIn:    3600,
+		ObtainedAt:   time.Now(),
 	}
 	mgr.LoadToken(tok)
 
@@ -86,6 +87,27 @@ func TestLoadToken_GetAccessToken(t *testing.T) {
 	}
 	if got != "access-abc" {
 		t.Errorf("got %q, want %q", got, "access-abc")
+	}
+}
+
+func TestLoadToken_StaleAndLegacyExpired(t *testing.T) {
+	// A token obtained longer ago than ExpiresIn must not be served.
+	mgr := NewManager(WithAutoRefresh(false))
+	mgr.LoadToken(&TokenResponse{
+		AccessToken: "stale",
+		ExpiresIn:   300,
+		ObtainedAt:  time.Now().Add(-10 * time.Minute),
+	})
+	if _, err := mgr.GetAccessToken(); err == nil {
+		t.Fatal("expected error for stale token")
+	}
+
+	// Legacy token files carry no obtained_at; treat them as expired so the
+	// first use refreshes instead of sending a possibly-expired token.
+	mgr = NewManager(WithAutoRefresh(false))
+	mgr.LoadToken(&TokenResponse{AccessToken: "legacy", ExpiresIn: 300})
+	if _, err := mgr.GetAccessToken(); err == nil {
+		t.Fatal("expected error for legacy token without obtained_at")
 	}
 }
 

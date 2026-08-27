@@ -119,7 +119,7 @@ func NewClient(authManager *auth.Manager, opts ...ClientOption) (*Client, error)
 	}
 
 	requestEditor := func(ctx context.Context, req *http.Request) error {
-		token, err := client.auth.GetAccessToken()
+		token, err := client.validAccessToken()
 		if err != nil {
 			return fmt.Errorf("failed to get access token: %w", err)
 		}

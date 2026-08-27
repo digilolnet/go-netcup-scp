@@ -32,7 +32,7 @@ import (
 // that tunnels the raw RFB (VNC) protocol over binary WebSocket frames and
 // authenticates via the standard SCP access token passed in the query string.
 func (c *Client) VNCWebSocketURL(serverID int32) (string, error) {
-	token, err := c.accessTokenForVNC()
+	token, err := c.validAccessToken()
 	if err != nil {
 		return "", fmt.Errorf("vnc: %w", err)
 	}
@@ -86,9 +86,9 @@ func (c *Client) DialVNC(ctx context.Context, serverID int32) (net.Conn, error) 
 	return websocket.NetConn(ctx, ws, websocket.MessageBinary), nil
 }
 
-// accessTokenForVNC returns a currently-valid access token, refreshing once if
+// validAccessToken returns a currently-valid access token, refreshing once if
 // the cached token has expired.
-func (c *Client) accessTokenForVNC() (string, error) {
+func (c *Client) validAccessToken() (string, error) {
 	if tok, err := c.auth.GetAccessToken(); err == nil {
 		return tok, nil
 	}

@@ -58,6 +58,10 @@ type TokenResponse struct {
 	NotBeforePolicy  int    `json:"not-before-policy"`
 	SessionState     string `json:"session_state"`
 	Scope            string `json:"scope"`
+	// ObtainedAt is set by this library (not the IdP) when the token is
+	// received, so that a token reloaded from disk expires at the right
+	// absolute time instead of ExpiresIn seconds after loading.
+	ObtainedAt time.Time `json:"obtained_at,omitempty"`
 }
 
 type Manager struct {
@@ -286,7 +290,16 @@ func (am *Manager) RevokeToken(ctx context.Context, refreshToken string) error {
 }
 
 func (am *Manager) LoadToken(token *TokenResponse) {
+	// Token files written before ObtainedAt existed carry no issue time;
+	// assume the worst so the first use refreshes instead of sending a
+	// possibly-expired token.
+	legacy := token.ObtainedAt.IsZero()
 	am.setToken(token)
+	if legacy {
+		am.mu.Lock()
+		am.tokenExpiry = time.Now()
+		am.mu.Unlock()
+	}
 	if am.autoRefresh {
 		am.scheduleRefresh()
 	}
@@ -322,8 +335,11 @@ func (am *Manager) setToken(token *TokenResponse) {
 	am.mu.Lock()
 	defer am.mu.Unlock()
 
+	if token.ObtainedAt.IsZero() {
+		token.ObtainedAt = time.Now()
+	}
 	am.token = token
-	am.tokenExpiry = time.Now().Add(time.Duration(token.ExpiresIn) * time.Second)
+	am.tokenExpiry = token.ObtainedAt.Add(time.Duration(token.ExpiresIn) * time.Second)
 }
 
 func (am *Manager) scheduleRefresh() {
