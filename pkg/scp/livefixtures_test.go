@@ -277,6 +277,81 @@ func TestLiveFixtures(t *testing.T) {
 			},
 		},
 		{
+			// BIOS mode: online snapshot creation succeeds with a 202 task.
+			fixture: "POST_servers_111007_snapshots_bios-online.json",
+			call: func(c *Client) (any, error) {
+				return c.CreateSnapshot(ctx, 111007, "audit-s1", "")
+			},
+		},
+		{
+			fixture: "GET_servers_111007_snapshots_audit-s1.json",
+			call:    func(c *Client) (any, error) { return c.GetSnapshot(ctx, 111007, "audit-s1") },
+		},
+		{
+			fixture: "POST_servers_111007_snapshots_audit-s1_revert.json",
+			call:    func(c *Client) (any, error) { return c.RevertSnapshot(ctx, 111007, "audit-s1") },
+		},
+		{
+			// Offline snapshot export: 202 task.
+			fixture: "POST_servers_111007_snapshots_audit-off_export.json",
+			call:    func(c *Client) (any, error) { return c.ExportSnapshot(ctx, 111007, "audit-off") },
+		},
+		{
+			// Online snapshots cannot be exported: live 400.
+			fixture: "POST_servers_111007_snapshots_audit-s1_export.json",
+			wantErr: true,
+			call:    func(c *Client) (any, error) { return c.ExportSnapshot(ctx, 111007, "audit-s1") },
+		},
+		{
+			fixture: "DELETE_servers_111007_snapshots_audit-s1.json",
+			call:    func(c *Client) (any, error) { return c.DeleteSnapshot(ctx, 111007, "audit-s1") },
+		},
+		{
+			fixture: "POST_servers_111007_disks_vda_format.json",
+			call:    func(c *Client) (any, error) { return c.FormatDisk(ctx, 111007, "vda") },
+		},
+		{
+			fixture: "PATCH_servers_111007_disks.json",
+			call: func(c *Client) (any, error) {
+				return c.SetDiskDriver(ctx, 111007, StorageDriver("VIRTIO"))
+			},
+		},
+		{
+			// Covers both PATCH /servers/{id} mutations (uefi, cpu topology).
+			fixture: "PATCH_servers_111007.json",
+			call:    func(c *Client) (any, error) { return c.SetUEFI(ctx, 111007, true) },
+		},
+		{
+			fixture: "POST_servers_111007_image.json",
+			call: func(c *Client) (any, error) {
+				return c.InstallImage(ctx, 111007, ServerImageSetup{})
+			},
+		},
+		{
+			fixture: "POST_servers_111007_user-image.json",
+			call: func(c *Client) (any, error) {
+				return c.InstallUserImage(ctx, 111007, ServerUserImageSetup{})
+			},
+		},
+		{
+			fixture: "PUT_servers_111007_interfaces_02_00_00_97_47_9f_firewall.json",
+			call: func(c *Client) (any, error) {
+				return c.UpdateFirewall(ctx, 111007, "02:00:00:97:47:9f", ServerFirewallSave{})
+			},
+		},
+		{
+			fixture: "POST_servers_111007_interfaces_02_00_00_97_47_9f_firewall_reapply.json",
+			call: func(c *Client) (any, error) {
+				return c.ReapplyFirewall(ctx, 111007, "02:00:00:97:47:9f")
+			},
+		},
+		{
+			fixture: "DELETE_servers_111007_interfaces_02_00_00_97_47_a0.json",
+			call: func(c *Client) (any, error) {
+				return c.DeleteInterface(ctx, 111007, "02:00:00:97:47:a0")
+			},
+		},
+		{
 			// One NIC per VLAN per server: live 400 with message.
 			fixture: "POST_servers_111007_interfaces.json",
 			wantErr: true,

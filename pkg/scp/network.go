@@ -87,6 +87,9 @@ type GetInterfaceOptions struct {
 
 // GetInterface retrieves information about a specific network interface.
 func (c *Client) GetInterface(ctx context.Context, serverID int32, mac string, opts *GetInterfaceOptions) (*generated.Interface, error) {
+	if err := requireID("get interface", "mac", mac); err != nil {
+		return nil, err
+	}
 	params := &generated.GetApiV1ServersServerIdInterfacesMacParams{}
 	if opts != nil {
 		params.LoadRdns = opts.LoadRdns
@@ -228,6 +231,9 @@ func IsPrimaryInterface(iface *Interface) bool {
 // DeleteInterface removes a network interface from a server.
 // Returns a TaskInfo when the API responds with 202 (async), or nil for 200/204.
 func (c *Client) DeleteInterface(ctx context.Context, serverID int32, mac string) (*TaskInfo, error) {
+	if err := requireID("delete interface", "mac", mac); err != nil {
+		return nil, err
+	}
 	resp, err := c.api.DeleteApiV1ServersServerIdInterfacesMacWithResponse(ctx, serverID, mac)
 	if err != nil {
 		return nil, fmt.Errorf("delete interface: %w", err)

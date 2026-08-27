@@ -46,6 +46,9 @@ func (c *Client) ListDisks(ctx context.Context, serverID int32) ([]generated.Dis
 
 // GetDisk retrieves information about a specific disk.
 func (c *Client) GetDisk(ctx context.Context, serverID int32, diskName string) (*generated.Disk, error) {
+	if err := requireID("get disk", "disk name", diskName); err != nil {
+		return nil, err
+	}
 	resp, err := c.api.GetApiV1ServersServerIdDisksDiskNameWithResponse(ctx, serverID, diskName)
 	if err != nil {
 		return nil, fmt.Errorf("get disk: %w", err)

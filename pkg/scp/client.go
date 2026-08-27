@@ -217,6 +217,16 @@ func (c *Client) GetMaintenance(ctx context.Context) ([]generated.Maintenance, e
 	return []generated.Maintenance{{StartAt: single.StartAt, FinishAt: single.FinishAt}}, nil
 }
 
+// requireID rejects empty path identifiers: an empty segment would silently
+// address the collection endpoint instead (e.g. GET /disks/ is the list), which
+// surfaces as a confusing unmarshal error or a 405 rather than a clear message.
+func requireID(op, name, value string) error {
+	if value == "" {
+		return fmt.Errorf("%s: %s must not be empty", op, name)
+	}
+	return nil
+}
+
 // deref returns the dereferenced value of p, or the zero value of T if p is nil.
 func deref[T any](p *T) T {
 	if p == nil {
