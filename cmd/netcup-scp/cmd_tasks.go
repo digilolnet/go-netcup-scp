@@ -80,7 +80,7 @@ func newTasksListCmd() *cobra.Command {
 		},
 	}
 	cmd.Flags().IntVar(&serverID, "server-id", 0, "filter by server ID")
-	cmd.Flags().StringVar(&state, "state", "", "filter by state (QUEUED, RUNNING, DONE, FAILED, CANCELLED)")
+	cmd.Flags().StringVar(&state, "state", "", "filter by state (PENDING, RUNNING, FINISHED, ERROR, CANCELED, ROLLBACK, WAITING_FOR_CANCEL)")
 	cmd.Flags().StringVar(&q, "q", "", "search query")
 	cmd.Flags().IntVar(&limit, "limit", 0, "max results")
 	cmd.Flags().IntVar(&offset, "offset", 0, "pagination offset")

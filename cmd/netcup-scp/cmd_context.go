@@ -73,7 +73,7 @@ func newContextCurrentCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			if cfg.CurrentContext == "" {
+			if cfg.CurrentContext == "" && !rootFlags.jsonOut {
 				fmt.Println("no current context set")
 				return nil
 			}

@@ -826,7 +826,7 @@ func newServersQemuStatusCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			var rows []serverQemuStatus
+			rows := []serverQemuStatus{}
 			for _, s := range servers {
 				detail, err := cc.client.GetServer(cc.ctx, derefInt32(s.Id), nil)
 				if err != nil {

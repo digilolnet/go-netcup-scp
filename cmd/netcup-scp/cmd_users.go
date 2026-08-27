@@ -98,7 +98,10 @@ func newUsersUpdateCmd() *cobra.Command {
 				body.TimeZone = timezone
 			}
 			if cmd.Flags().Changed("passwordless-mode") {
-				v := passwordlessMode == "true"
+				v, err := parseBool(passwordlessMode)
+				if err != nil {
+					return err
+				}
 				body.PasswordlessMode = &v
 			}
 

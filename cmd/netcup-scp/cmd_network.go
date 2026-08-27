@@ -17,6 +17,7 @@ package main
 import (
 	"fmt"
 	"sort"
+	"strings"
 
 	"github.com/jedib0t/go-pretty/v6/table"
 	"github.com/spf13/cobra"
@@ -231,8 +232,15 @@ func newInterfacesUpdateDriverCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			if err := cc.client.UpdateInterfaceDriver(cc.ctx, id, args[1], scp.NetworkDriver(args[2])); err != nil {
+			// The API's driver enum is uppercase, but `interfaces get`
+			// displays lowercase — normalize so our own output is valid input.
+			driver := scp.NetworkDriver(strings.ToUpper(args[2]))
+			task, err := cc.client.UpdateInterfaceDriver(cc.ctx, id, args[1], driver)
+			if err != nil {
 				return err
+			}
+			if task != nil {
+				return printTaskAndWait(cc, task, false)
 			}
 			printOK(cc)
 			return nil

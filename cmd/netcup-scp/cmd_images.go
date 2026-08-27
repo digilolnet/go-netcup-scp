@@ -143,7 +143,11 @@ and when installing the image onto a server. Defaults to the file's basename.`,
 				return fmt.Errorf("open file: %w", err)
 			}
 			defer f.Close()
-			if err := cc.client.UploadImage(cc.ctx, cc.userID, key, f); err != nil {
+			fi, err := f.Stat()
+			if err != nil {
+				return fmt.Errorf("stat file: %w", err)
+			}
+			if err := cc.client.UploadImage(cc.ctx, cc.userID, key, f, fi.Size()); err != nil {
 				return err
 			}
 			cc.invalidateCompletionCache("user-images")

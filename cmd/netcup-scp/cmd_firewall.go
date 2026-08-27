@@ -448,7 +448,7 @@ func newFWPoliciesAddRuleCmd() *cobra.Command {
 			if err := printResult(cc, result, func() {
 				if result.FirewallPolicy != nil {
 					p := result.FirewallPolicy
-					fmt.Printf("Policy %d %q now has %d rule(s)\n", derefInt32(p.Id), derefStr(p.Name), len(*p.Rules))
+					fmt.Printf("Policy %d %q now has %d rule(s)\n", derefInt32(p.Id), derefStr(p.Name), len(deref(p.Rules)))
 				}
 				if result.TaskInfo != nil {
 					printKV("Task UUID", derefStr(result.TaskInfo.Uuid))

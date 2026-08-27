@@ -17,6 +17,7 @@ package main
 import (
 	"fmt"
 
+	"github.com/jedib0t/go-pretty/v6/table"
 	"github.com/spf13/cobra"
 )
 
@@ -75,10 +76,11 @@ func newSystemMaintenanceCmd() *cobra.Command {
 					fmt.Println("no maintenance scheduled")
 					return
 				}
-				fmt.Printf("%-30s  %s\n", "START", "END")
+				t := newTable("START (UTC)", "END (UTC)")
 				for _, w := range windows {
-					fmt.Printf("%-30v  %v\n", w.StartAt, w.FinishAt)
+					t.AppendRow(table.Row{fmtTime(w.StartAt), fmtTime(w.FinishAt)})
 				}
+				t.Render()
 			})
 		},
 	}

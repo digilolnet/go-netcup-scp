@@ -62,7 +62,7 @@ func newSnapshotsListCmd() *cobra.Command {
 			return printResult(cc, snaps, func() {
 				t := newTable("NAME", "STATE", "ONLINE", "DESCRIPTION", "DATE")
 				for _, s := range snaps {
-					t.AppendRow(table.Row{derefStr(s.Name), derefStr((*string)(s.State)), deref(s.Online), derefStr(s.Description), deref(s.CreationTime)})
+					t.AppendRow(table.Row{derefStr(s.Name), derefStr((*string)(s.State)), deref(s.Online), derefStr(s.Description), fmtTime(s.CreationTime)})
 				}
 				t.Render()
 			})
@@ -95,7 +95,7 @@ func newSnapshotsGetCmd() *cobra.Command {
 				printKV(
 					"Name", derefStr(snap.Name),
 					"Description", derefStr(snap.Description),
-					"Created At", deref(snap.CreationTime),
+					"Created At (UTC)", fmtTime(snap.CreationTime),
 					"Online", deref(snap.Online),
 					"State", derefStr((*string)(snap.State)),
 				)
