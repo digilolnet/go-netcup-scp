@@ -108,7 +108,7 @@ func (c *Client) DeleteSnapshot(ctx context.Context, serverID int32, name string
 // This operation will revert the server to the state it was in when the snapshot was created.
 // Returns a TaskInfo when the API responds with 202 (async), or nil for 200.
 func (c *Client) RevertSnapshot(ctx context.Context, serverID int32, name string) (*TaskInfo, error) {
-	resp, err := c.api.PostApiV1ServersServerIdSnapshotsNameRevertWithResponse(ctx, serverID, name)
+	resp, err := c.api.PostApiV1ServersServerIdSnapshotsNameRevertWithResponse(ctx, serverID, name, setContentTypeJSON)
 	if err != nil {
 		return nil, fmt.Errorf("revert snapshot: %w", err)
 	}
@@ -150,7 +150,7 @@ func (c *Client) DryRunSnapshot(ctx context.Context, serverID int32, onlineSnaps
 // ExportSnapshot exports a snapshot.
 // The operation is asynchronous; check the returned task for completion.
 func (c *Client) ExportSnapshot(ctx context.Context, serverID int32, name string) (*generated.TaskInfo, error) {
-	resp, err := c.api.PostApiV1ServersServerIdSnapshotsNameExportWithResponse(ctx, serverID, name)
+	resp, err := c.api.PostApiV1ServersServerIdSnapshotsNameExportWithResponse(ctx, serverID, name, setContentTypeJSON)
 	if err != nil {
 		return nil, fmt.Errorf("export snapshot: %w", err)
 	}

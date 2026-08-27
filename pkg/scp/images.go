@@ -157,7 +157,9 @@ func (c *Client) CompleteMultipartImageUpload(ctx context.Context, userID int32,
 
 // UploadImage uploads an image file using the simple (non-multipart) method.
 // This is a convenience function that initiates the upload and performs the HTTP PUT in one call.
-func (c *Client) UploadImage(ctx context.Context, userID int32, key string, reader io.Reader) error {
+// contentLength must be the exact size of the data: the S3-compatible storage
+// rejects chunked transfer encoding (HTTP 501), so the size is set explicitly.
+func (c *Client) UploadImage(ctx context.Context, userID int32, key string, reader io.Reader, contentLength int64) error {
 	presignedURL, err := c.InitiateImageUpload(ctx, userID, key)
 	if err != nil {
 		return err
@@ -167,6 +169,7 @@ func (c *Client) UploadImage(ctx context.Context, userID int32, key string, read
 	if err != nil {
 		return fmt.Errorf("upload image: %w", err)
 	}
+	req.ContentLength = contentLength
 
 	httpResp, err := c.httpClient.Do(req)
 	if err != nil {

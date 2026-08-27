@@ -43,7 +43,7 @@ func (c *Client) GetRescueSystem(ctx context.Context, serverID int32) (*generate
 // The operation is asynchronous; use the returned task to track progress.
 // The response includes a one-time password for the rescue system.
 func (c *Client) ActivateRescueSystem(ctx context.Context, serverID int32) (*generated.TaskInfo, error) {
-	resp, err := c.api.PostApiV1ServersServerIdRescuesystemWithResponse(ctx, serverID)
+	resp, err := c.api.PostApiV1ServersServerIdRescuesystemWithResponse(ctx, serverID, setContentTypeJSON)
 	if err != nil {
 		return nil, fmt.Errorf("activate rescue system: %w", err)
 	}

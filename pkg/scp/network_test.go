@@ -205,7 +205,7 @@ func TestUpdateInterfaceDriver(t *testing.T) {
 	})
 	defer cleanup()
 
-	if err := client.UpdateInterfaceDriver(context.Background(), 123, "aa:bb:cc:dd:ee:ff", generated.NetworkDriverVIRTIO); err != nil {
+	if _, err := client.UpdateInterfaceDriver(context.Background(), 123, "aa:bb:cc:dd:ee:ff", generated.NetworkDriverVIRTIO); err != nil {
 		t.Errorf("UpdateInterfaceDriver() error = %v", err)
 	}
 }

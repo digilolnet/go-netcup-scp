@@ -244,21 +244,26 @@ func (c *Client) DeleteInterface(ctx context.Context, serverID int32, mac string
 }
 
 // UpdateInterfaceDriver updates a network interface's driver.
-func (c *Client) UpdateInterfaceDriver(ctx context.Context, serverID int32, mac string, driver NetworkDriver) error {
+// Returns a TaskInfo when the API responds with 202 (driver actually changed,
+// applied asynchronously), or nil for a 204 no-op.
+func (c *Client) UpdateInterfaceDriver(ctx context.Context, serverID int32, mac string, driver NetworkDriver) (*TaskInfo, error) {
 	update := generated.ServerInterfaceUpdate{
 		Driver: &driver,
 	}
 
 	resp, err := c.api.PutApiV1ServersServerIdInterfacesMacWithResponse(ctx, serverID, mac, update)
 	if err != nil {
-		return fmt.Errorf("update interface driver: %w", err)
+		return nil, fmt.Errorf("update interface driver: %w", err)
 	}
 
-	if err := checkResponse(resp, 200, 204); err != nil {
-		return fmt.Errorf("update interface driver: %w", err)
+	if err := checkResponse(resp, 200, 202, 204); err != nil {
+		return nil, fmt.Errorf("update interface driver: %w", err)
 	}
 
-	return nil
+	if resp.JSON202 != nil {
+		return resp.JSON202, nil
+	}
+	return resp.HALJSON202, nil
 }
 
 // GetRDNSv4 retrieves the reverse DNS entry for an IPv4 address.

@@ -97,7 +97,7 @@ func (c *Client) UpdateVLan(ctx context.Context, userID int32, vlanID int32, nam
 		return fmt.Errorf("update vlan: %w", err)
 	}
 
-	if err := checkResponse(resp, 200, 204); err != nil {
+	if err := checkResponse(resp, 200, 202, 204); err != nil {
 		return fmt.Errorf("update vlan: %w", err)
 	}
 

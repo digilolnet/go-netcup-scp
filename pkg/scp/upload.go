@@ -50,6 +50,9 @@ func (c *Client) multipartUpload(
 	buf := make([]byte, partSize)
 	for {
 		n, readErr := io.ReadFull(r, buf)
+		if readErr != nil && readErr != io.EOF && readErr != io.ErrUnexpectedEOF {
+			return fmt.Errorf("part %d: read: %w", partNum, readErr)
+		}
 		if n == 0 {
 			break // clean EOF before reading anything
 		}
@@ -90,7 +93,8 @@ func (c *Client) multipartUpload(
 		}
 
 		if readErr != nil {
-			// io.ErrUnexpectedEOF = final partial chunk; stop looping.
+			// io.EOF / io.ErrUnexpectedEOF = final (possibly partial) chunk;
+			// real read errors were rejected above.
 			break
 		}
 		partNum++

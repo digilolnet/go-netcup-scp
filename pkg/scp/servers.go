@@ -449,7 +449,7 @@ func (c *Client) OptimizeStorage(ctx context.Context, serverID int32, opts *Opti
 		params.StartAfterOptimization = opts.StartAfterOptimization
 	}
 
-	resp, err := c.api.PostApiV1ServersServerIdStorageoptimizationWithResponse(ctx, serverID, params)
+	resp, err := c.api.PostApiV1ServersServerIdStorageoptimizationWithResponse(ctx, serverID, params, setContentTypeJSON)
 	if err != nil {
 		return nil, fmt.Errorf("optimize storage: %w", err)
 	}
