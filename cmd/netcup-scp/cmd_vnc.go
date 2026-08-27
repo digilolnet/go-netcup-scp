@@ -16,9 +16,10 @@ package main
 
 import (
 	"context"
-	_ "embed"
+	"embed"
 	"fmt"
 	"io"
+	"io/fs"
 	"net"
 	"net/http"
 	"os"
@@ -33,8 +34,10 @@ import (
 	"github.com/digilolnet/go-netcup-scp/pkg/scp"
 )
 
-//go:embed vnc_index.html
-var vncIndexHTML []byte
+// The stock noVNC client (https://github.com/novnc/noVNC), vendored unmodified.
+//
+//go:embed all:novnc
+var novncFS embed.FS
 
 func newServersVNCCmd() *cobra.Command {
 	var tcpAddr, webAddr string
@@ -150,13 +153,17 @@ func serveVNCTCP(ctx context.Context, client *scp.Client, id int32, ln net.Liste
 // browser to a console WebSocket session.
 func vncWebHandler(ctx context.Context, client *scp.Client, id int32) http.Handler {
 	mux := http.NewServeMux()
+	novnc, err := fs.Sub(novncFS, "novnc")
+	if err != nil {
+		panic(err) // embedded tree is fixed at build time
+	}
+	fileServer := http.FileServer(http.FS(novnc))
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path != "/" {
-			http.NotFound(w, r)
+		if r.URL.Path == "/" {
+			http.Redirect(w, r, "/vnc.html?autoconnect=true&resize=scale", http.StatusFound)
 			return
 		}
-		w.Header().Set("Content-Type", "text/html; charset=utf-8")
-		_, _ = w.Write(vncIndexHTML)
+		fileServer.ServeHTTP(w, r)
 	})
 	mux.HandleFunc("/websockify", func(w http.ResponseWriter, r *http.Request) {
 		ws, err := websocket.Accept(w, r, &websocket.AcceptOptions{
