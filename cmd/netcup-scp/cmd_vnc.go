@@ -160,7 +160,7 @@ func vncWebHandler(ctx context.Context, client *scp.Client, id int32) http.Handl
 	fileServer := http.FileServer(http.FS(novnc))
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path == "/" {
-			http.Redirect(w, r, "/vnc.html?autoconnect=true&resize=scale", http.StatusFound)
+			http.Redirect(w, r, "/vnc.html?autoconnect=true&resize=scale&reconnect=true&reconnect_delay=2000", http.StatusFound)
 			return
 		}
 		fileServer.ServeHTTP(w, r)
