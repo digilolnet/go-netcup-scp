@@ -7,6 +7,8 @@ import (
 	"net/http/httptest"
 	"net/url"
 	"strings"
+	"sync"
+	"sync/atomic"
 	"testing"
 	"time"
 )
@@ -415,5 +417,76 @@ func TestWithTokenRefreshCallback(t *testing.T) {
 	}
 	if !called {
 		t.Error("expected refresh callback to be called")
+	}
+}
+
+func TestValidAccessToken_SingleFlight(t *testing.T) {
+	var refreshes atomic.Int32
+	mux := http.NewServeMux()
+	mux.HandleFunc("/token", func(w http.ResponseWriter, r *http.Request) {
+		refreshes.Add(1)
+		time.Sleep(50 * time.Millisecond) // widen the race window
+		_ = json.NewEncoder(w).Encode(TokenResponse{
+			AccessToken:  "fresh",
+			RefreshToken: "refresh-2",
+			ExpiresIn:    300,
+		})
+	})
+	_, mgr := testServer(t, mux)
+	mgr.LoadToken(&TokenResponse{
+		AccessToken:  "stale",
+		RefreshToken: "refresh-1",
+		ExpiresIn:    300,
+		ObtainedAt:   time.Now().Add(-10 * time.Minute),
+	})
+
+	var wg sync.WaitGroup
+	for range 8 {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			tok, err := mgr.ValidAccessToken(context.Background())
+			if err != nil || tok != "fresh" {
+				t.Errorf("ValidAccessToken = %q, %v", tok, err)
+			}
+		}()
+	}
+	wg.Wait()
+	if got := refreshes.Load(); got != 1 {
+		t.Errorf("want exactly 1 refresh request, got %d", got)
+	}
+}
+
+func TestValidAccessToken_CachedNoRefresh(t *testing.T) {
+	mux := http.NewServeMux() // any request would 404 and fail the refresh
+	_, mgr := testServer(t, mux)
+	mgr.LoadToken(&TokenResponse{AccessToken: "live", ExpiresIn: 300, ObtainedAt: time.Now()})
+	tok, err := mgr.ValidAccessToken(context.Background())
+	if err != nil || tok != "live" {
+		t.Fatalf("ValidAccessToken = %q, %v", tok, err)
+	}
+}
+
+func TestRefreshToken_AfterCloseRefused(t *testing.T) {
+	mux := http.NewServeMux()
+	mux.HandleFunc("/token", func(w http.ResponseWriter, _ *http.Request) {
+		_ = json.NewEncoder(w).Encode(TokenResponse{AccessToken: "x", ExpiresIn: 300})
+	})
+	_, mgr := testServer(t, mux)
+	mgr.LoadToken(&TokenResponse{AccessToken: "a", RefreshToken: "r", ExpiresIn: 300, ObtainedAt: time.Now()})
+	mgr.Close()
+	if _, err := mgr.RefreshToken(context.Background(), "r"); err == nil {
+		t.Fatal("want error refreshing after Close")
+	}
+}
+
+func TestSetToken_DoesNotAliasCaller(t *testing.T) {
+	mgr := NewManager(WithAutoRefresh(false))
+	tok := &TokenResponse{AccessToken: "a", ExpiresIn: 300, ObtainedAt: time.Now()}
+	mgr.LoadToken(tok)
+	tok.AccessToken = "mutated-by-caller"
+	got, err := mgr.GetAccessToken()
+	if err != nil || got != "a" {
+		t.Fatalf("manager state affected by caller mutation: %q, %v", got, err)
 	}
 }

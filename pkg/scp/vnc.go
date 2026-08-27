@@ -36,7 +36,7 @@ import (
 // that tunnels the raw RFB (VNC) protocol over binary WebSocket frames and
 // authenticates via the standard SCP access token passed in the query string.
 func (c *Client) VNCWebSocketURL(serverID int32) (string, error) {
-	token, err := c.validAccessToken()
+	token, err := c.validAccessToken(context.Background())
 	if err != nil {
 		return "", fmt.Errorf("vnc: %w", err)
 	}
@@ -90,21 +90,10 @@ func (c *Client) DialVNC(ctx context.Context, serverID int32) (net.Conn, error) 
 	return websocket.NetConn(ctx, ws, websocket.MessageBinary), nil
 }
 
-// validAccessToken returns a currently-valid access token, refreshing once if
-// the cached token has expired.
-func (c *Client) validAccessToken() (string, error) {
-	if tok, err := c.auth.GetAccessToken(); err == nil {
-		return tok, nil
-	}
-	refresh, err := c.auth.GetRefreshToken()
-	if err != nil {
-		return "", fmt.Errorf("no valid access token: %w", err)
-	}
-	tok, err := c.auth.RefreshToken(context.Background(), refresh)
-	if err != nil {
-		return "", fmt.Errorf("refresh access token: %w", err)
-	}
-	return tok.AccessToken, nil
+// validAccessToken returns a currently-valid access token, refreshing
+// (single-flight) if the cached token has expired.
+func (c *Client) validAccessToken(ctx context.Context) (string, error) {
+	return c.auth.ValidAccessToken(ctx)
 }
 
 // originURL returns the scheme://host of the API base URL, for use as an Origin

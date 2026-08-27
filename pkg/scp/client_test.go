@@ -16,6 +16,7 @@ import (
 type mockRefresher struct {
 	newToken *auth.TokenResponse
 	err      error
+	calls    int
 }
 
 func (m *mockRefresher) GetRefreshToken() (string, error) {
@@ -23,6 +24,7 @@ func (m *mockRefresher) GetRefreshToken() (string, error) {
 }
 
 func (m *mockRefresher) RefreshToken(_ context.Context, _ string) (*auth.TokenResponse, error) {
+	m.calls++
 	return m.newToken, m.err
 }
 
@@ -107,6 +109,7 @@ func TestRetryTransport_PostBodyRestoredOnRetry(t *testing.T) {
 	req, _ := http.NewRequestWithContext(context.Background(), http.MethodPost, srv.URL,
 		strings.NewReader(body))
 	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Authorization", "Bearer stale")
 
 	resp, err := rt.RoundTrip(req)
 	if err != nil {
@@ -134,6 +137,7 @@ func TestRetryTransport_NoRetryWhenRefreshFails(t *testing.T) {
 	rt := &retryTransport{base: srv.Client().Transport, auth: refresher}
 
 	req, _ := http.NewRequestWithContext(context.Background(), http.MethodGet, srv.URL, nil)
+	req.Header.Set("Authorization", "Bearer stale")
 	_, err := rt.RoundTrip(req)
 	if err == nil {
 		t.Fatal("expected error when refresh fails, got nil")
@@ -141,5 +145,62 @@ func TestRetryTransport_NoRetryWhenRefreshFails(t *testing.T) {
 	// Only one call — no retry after a failed refresh.
 	if calls.Load() != 1 {
 		t.Errorf("expected 1 call, got %d", calls.Load())
+	}
+}
+
+func TestRetryTransport_NoRefreshForUnauthenticatedRequests(t *testing.T) {
+	// Presigned S3 requests carry no Authorization header; a 401 from them
+	// must pass through untouched — no OAuth refresh, no token attached.
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		w.WriteHeader(http.StatusUnauthorized)
+	}))
+	defer srv.Close()
+
+	refresher := &mockRefresher{
+		newToken: &auth.TokenResponse{AccessToken: "should-not-be-used", ExpiresIn: 300},
+	}
+	rt := &retryTransport{base: srv.Client().Transport, auth: refresher}
+
+	req, _ := http.NewRequestWithContext(context.Background(), http.MethodPut, srv.URL, nil)
+	resp, err := rt.RoundTrip(req)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode != http.StatusUnauthorized {
+		t.Errorf("status = %d, want passthrough 401", resp.StatusCode)
+	}
+	if refresher.calls != 0 {
+		t.Errorf("refresh called %d times for unauthenticated request", refresher.calls)
+	}
+}
+
+func TestRetryTransport_NoRetryWithConsumedStreamingBody(t *testing.T) {
+	// A body without GetBody (e.g. a raw io.Reader upload) is consumed by the
+	// first attempt; retrying would send it empty or truncated.
+	var requests atomic.Int32
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		requests.Add(1)
+		w.WriteHeader(http.StatusUnauthorized)
+	}))
+	defer srv.Close()
+
+	refresher := &mockRefresher{
+		newToken: &auth.TokenResponse{AccessToken: "fresh", ExpiresIn: 300},
+	}
+	rt := &retryTransport{base: srv.Client().Transport, auth: refresher}
+
+	req, _ := http.NewRequestWithContext(context.Background(), http.MethodPut, srv.URL,
+		io.NopCloser(strings.NewReader("streaming-payload")))
+	req.Header.Set("Authorization", "Bearer stale")
+	req.GetBody = nil
+
+	resp, err := rt.RoundTrip(req)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	defer resp.Body.Close()
+	if got := requests.Load(); got != 1 {
+		t.Errorf("server saw %d requests, want 1 (no retry)", got)
 	}
 }

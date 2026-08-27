@@ -74,6 +74,19 @@ func (t *retryTransport) RoundTrip(req *http.Request) (*http.Response, error) {
 		return resp, err
 	}
 
+	// Only requests that carried our Bearer token are candidates: a 401 from
+	// anywhere else (e.g. a presigned S3 upload URL) must not trigger an
+	// OAuth refresh, and retrying would attach the API token to a
+	// third-party host.
+	if req.Header.Get("Authorization") == "" {
+		return resp, nil
+	}
+	// A consumed streaming body without GetBody cannot be replayed; a retry
+	// would silently send an empty or truncated body.
+	if req.Body != nil && req.GetBody == nil {
+		return resp, nil
+	}
+
 	// Drain and discard the 401 body so the connection can be reused.
 	_, _ = io.Copy(io.Discard, resp.Body)
 	resp.Body.Close()
@@ -128,7 +141,7 @@ func NewClient(authManager *auth.Manager, opts ...ClientOption) (*Client, error)
 	}
 
 	requestEditor := func(ctx context.Context, req *http.Request) error {
-		token, err := client.validAccessToken()
+		token, err := client.validAccessToken(ctx)
 		if err != nil {
 			return fmt.Errorf("failed to get access token: %w", err)
 		}

@@ -72,6 +72,13 @@ type Manager struct {
 	onRefresh    func(*TokenResponse)
 	autoRefresh  bool
 	refreshTimer *time.Timer
+	closed       bool
+	// refreshMu single-flights token refreshes: concurrent callers needing a
+	// fresh token wait for the in-flight refresh and reuse its result instead
+	// of racing the IdP (fatal under refresh-token rotation). It also keeps
+	// each setToken+onRefresh pair atomic so the persisted token can never be
+	// older than the in-memory one.
+	refreshMu sync.Mutex
 }
 
 type Option func(*Manager)
@@ -211,7 +218,24 @@ func (am *Manager) requestToken(ctx context.Context, deviceCode string) (*TokenR
 	return &token, nil
 }
 
+// RefreshToken exchanges refreshToken for a fresh token pair. Concurrent
+// calls are serialized; prefer ValidAccessToken, which also skips the network
+// round-trip when the cached token is still valid.
 func (am *Manager) RefreshToken(ctx context.Context, refreshToken string) (*TokenResponse, error) {
+	am.refreshMu.Lock()
+	defer am.refreshMu.Unlock()
+	return am.refresh(ctx, refreshToken)
+}
+
+// refresh performs the token refresh. Callers must hold refreshMu.
+func (am *Manager) refresh(ctx context.Context, refreshToken string) (*TokenResponse, error) {
+	am.mu.RLock()
+	closed := am.closed
+	am.mu.RUnlock()
+	if closed {
+		return nil, errors.New("auth manager is closed")
+	}
+
 	data := url.Values{
 		"client_id":     {clientID},
 		"refresh_token": {refreshToken},
@@ -252,6 +276,29 @@ func (am *Manager) RefreshToken(ctx context.Context, refreshToken string) (*Toke
 	return &token, nil
 }
 
+// ValidAccessToken returns a currently-valid access token, refreshing once
+// (single-flight across goroutines) when the cached token has expired.
+func (am *Manager) ValidAccessToken(ctx context.Context) (string, error) {
+	if tok, err := am.GetAccessToken(); err == nil {
+		return tok, nil
+	}
+	am.refreshMu.Lock()
+	defer am.refreshMu.Unlock()
+	// Another caller may have refreshed while we waited for the lock.
+	if tok, err := am.GetAccessToken(); err == nil {
+		return tok, nil
+	}
+	refreshToken, err := am.GetRefreshToken()
+	if err != nil {
+		return "", fmt.Errorf("no valid access token: %w", err)
+	}
+	tok, err := am.refresh(ctx, refreshToken)
+	if err != nil {
+		return "", fmt.Errorf("refresh access token: %w", err)
+	}
+	return tok.AccessToken, nil
+}
+
 func (am *Manager) RevokeToken(ctx context.Context, refreshToken string) error {
 	data := url.Values{
 		"client_id":       {clientID},
@@ -290,16 +337,16 @@ func (am *Manager) RevokeToken(ctx context.Context, refreshToken string) error {
 }
 
 func (am *Manager) LoadToken(token *TokenResponse) {
-	// Token files written before ObtainedAt existed carry no issue time;
-	// assume the worst so the first use refreshes instead of sending a
-	// possibly-expired token.
-	legacy := token.ObtainedAt.IsZero()
-	am.setToken(token)
-	if legacy {
-		am.mu.Lock()
-		am.tokenExpiry = time.Now()
-		am.mu.Unlock()
+	if token.ObtainedAt.IsZero() {
+		// Token files written before ObtainedAt existed carry no issue
+		// time; backdate so the token counts as already expired and the
+		// first use refreshes instead of sending a possibly-expired token.
+		// Backdating (rather than fixing up expiry afterwards) keeps the
+		// whole load in one lock section, so no reader can observe a
+		// spuriously-fresh expiry in between.
+		token.ObtainedAt = time.Now().Add(-time.Duration(token.ExpiresIn)*time.Second - time.Second)
 	}
+	am.setToken(token)
 	if am.autoRefresh {
 		am.scheduleRefresh()
 	}
@@ -338,7 +385,10 @@ func (am *Manager) setToken(token *TokenResponse) {
 	if token.ObtainedAt.IsZero() {
 		token.ObtainedAt = time.Now()
 	}
-	am.token = token
+	// Store a copy: callers keep using their pointer after LoadToken/refresh,
+	// and aliasing it would let them mutate manager state without the lock.
+	t := *token
+	am.token = &t
 	am.tokenExpiry = token.ObtainedAt.Add(time.Duration(token.ExpiresIn) * time.Second)
 }
 
@@ -350,21 +400,39 @@ func (am *Manager) scheduleRefresh() {
 		am.refreshTimer.Stop()
 	}
 
-	if am.token == nil {
+	if am.token == nil || am.closed {
 		return
 	}
 
 	refreshIn := time.Until(am.tokenExpiry) - 30*time.Second
-	if refreshIn < 0 {
-		refreshIn = 0
+	// Floor the interval: an already-expired or very short-lived token would
+	// otherwise refresh in a hot loop against the IdP. The floor also paces
+	// retries when a refresh fails (see the callback below).
+	if refreshIn < 15*time.Second {
+		refreshIn = 15 * time.Second
 	}
 
 	am.refreshTimer = time.AfterFunc(refreshIn, func() {
+		// The timer may fire concurrently with Close or RevokeToken;
+		// Stop() does not wait for a running callback, so re-check state
+		// under the lock instead of assuming a token is present.
 		am.mu.RLock()
-		refreshToken := am.token.RefreshToken
+		closed := am.closed
+		refreshToken := ""
+		if am.token != nil {
+			refreshToken = am.token.RefreshToken
+		}
 		am.mu.RUnlock()
+		if closed || refreshToken == "" {
+			return
+		}
 
-		_, _ = am.RefreshToken(context.Background(), refreshToken)
+		if _, err := am.RefreshToken(context.Background(), refreshToken); err != nil {
+			// Transient failure must not silently kill auto-refresh for a
+			// long-lived process: re-arm (the floor above paces retries).
+			// The request paths refresh on demand regardless.
+			am.scheduleRefresh()
+		}
 	})
 }
 
@@ -372,6 +440,10 @@ func (am *Manager) Close() {
 	am.mu.Lock()
 	defer am.mu.Unlock()
 
+	// The flag, not the Stop call, is what actually ends auto-refresh: a
+	// callback already in flight re-checks it before refreshing, and refresh
+	// and scheduleRefresh refuse to run once it is set.
+	am.closed = true
 	if am.refreshTimer != nil {
 		am.refreshTimer.Stop()
 		am.refreshTimer = nil
