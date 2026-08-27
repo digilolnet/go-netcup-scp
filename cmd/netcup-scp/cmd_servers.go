@@ -41,6 +41,7 @@ func newServersCmd() *cobra.Command {
 		newServersLogsCmd(),
 		newServersCPUTopologyCmd(),
 		newServersGuestAgentCmd(),
+		newServersVNCCmd(),
 		newServersImageFlavoursCmd(),
 		newServersInstallImageCmd(),
 		newServersInstallUserImageCmd(),
