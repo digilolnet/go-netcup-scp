@@ -16,7 +16,7 @@
   <div id="bar">netcup VNC — <span id="status">connecting…</span></div>
   <div id="screen"></div>
   <script type="module">
-    import RFB from 'https://cdn.jsdelivr.net/npm/@novnc/novnc@1.5.0/lib/rfb.js';
+    import RFB from 'https://cdn.jsdelivr.net/gh/novnc/noVNC@v1.5.0/core/rfb.js';
 
     const status = document.getElementById('status');
     const proto = location.protocol === 'https:' ? 'wss' : 'ws';

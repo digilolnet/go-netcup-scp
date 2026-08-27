@@ -170,6 +170,7 @@ func vncWebHandler(ctx context.Context, client *scp.Client, id int32) http.Handl
 
 		remote, err := client.DialVNC(ctx, id)
 		if err != nil {
+			fmt.Fprintf(os.Stderr, "console dial failed: %v\n", err)
 			ws.Close(websocket.StatusInternalError, "console dial failed")
 			return
 		}
