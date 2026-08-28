@@ -52,3 +52,31 @@ func TestTrimOpenBucket(t *testing.T) {
 		t.Errorf("short series: want 2 points, got %d", len(got))
 	}
 }
+
+func TestFilterSeriesAndTotal(t *testing.T) {
+	points := []scp.MetricPoint{
+		{Values: map[string]float64{"CPU0": 1, "CPU1": 2, "vda Read": 5}},
+		{Values: map[string]float64{"CPU0": 3}},
+		{Values: map[string]float64{}},
+	}
+
+	got, err := filterSeries(points, []string{"cpu*"})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(got[0].Values) != 2 || len(got[1].Values) != 1 {
+		t.Errorf("glob filter wrong: %+v", got)
+	}
+
+	if _, err := filterSeries(points, []string{"gpu*"}); err == nil {
+		t.Error("want error when nothing matches")
+	}
+
+	tot := totalSeries(points)
+	if tot[0].Values["TOTAL"] != 8 || tot[1].Values["TOTAL"] != 3 {
+		t.Errorf("totals wrong: %+v", tot)
+	}
+	if len(tot[2].Values) != 0 {
+		t.Error("empty point must stay a gap, not TOTAL=0")
+	}
+}

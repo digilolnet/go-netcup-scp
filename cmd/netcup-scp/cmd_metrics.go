@@ -17,6 +17,8 @@ package main
 import (
 	"fmt"
 	"math"
+	"path"
+	"strings"
 	"time"
 
 	"github.com/guptarohit/asciigraph"
@@ -81,6 +83,8 @@ func newMetricsCmd() *cobra.Command {
 
 func newMetricsSubCmd(spec metricSpec) *cobra.Command {
 	var hours int32
+	var seriesGlobs []string
+	var total bool
 	cmd := &cobra.Command{
 		Use:               spec.use + " <server-id>",
 		Short:             spec.short,
@@ -101,13 +105,81 @@ func newMetricsSubCmd(spec metricSpec) *cobra.Command {
 			if err != nil {
 				return err
 			}
+			if len(seriesGlobs) > 0 {
+				points, err = filterSeries(points, seriesGlobs)
+				if err != nil {
+					return err
+				}
+			}
+			if total {
+				points = totalSeries(points)
+			}
 			return printResult(cc, points, func() {
 				printMetricsSparklines(points, spec.unit, spec.siBase)
 			})
 		},
 	}
 	cmd.Flags().Int32Var(&hours, "hours", 6, "last N hours of data")
+	cmd.Flags().StringSliceVar(
+		&seriesGlobs,
+		"series",
+		nil,
+		`only these series; case-insensitive globs (e.g. "CPU0", "*:9f IN", "vda *")`,
+	)
+	cmd.Flags().BoolVar(&total, "total", false, "sum the (remaining) series into one TOTAL series")
 	return cmd
+}
+
+// filterSeries keeps only series whose name matches one of the
+// case-insensitive glob patterns; matching nothing is an error that lists
+// what is available.
+func filterSeries(points []scp.MetricPoint, globs []string) ([]scp.MetricPoint, error) {
+	match := func(name string) bool {
+		for _, g := range globs {
+			if ok, _ := path.Match(strings.ToLower(g), strings.ToLower(name)); ok {
+				return true
+			}
+		}
+		return false
+	}
+	kept := false
+	out := make([]scp.MetricPoint, len(points))
+	for i, p := range points {
+		vals := map[string]float64{}
+		for name, v := range p.Values {
+			if match(name) {
+				vals[name] = v
+				kept = true
+			}
+		}
+		out[i] = scp.MetricPoint{Time: p.Time, Values: vals}
+	}
+	if !kept {
+		return nil, fmt.Errorf(
+			"no series matches %v; available: %s",
+			globs,
+			strings.Join(scp.Series(points), ", "),
+		)
+	}
+	return out, nil
+}
+
+// totalSeries reduces every point to a single TOTAL series summing the
+// present samples; points with no samples at all stay empty (a gap).
+func totalSeries(points []scp.MetricPoint) []scp.MetricPoint {
+	out := make([]scp.MetricPoint, len(points))
+	for i, p := range points {
+		vals := map[string]float64{}
+		if len(p.Values) > 0 {
+			sum := 0.0
+			for _, v := range p.Values {
+				sum += v
+			}
+			vals["TOTAL"] = sum
+		}
+		out[i] = scp.MetricPoint{Time: p.Time, Values: vals}
+	}
+	return out
 }
 
 // printMetricsSparklines renders one colored sparkline per series. Samples a
