@@ -25,6 +25,7 @@ import (
 
 	"github.com/spf13/cobra"
 
+	"github.com/digilolnet/go-netcup-scp/internal/version"
 	"github.com/digilolnet/go-netcup-scp/pkg/scp"
 	"github.com/digilolnet/go-netcup-scp/pkg/scp/auth"
 )
@@ -67,6 +68,7 @@ func newRootCmd() *cobra.Command {
 		Long: "CLI for the netcup Server Control Panel API.\n\n" +
 			"<server> arguments accept a numeric id, nickname, name, or hostname,\n" +
 			"or a unique prefix of one of those.",
+		Version:       version.Version(),
 		SilenceUsage:  true,
 		SilenceErrors: true,
 		PersistentPreRunE: func(cmd *cobra.Command, args []string) error {

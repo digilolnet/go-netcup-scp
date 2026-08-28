@@ -21,10 +21,13 @@ import (
 
 const modulePath = "github.com/digilolnet/go-netcup-scp"
 
-var userAgent string
+var (
+	version   string
+	userAgent string
+)
 
 func init() {
-	version := "dev"
+	version = "dev"
 
 	if info, ok := debug.ReadBuildInfo(); ok {
 		for _, dep := range info.Deps {
@@ -39,6 +42,12 @@ func init() {
 	}
 
 	userAgent = fmt.Sprintf("go-netcup-scp/%s (+https://%s)", version, modulePath)
+}
+
+// Version returns the module version from build info: the tag for tagged
+// builds, a pseudo-version for untagged ones, "dev" when build info is absent.
+func Version() string {
+	return version
 }
 
 func UserAgent() string {
