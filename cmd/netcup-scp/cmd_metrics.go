@@ -114,6 +114,7 @@ func newMetricsSubCmd(spec metricSpec) *cobra.Command {
 // series is missing are plotted as NaN, which asciigraph draws as gaps —
 // never as fake zeros.
 func printMetricsSparklines(points []scp.MetricPoint, baseUnit string, siBase float64) {
+	points = trimOpenBucket(points)
 	if len(points) == 0 {
 		fmt.Println("no data")
 		return
@@ -177,4 +178,20 @@ func printMetricsSparklines(points []scp.MetricPoint, baseUnit string, siBase fl
 		asciigraph.SeriesLegends(series...),
 	)
 	fmt.Println(graph)
+}
+
+// trimOpenBucket drops the final point when its aggregation window is still
+// open: the API reports per-interval averages, and the in-progress bucket is
+// systematically undercounted, which draws a bogus cliff at the right edge of
+// the chart. Raw --json output is unaffected.
+func trimOpenBucket(points []scp.MetricPoint) []scp.MetricPoint {
+	if len(points) < 3 {
+		return points
+	}
+	last := points[len(points)-1].Time
+	interval := last.Sub(points[len(points)-2].Time)
+	if interval > 0 && time.Now().Before(last.Add(interval)) {
+		return points[:len(points)-1]
+	}
+	return points
 }
