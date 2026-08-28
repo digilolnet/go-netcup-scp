@@ -24,6 +24,12 @@ func newContextCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "context",
 		Short: "Manage named account contexts (multi-account support)",
+		// A parent without RunE never runs Args validation, so an unknown
+		// subcommand would silently print help with exit 0.
+		Args: cobra.NoArgs,
+		RunE: func(cmd *cobra.Command, _ []string) error {
+			return cmd.Help()
+		},
 	}
 	cmd.AddCommand(
 		newContextListCmd(),

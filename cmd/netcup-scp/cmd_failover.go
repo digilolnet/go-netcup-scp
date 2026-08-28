@@ -27,6 +27,12 @@ func newFailoverV4Cmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "failover-v4",
 		Short: "Manage IPv4 failover addresses",
+		// A parent without RunE never runs Args validation, so an unknown
+		// subcommand would silently print help with exit 0.
+		Args: cobra.NoArgs,
+		RunE: func(cmd *cobra.Command, _ []string) error {
+			return cmd.Help()
+		},
 	}
 	cmd.AddCommand(
 		newFailoverV4ListCmd(),
@@ -150,6 +156,12 @@ func newFailoverV6Cmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "failover-v6",
 		Short: "Manage IPv6 failover prefixes",
+		// A parent without RunE never runs Args validation, so an unknown
+		// subcommand would silently print help with exit 0.
+		Args: cobra.NoArgs,
+		RunE: func(cmd *cobra.Command, _ []string) error {
+			return cmd.Help()
+		},
 	}
 	cmd.AddCommand(
 		newFailoverV6ListCmd(),

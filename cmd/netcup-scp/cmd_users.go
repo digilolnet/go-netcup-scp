@@ -25,6 +25,12 @@ func newUsersCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "users",
 		Short: "Manage user accounts",
+		// A parent without RunE never runs Args validation, so an unknown
+		// subcommand would silently print help with exit 0.
+		Args: cobra.NoArgs,
+		RunE: func(cmd *cobra.Command, _ []string) error {
+			return cmd.Help()
+		},
 	}
 	cmd.AddCommand(
 		newUsersGetCmd(),
@@ -168,6 +174,12 @@ func newSSHKeysCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "ssh-keys",
 		Short: "Manage SSH keys",
+		// A parent without RunE never runs Args validation, so an unknown
+		// subcommand would silently print help with exit 0.
+		Args: cobra.NoArgs,
+		RunE: func(cmd *cobra.Command, _ []string) error {
+			return cmd.Help()
+		},
 	}
 	cmd.AddCommand(
 		newSSHKeysListCmd(),

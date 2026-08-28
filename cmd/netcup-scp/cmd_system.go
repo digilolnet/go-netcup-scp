@@ -25,6 +25,12 @@ func newSystemCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "system",
 		Short: "System-level operations",
+		// A parent without RunE never runs Args validation, so an unknown
+		// subcommand would silently print help with exit 0.
+		Args: cobra.NoArgs,
+		RunE: func(cmd *cobra.Command, _ []string) error {
+			return cmd.Help()
+		},
 	}
 	cmd.AddCommand(
 		newSystemPingCmd(),

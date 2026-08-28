@@ -29,6 +29,12 @@ func newInterfacesCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "interfaces",
 		Short: "Manage network interfaces",
+		// A parent without RunE never runs Args validation, so an unknown
+		// subcommand would silently print help with exit 0.
+		Args: cobra.NoArgs,
+		RunE: func(cmd *cobra.Command, _ []string) error {
+			return cmd.Help()
+		},
 	}
 	cmd.AddCommand(
 		newInterfacesListCmd(),
@@ -306,6 +312,12 @@ func newRDNSv4Cmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "rdns-v4",
 		Short: "Manage IPv4 reverse DNS entries",
+		// A parent without RunE never runs Args validation, so an unknown
+		// subcommand would silently print help with exit 0.
+		Args: cobra.NoArgs,
+		RunE: func(cmd *cobra.Command, _ []string) error {
+			return cmd.Help()
+		},
 	}
 	cmd.AddCommand(
 		newRDNSGetCmd(func(cc *cmdContext, ip string) (string, error) {
@@ -331,6 +343,12 @@ func newRDNSv6Cmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "rdns-v6",
 		Short: "Manage IPv6 reverse DNS entries",
+		// A parent without RunE never runs Args validation, so an unknown
+		// subcommand would silently print help with exit 0.
+		Args: cobra.NoArgs,
+		RunE: func(cmd *cobra.Command, _ []string) error {
+			return cmd.Help()
+		},
 	}
 	cmd.AddCommand(
 		newRDNSGetCmd(func(cc *cmdContext, ip string) (string, error) {

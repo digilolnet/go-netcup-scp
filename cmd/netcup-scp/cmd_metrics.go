@@ -16,7 +16,7 @@ package main
 
 import (
 	"fmt"
-	"sort"
+	"math"
 	"time"
 
 	"github.com/guptarohit/asciigraph"
@@ -25,25 +25,65 @@ import (
 	"github.com/digilolnet/go-netcup-scp/pkg/scp"
 )
 
+// metricSpec describes one metrics subcommand; the four commands differ only
+// in endpoint, unit and SI base.
+type metricSpec struct {
+	use    string
+	short  string
+	unit   string
+	siBase float64
+	fetch  func(cc *cmdContext, id int32, opts *scp.MetricsOptions) ([]scp.MetricPoint, error)
+}
+
+var metricSpecs = []metricSpec{
+	{
+		use: "cpu", short: "Per-vCPU usage (percent of one core)", unit: "%", siBase: 1000,
+		fetch: func(cc *cmdContext, id int32, opts *scp.MetricsOptions) ([]scp.MetricPoint, error) {
+			return cc.client.GetCPUMetrics(cc.ctx, id, opts)
+		},
+	},
+	{
+		use: "disk", short: "Disk I/O operations per second", unit: "OP/s", siBase: 1000,
+		fetch: func(cc *cmdContext, id int32, opts *scp.MetricsOptions) ([]scp.MetricPoint, error) {
+			return cc.client.GetDiskMetrics(cc.ctx, id, opts)
+		},
+	},
+	{
+		use: "network", short: "Network throughput", unit: "B/s", siBase: 1024,
+		fetch: func(cc *cmdContext, id int32, opts *scp.MetricsOptions) ([]scp.MetricPoint, error) {
+			return cc.client.GetNetworkMetrics(cc.ctx, id, opts)
+		},
+	},
+	{
+		use: "network-packet", short: "Network packets per second", unit: "P/s", siBase: 1000,
+		fetch: func(cc *cmdContext, id int32, opts *scp.MetricsOptions) ([]scp.MetricPoint, error) {
+			return cc.client.GetNetworkPacketMetrics(cc.ctx, id, opts)
+		},
+	},
+}
+
 func newMetricsCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "metrics",
 		Short: "Retrieve server performance metrics",
+		// A parent without RunE never runs Args validation, so an unknown
+		// subcommand would silently print help with exit 0.
+		Args: cobra.NoArgs,
+		RunE: func(cmd *cobra.Command, _ []string) error {
+			return cmd.Help()
+		},
 	}
-	cmd.AddCommand(
-		newMetricsCPUCmd(),
-		newMetricsDiskCmd(),
-		newMetricsNetworkCmd(),
-		newMetricsNetworkPacketsCmd(),
-	)
+	for _, spec := range metricSpecs {
+		cmd.AddCommand(newMetricsSubCmd(spec))
+	}
 	return cmd
 }
 
-func newMetricsCPUCmd() *cobra.Command {
-	var hours int
+func newMetricsSubCmd(spec metricSpec) *cobra.Command {
+	var hours int32
 	cmd := &cobra.Command{
-		Use:               "cpu <server-id>",
-		Short:             "Get CPU usage metrics",
+		Use:               spec.use + " <server-id>",
+		Short:             spec.short,
 		Args:              cobra.ExactArgs(1),
 		ValidArgsFunction: makeCompleter(serverIDCompletions),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -57,180 +97,57 @@ func newMetricsCPUCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			data, err := cc.client.GetCPUMetrics(cc.ctx, id, &scp.MetricsOptions{Hours: new(int32(hours))})
+			points, err := spec.fetch(cc, id, &scp.MetricsOptions{Hours: &hours})
 			if err != nil {
 				return err
 			}
-			return printResult(cc, data, func() {
-				printMetricsSparklines(data, "OP/s", 1000)
+			return printResult(cc, points, func() {
+				printMetricsSparklines(points, spec.unit, spec.siBase)
 			})
 		},
 	}
-	cmd.Flags().IntVar(&hours, "hours", 6, "last N hours of data")
+	cmd.Flags().Int32Var(&hours, "hours", 6, "last N hours of data")
 	return cmd
 }
 
-func newMetricsDiskCmd() *cobra.Command {
-	var hours int
-	cmd := &cobra.Command{
-		Use:               "disk <server-id>",
-		Short:             "Get disk I/O metrics",
-		Args:              cobra.ExactArgs(1),
-		ValidArgsFunction: makeCompleter(serverIDCompletions),
-		RunE: func(cmd *cobra.Command, args []string) error {
-			cc, cleanup, err := makeCmdContext(false)
-			if err != nil {
-				return err
-			}
-			defer cleanup()
-
-			id, err := parseID(args[0], "server-id")
-			if err != nil {
-				return err
-			}
-			data, err := cc.client.GetDiskMetrics(cc.ctx, id, &scp.MetricsOptions{Hours: new(int32(hours))})
-			if err != nil {
-				return err
-			}
-			return printResult(cc, data, func() {
-				printMetricsSparklines(data, "OP/s", 1000)
-			})
-		},
+// printMetricsSparklines renders one colored sparkline per series. Samples a
+// series is missing are plotted as NaN, which asciigraph draws as gaps —
+// never as fake zeros.
+func printMetricsSparklines(points []scp.MetricPoint, baseUnit string, siBase float64) {
+	if len(points) == 0 {
+		fmt.Println("no data")
+		return
 	}
-	cmd.Flags().IntVar(&hours, "hours", 6, "last N hours of data")
-	return cmd
-}
+	series := scp.Series(points)
 
-func newMetricsNetworkCmd() *cobra.Command {
-	var hours int
-	cmd := &cobra.Command{
-		Use:               "network <server-id>",
-		Short:             "Get network throughput metrics",
-		Args:              cobra.ExactArgs(1),
-		ValidArgsFunction: makeCompleter(serverIDCompletions),
-		RunE: func(cmd *cobra.Command, args []string) error {
-			cc, cleanup, err := makeCmdContext(false)
-			if err != nil {
-				return err
-			}
-			defer cleanup()
-
-			id, err := parseID(args[0], "server-id")
-			if err != nil {
-				return err
-			}
-			data, err := cc.client.GetNetworkMetrics(cc.ctx, id, &scp.MetricsOptions{Hours: new(int32(hours))})
-			if err != nil {
-				return err
-			}
-			return printResult(cc, data, func() {
-				printMetricsSparklines(data, "B/s", 1024)
-			})
-		},
-	}
-	cmd.Flags().IntVar(&hours, "hours", 6, "last N hours of data")
-	return cmd
-}
-
-func newMetricsNetworkPacketsCmd() *cobra.Command {
-	var hours int
-	cmd := &cobra.Command{
-		Use:               "network-packet <server-id>",
-		Short:             "Get network packet count metrics",
-		Args:              cobra.ExactArgs(1),
-		ValidArgsFunction: makeCompleter(serverIDCompletions),
-		RunE: func(cmd *cobra.Command, args []string) error {
-			cc, cleanup, err := makeCmdContext(false)
-			if err != nil {
-				return err
-			}
-			defer cleanup()
-
-			id, err := parseID(args[0], "server-id")
-			if err != nil {
-				return err
-			}
-			data, err := cc.client.GetNetworkPacketMetrics(cc.ctx, id, &scp.MetricsOptions{Hours: new(int32(hours))})
-			if err != nil {
-				return err
-			}
-			return printResult(cc, data, func() {
-				printMetricsSparklines(data, "PPS", 1000)
-			})
-		},
-	}
-	cmd.Flags().IntVar(&hours, "hours", 6, "last N hours of data")
-	return cmd
-}
-
-func printMetricsSparklines(data map[string]any, baseUnit string, siBase float64) {
-	type point struct {
-		t    time.Time
-		vals map[string]float64
-	}
-
-	var points []point
-	seriesSet := map[string]bool{}
-
-	for k, v := range data {
-		t, err := time.Parse(time.RFC3339, k)
-		if err != nil {
-			_ = printJSON(data)
-			return
-		}
-		nested, ok := v.(map[string]any)
-		if !ok {
-			_ = printJSON(data)
-			return
-		}
-		vals := map[string]float64{}
-		for nk, nv := range nested {
-			if f, ok := nv.(float64); ok {
-				vals[nk] = f
-				seriesSet[nk] = true
-			}
-		}
-		points = append(points, point{t, vals})
-	}
-
-	sort.Slice(points, func(i, j int) bool { return points[i].t.Before(points[j].t) })
-
-	series := make([]string, 0, len(seriesSet))
-	for k := range seriesSet {
-		series = append(series, k)
-	}
-	sort.Strings(series)
-
-	// Build one float64 slice per series and find global max for scaling
 	seriesData := make([][]float64, len(series))
 	globalMax := 0.0
 	for si, name := range series {
 		vals := make([]float64, len(points))
 		for i, p := range points {
-			vals[i] = p.vals[name]
-			if vals[i] > globalMax {
-				globalMax = vals[i]
+			v, ok := p.Values[name]
+			if !ok {
+				vals[i] = math.NaN()
+				continue
+			}
+			vals[i] = v
+			if v > globalMax {
+				globalMax = v
 			}
 		}
 		seriesData[si] = vals
 	}
 
-	// Determine SI scale
-	var scale float64
-	var unit string
-	switch {
-	case globalMax >= siBase*siBase*siBase:
-		scale, unit = siBase*siBase*siBase, "G"+baseUnit
-	case globalMax >= siBase*siBase:
-		scale, unit = siBase*siBase, "M"+baseUnit
-	case globalMax >= siBase:
-		scale, unit = siBase, "K"+baseUnit
-	default:
-		scale, unit = 1, baseUnit
+	// Scale to the largest SI prefix the data reaches.
+	scale, unit := 1.0, baseUnit
+	for _, prefix := range []string{"K", "M", "G"} {
+		if globalMax >= scale*siBase {
+			scale, unit = scale*siBase, prefix+baseUnit
+		}
 	}
 	for si := range seriesData {
-		for i := range seriesData[si] {
-			seriesData[si][i] /= scale
+		for i, v := range seriesData[si] {
+			seriesData[si][i] = v / scale
 		}
 	}
 
@@ -243,11 +160,8 @@ func printMetricsSparklines(data map[string]any, baseUnit string, siBase float64
 		graphColors[i] = colors[i%len(colors)]
 	}
 
-	var xMin, xMax float64
-	if len(points) > 0 {
-		xMin = float64(points[0].t.Unix())
-		xMax = float64(points[len(points)-1].t.Unix())
-	}
+	xMin := float64(points[0].Time.Unix())
+	xMax := float64(points[len(points)-1].Time.Unix())
 
 	graph := asciigraph.PlotMany(seriesData,
 		asciigraph.Height(15),
@@ -263,27 +177,4 @@ func printMetricsSparklines(data map[string]any, baseUnit string, siBase float64
 		asciigraph.SeriesLegends(series...),
 	)
 	fmt.Println(graph)
-}
-
-// scaleMetricValues multiplies every numeric sample by factor, leaving the
-// timestamp/series structure untouched.
-func scaleMetricValues(data map[string]any, factor float64) map[string]any {
-	out := make(map[string]any, len(data))
-	for k, v := range data {
-		nested, ok := v.(map[string]any)
-		if !ok {
-			out[k] = v
-			continue
-		}
-		scaled := make(map[string]any, len(nested))
-		for nk, nv := range nested {
-			if f, ok := nv.(float64); ok {
-				scaled[nk] = f * factor
-			} else {
-				scaled[nk] = nv
-			}
-		}
-		out[k] = scaled
-	}
-	return out
 }

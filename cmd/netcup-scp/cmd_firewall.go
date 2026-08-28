@@ -27,6 +27,12 @@ func newFirewallCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "firewall",
 		Short: "Manage per-interface firewall configuration",
+		// A parent without RunE never runs Args validation, so an unknown
+		// subcommand would silently print help with exit 0.
+		Args: cobra.NoArgs,
+		RunE: func(cmd *cobra.Command, _ []string) error {
+			return cmd.Help()
+		},
 	}
 	cmd.AddCommand(
 		newFirewallGetCmd(),
@@ -262,6 +268,12 @@ func newFirewallPoliciesCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "firewall-policies",
 		Short: "Manage user-defined firewall policies",
+		// A parent without RunE never runs Args validation, so an unknown
+		// subcommand would silently print help with exit 0.
+		Args: cobra.NoArgs,
+		RunE: func(cmd *cobra.Command, _ []string) error {
+			return cmd.Help()
+		},
 	}
 	cmd.AddCommand(
 		newFWPoliciesListCmd(),
