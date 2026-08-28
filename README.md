@@ -10,6 +10,7 @@ Go client library and CLI for the [netcup SCP](https://www.servercontrolpanel.de
 ## Contents
 
 - [`pkg/scp`](#library) — high-level Go client library
+- [`pkg/rfb`](#vnc-console) — minimal RFB (VNC) client for driving consoles
 - [`cmd/netcup-scp`](#cli) — full-featured command-line tool
 
 ## Library
@@ -65,23 +66,25 @@ defer client.Close()
 
 `pkg/scp` provides high-level wrappers for all meaningful endpoints:
 
-| Package file           | Operations                                                                                                                             |
-| ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| `servers.go`           | List, get, start/stop/restart, autostart, UEFI, nickname, CPU topology, logs, guest agent, image install, storage optimize, GPU driver |
-| `disks.go`             | List, get, format, set driver                                                                                                          |
-| `network.go`           | List/get/create/delete interfaces, rDNS (IPv4/IPv6)                                                                                    |
-| `snapshots.go`         | Create, list, get, restore, delete                                                                                                     |
-| `metrics.go`           | CPU, disk I/O, network throughput, network packets                                                                                     |
-| `firewall_policies.go` | List, get, create, update, delete policies and rules                                                                                   |
-| `failover.go`          | List, route, unroute IPv4/IPv6 failover addresses                                                                                      |
-| `vlans.go`             | List, get, update VLANs                                                                                                                |
-| `users.go`             | Get/update user, logs                                                                                                                  |
-| `ssh_keys.go`          | List, create, delete SSH keys                                                                                                          |
-| `isos.go`              | List user ISOs                                                                                                                         |
-| `images.go`            | List, download-url, delete, upload user images                                                                                                  |
-| `rescue.go`            | `servers rescue <on|off>` toggle                                                                                                           |
-| `tasks.go`             | List, get, cancel async tasks                                                                                                          |
-| `upload.go`            | Upload files                                                                                                                           |
+| Package file           | Operations                                                                                              |
+| ---------------------- | ------------------------------------------------------------------------------------------------------- |
+| `servers.go`           | List, get, power management, autostart, UEFI, nickname, CPU topology, logs, guest agent, image install, storage optimize, GPU driver |
+| `disks.go`             | List, get, format, set storage driver, supported drivers                                                 |
+| `network.go`           | List/get/create/delete interfaces, interface driver, rDNS (IPv4/IPv6)                                    |
+| `snapshots.go`         | Create, list, get, revert, delete, export, dry-run                                                       |
+| `metrics.go`           | CPU, disk I/O, network throughput, network packets                                                       |
+| `firewall.go`          | Per-interface firewall: get, update, activate, reapply, clear, restore copied policies                   |
+| `firewall_policies.go` | List, get, create, update, delete policies; add rules                                                    |
+| `failover.go`          | List, route, unroute IPv4/IPv6 failover addresses                                                        |
+| `vlans.go`             | List, get, update VLANs                                                                                  |
+| `users.go`             | Get/update user, logs                                                                                    |
+| `ssh_keys.go`          | List, create, delete SSH keys                                                                            |
+| `isos.go`              | Attach/detach/attached ISO; user ISOs: list, upload, delete, download URL                                |
+| `images.go`            | User images: list, upload, delete, download URL; multipart upload                                        |
+| `rescue.go`            | Activate/deactivate/get rescue system                                                                    |
+| `tasks.go`             | List, get, cancel async tasks                                                                            |
+| `vnc.go`               | Dial the VNC console WebSocket; screenshot/keyboard helpers (via `pkg/rfb`)                              |
+| `client.go`            | Ping, maintenance windows, API traffic recorder (`WithTraceDir`)                                         |
 
 For operations not covered by wrappers, the full generated client is accessible via `client.API()`.
 
@@ -99,21 +102,38 @@ The library uses a two-layer design:
 servers, err := client.ListServers(ctx, nil)
 
 // Get server with live info
+live := true
 server, err := client.GetServer(ctx, serverID, &scp.GetServerOptions{
-    LoadServerLiveInfo: ptr(true),
+    LoadServerLiveInfo: &live,
 })
 
-// Power operations
-err = client.StartServer(ctx, serverID)
-err = client.StopServer(ctx, serverID, false)    // graceful shutdown
-err = client.RestartServer(ctx, serverID, true)  // hard reset
+// Power operations are async: they return a task handle
+task, err := client.StopServer(ctx, serverID, false) // graceful shutdown
+task, err = client.RestartServer(ctx, serverID, true) // hard reset
 
-// Snapshots
-err = client.CreateSnapshot(ctx, serverID, "before-upgrade", "")
-err = client.RestoreSnapshot(ctx, serverID, "before-upgrade")
+// Snapshots (BIOS-mode servers only; the API refuses UEFI servers)
+task, err = client.CreateSnapshot(ctx, serverID, "before-upgrade", "")
+task, err = client.RevertSnapshot(ctx, serverID, "before-upgrade")
 
-// Access the raw generated client for advanced use
-resp, err := client.API().GetApiV1ServersServerIdWithResponse(ctx, serverID, params)
+// Access the raw generated client for anything not wrapped
+resp, err := client.API().GetApiV1ServersServerIdWithResponse(ctx, serverID, nil)
+```
+
+### VNC console
+
+The SCP exposes each server's VNC console over an undocumented WebSocket
+(raw RFB over binary frames, authenticated with the normal access token).
+`DialVNC` returns it as a `net.Conn`; `pkg/rfb` is a minimal transport-agnostic
+RFB client on top (RFB 3.8, security None, Raw encoding).
+
+```go
+// Screenshot the console
+conn, err := client.DialVNC(ctx, serverID)
+defer conn.Close()
+img, err := rfb.Screenshot(ctx, conn)
+
+// Drive a boot menu
+err = client.SendVNCKeys(ctx, serverID, 0, rfb.KeyDown, rfb.KeyDown, rfb.KeyEnter)
 ```
 
 ---
@@ -221,7 +241,13 @@ system
   ping, maintenance
 ```
 
-All commands support `--json` / `-j` for raw JSON output and shell completion (`bash`, `zsh`, `fish`, `powershell`).
+All commands support `--json` / `-j` for raw JSON output and shell completion
+(`bash`, `zsh`, `fish`, `powershell`). Completions are cached per account for
+5 minutes and invalidated by mutating commands.
+
+Environment variables: `NETCUP_SCP_JSON=1` (default to JSON output),
+`NETCUP_SCP_CONTEXT` (select a named account context),
+`NETCUP_SCP_TRACE_DIR` (record every API exchange to files for debugging).
 
 ---
 
