@@ -88,9 +88,12 @@ curl 'https://www.servercontrolpanel.de/realms/scp/protocol/openid-connect/revok
 
 **User Info**
 
-The user ID is embedded in the JWT access token as the `sub` claim. The Go library extracts it directly from the token without an extra HTTP request.
+The numeric user ID (used in API paths like `/users/{userId}/...`) is embedded
+in the JWT access token as the `id` claim. The Go library extracts it directly
+from the token without an extra HTTP request. Note that the standard `sub`
+claim is the Keycloak account UUID, not the numeric SCP user ID.
 
-For reference, the ID can also be retrieved via the userinfo endpoint:
+For reference, the userinfo endpoint returns the same claims:
 
 ```bash
 curl 'https://www.servercontrolpanel.de/realms/scp/protocol/openid-connect/userinfo' \
@@ -104,4 +107,17 @@ curl 'https://www.servercontrolpanel.de/realms/scp/protocol/openid-connect/useri
 
 **Auto-refresh**
 
-The Go `auth.Manager` automatically schedules a token refresh 30 seconds before the access token expires, using the refresh token. An optional callback can be provided to persist the new token when it is refreshed.
+The Go `auth.Manager` keeps the access token fresh two ways:
+
+- On demand: every API request obtains its token via `ValidAccessToken`, which
+  returns the cached token or refreshes it first. Concurrent callers share a
+  single refresh (single-flight), so parallel requests never race the IdP.
+- Proactively: a timer refreshes 30 seconds before expiry (floored at 15s, and
+  re-armed after transient failures) — this matters for long-lived processes
+  such as the VNC console bridge.
+
+An optional callback persists refreshed tokens. When persisting, the library
+adds an `obtained_at` timestamp (not part of the IdP response) so a token
+reloaded from disk expires at the correct absolute time; token files without
+it are treated as expired and refreshed on first use. `Close` stops all
+refreshing; no token can be fetched or persisted afterwards.
