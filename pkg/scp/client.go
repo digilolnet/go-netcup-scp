@@ -23,15 +23,11 @@ import (
 	"os"
 	"reflect"
 	"slices"
-	"time"
 
 	"github.com/digilolnet/go-netcup-scp/internal/generated"
 	"github.com/digilolnet/go-netcup-scp/internal/version"
 	"github.com/digilolnet/go-netcup-scp/pkg/scp/auth"
 )
-
-// Maintenance is an announced host maintenance window.
-type Maintenance = generated.Maintenance
 
 const (
 	BaseURL = "https://www.servercontrolpanel.de/scp-core"
@@ -187,53 +183,6 @@ func (c *Client) Ping(ctx context.Context) error {
 
 func (c *Client) Close() {
 	c.auth.Close()
-}
-
-// GetMaintenance retrieves upcoming maintenance windows.
-// Returns an empty slice if no maintenance is scheduled.
-//
-// Deprecated: the upstream endpoint is deprecated and will be removed by 2026-12-31.
-// Note: the generated parser expects a JSON array but the live API returns a single
-// object, so we bypass the generated parser and handle both formats here.
-func (c *Client) GetMaintenance(ctx context.Context) ([]Maintenance, error) {
-	rawResp, err := c.api.GetApiV1Maintenance(ctx)
-	if err != nil {
-		return nil, fmt.Errorf("get maintenance: %w", err)
-	}
-	defer rawResp.Body.Close()
-
-	if rawResp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("get maintenance: unexpected status code: %d", rawResp.StatusCode)
-	}
-
-	bodyBytes, err := io.ReadAll(rawResp.Body)
-	if err != nil {
-		return nil, fmt.Errorf("get maintenance: read body: %w", err)
-	}
-
-	// Try array first (spec says it should be an array).
-	var windows []Maintenance
-	if err := json.Unmarshal(bodyBytes, &windows); err == nil {
-		if windows == nil {
-			windows = []Maintenance{}
-		}
-		return windows, nil
-	}
-
-	// Fall back to single object (actual live API behaviour).
-	// Use pointer fields so we can detect JSON null vs. absent: the API uses
-	// {"finishAt":null,"startAt":null} to signal "no maintenance scheduled".
-	var single struct {
-		FinishAt *time.Time `json:"finishAt"`
-		StartAt  *time.Time `json:"startAt"`
-	}
-	if err := json.Unmarshal(bodyBytes, &single); err != nil {
-		return nil, fmt.Errorf("get maintenance: parse response: %w", err)
-	}
-	if single.StartAt == nil || single.FinishAt == nil {
-		return []Maintenance{}, nil
-	}
-	return []Maintenance{{StartAt: single.StartAt, FinishAt: single.FinishAt}}, nil
 }
 
 // requireID rejects empty path identifiers: an empty segment would silently

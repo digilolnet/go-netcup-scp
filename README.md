@@ -83,7 +83,7 @@ defer client.Close()
 | `rescue.go`            | Activate/deactivate/get rescue system                                                                    |
 | `tasks.go`             | List, get, cancel async tasks                                                                            |
 | `vnc.go`               | Dial the VNC console WebSocket; screenshot/keyboard helpers (via `pkg/rfb`)                              |
-| `client.go`            | Ping, maintenance windows, API traffic recorder (`WithTraceDir`)                                         |
+| `client.go`            | Ping, API traffic recorder (`WithTraceDir`)                                                              |
 
 For operations not covered by wrappers, the full generated client is accessible via `client.API()`.
 
@@ -240,7 +240,7 @@ ssh-keys
 tasks
   list/get/cancel <uuid>
 system
-  ping, maintenance
+  ping
 ```
 
 All commands support `--json` / `-j` for raw JSON output and shell completion

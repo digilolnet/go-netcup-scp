@@ -17,7 +17,6 @@ package main
 import (
 	"fmt"
 
-	"github.com/jedib0t/go-pretty/v6/table"
 	"github.com/spf13/cobra"
 )
 
@@ -34,7 +33,6 @@ func newSystemCmd() *cobra.Command {
 	}
 	cmd.AddCommand(
 		newSystemPingCmd(),
-		newSystemMaintenanceCmd(),
 	)
 	return cmd
 }
@@ -58,36 +56,6 @@ func newSystemPingCmd() *cobra.Command {
 			}
 			fmt.Println("pong")
 			return nil
-		},
-	}
-}
-
-func newSystemMaintenanceCmd() *cobra.Command {
-	return &cobra.Command{
-		Use:   "maintenance",
-		Short: "List upcoming maintenance windows",
-		RunE: func(cmd *cobra.Command, args []string) error {
-			cc, cleanup, err := makeCmdContext(false)
-			if err != nil {
-				return err
-			}
-			defer cleanup()
-
-			windows, err := cc.client.GetMaintenance(cc.ctx)
-			if err != nil {
-				return err
-			}
-			return printResult(cc, windows, func() {
-				if len(windows) == 0 {
-					fmt.Println("no maintenance scheduled")
-					return
-				}
-				t := newTable("START (UTC)", "END (UTC)")
-				for _, w := range windows {
-					t.AppendRow(table.Row{fmtTime(w.StartAt), fmtTime(w.FinishAt)})
-				}
-				t.Render()
-			})
 		},
 	}
 }
