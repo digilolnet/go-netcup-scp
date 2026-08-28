@@ -72,18 +72,19 @@ func newInterfacesListCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			return printResult(cc, ifaces, func() {
-				t := newTable("MAC", "SPEED (Mbit/s)", "DRIVER")
-				for _, iface := range ifaces {
-					t.AppendRow(table.Row{derefStr(iface.Mac), derefInt32(iface.SpeedInMBits), derefStr((*string)(iface.Driver))})
-				}
-				t.Render()
-			})
+			return interfaceDisplayer.print(cc, ifaces)
 		},
 	}
 	cmd.Flags().BoolVar(&loadRdns, "load-rdns", false, "include rDNS entries")
+	interfaceDisplayer.addFlags(cmd)
 	return cmd
 }
+
+var interfaceDisplayer = newDisplayer(
+	column("mac", "MAC", func(i scp.Interface) any { return derefStr(i.Mac) }),
+	column("speed", "SPEED (Mbit/s)", func(i scp.Interface) any { return derefInt32(i.SpeedInMBits) }),
+	column("driver", "DRIVER", func(i scp.Interface) any { return derefStr((*string)(i.Driver)) }),
+)
 
 func newInterfacesGetCmd() *cobra.Command {
 	var loadRdns bool

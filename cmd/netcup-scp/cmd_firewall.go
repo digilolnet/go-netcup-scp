@@ -318,20 +318,20 @@ func newFWPoliciesListCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			return printResult(cc, policies, func() {
-				t := newTable("ID", "NAME")
-				for _, p := range policies {
-					t.AppendRow(table.Row{derefInt32(p.Id), derefStr(p.Name)})
-				}
-				t.Render()
-			})
+			return fwPolicyDisplayer.print(cc, policies)
 		},
 	}
 	cmd.Flags().IntVar(&limit, "limit", 0, "max results")
 	cmd.Flags().IntVar(&offset, "offset", 0, "pagination offset")
 	cmd.Flags().StringVar(&q, "q", "", "search query")
+	fwPolicyDisplayer.addFlags(cmd)
 	return cmd
 }
+
+var fwPolicyDisplayer = newDisplayer(
+	column("id", "ID", func(p scp.FirewallPolicy) any { return derefInt32(p.Id) }),
+	column("name", "NAME", func(p scp.FirewallPolicy) any { return derefStr(p.Name) }),
+)
 
 func newFWPoliciesGetCmd() *cobra.Command {
 	cmd := &cobra.Command{

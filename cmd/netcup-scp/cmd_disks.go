@@ -17,7 +17,6 @@ package main
 import (
 	"fmt"
 
-	"github.com/jedib0t/go-pretty/v6/table"
 	"github.com/spf13/cobra"
 
 	"github.com/digilolnet/go-netcup-scp/pkg/scp"
@@ -44,8 +43,15 @@ func newDisksCmd() *cobra.Command {
 	return cmd
 }
 
+var diskDisplayer = newDisplayer(
+	column("name", "NAME", func(d scp.Disk) any { return derefStr(d.Name) }),
+	column("capacity", "CAPACITY (MiB)", func(d scp.Disk) any { return deref(d.CapacityInMiB) }),
+	column("allocation", "ALLOCATION (MiB)", func(d scp.Disk) any { return deref(d.AllocationInMiB) }),
+	column("driver", "DRIVER", func(d scp.Disk) any { return derefStr((*string)(d.StorageDriver)) }),
+)
+
 func newDisksListCmd() *cobra.Command {
-	return &cobra.Command{
+	cmd := &cobra.Command{
 		Use:               "list <server>",
 		Short:             "List disks attached to a server",
 		Args:              cobra.ExactArgs(1),
@@ -65,20 +71,11 @@ func newDisksListCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			return printResult(cc, disks, func() {
-				t := newTable("NAME", "CAPACITY (MiB)", "ALLOCATION (MiB)", "DRIVER")
-				for _, d := range disks {
-					t.AppendRow(table.Row{
-						derefStr(d.Name),
-						deref(d.CapacityInMiB),
-						deref(d.AllocationInMiB),
-						derefStr((*string)(d.StorageDriver)),
-					})
-				}
-				t.Render()
-			})
+			return diskDisplayer.print(cc, disks)
 		},
 	}
+	diskDisplayer.addFlags(cmd)
+	return cmd
 }
 
 func newDisksGetCmd() *cobra.Command {

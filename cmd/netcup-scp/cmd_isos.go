@@ -19,7 +19,6 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/jedib0t/go-pretty/v6/table"
 	"github.com/spf13/cobra"
 
 	"github.com/digilolnet/go-netcup-scp/pkg/scp"
@@ -54,7 +53,7 @@ func newIsosCmd() *cobra.Command {
 }
 
 func newIsosListAvailableCmd() *cobra.Command {
-	return &cobra.Command{
+	cmd := &cobra.Command{
 		Use:               "list <server>",
 		Short:             "List available ISO images for a server",
 		Args:              cobra.ExactArgs(1),
@@ -74,16 +73,27 @@ func newIsosListAvailableCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			return printResult(cc, isos, func() {
-				t := newTable("ID", "ARCHITECTURE", "NAME", "DESCRIPTION")
-				for _, iso := range isos {
-					t.AppendRow(table.Row{derefInt32(iso.Id), string(iso.Architecture), iso.Name, derefStr(iso.Description)})
-				}
-				t.Render()
-			})
+			return isoImageDisplayer.print(cc, isos)
 		},
 	}
+	isoImageDisplayer.addFlags(cmd)
+	return cmd
 }
+
+var isoImageDisplayer = newDisplayer(
+	column("id", "ID", func(i scp.IsoImage) any { return derefInt32(i.Id) }),
+	column("architecture", "ARCHITECTURE", func(i scp.IsoImage) any { return string(i.Architecture) }),
+	column("name", "NAME", func(i scp.IsoImage) any { return i.Name }),
+	column("description", "DESCRIPTION", func(i scp.IsoImage) any { return derefStr(i.Description) }),
+)
+
+// s3ObjectDisplayer renders uploaded user files; shared by 'user-isos list'
+// and 'user-images list'.
+var s3ObjectDisplayer = newDisplayer(
+	column("key", "KEY", func(o scp.S3Object) any { return derefStr(o.Key) }),
+	column("size", "SIZE (bytes)", func(o scp.S3Object) any { return deref(o.SizeInB) }),
+	column("modified", "LAST MODIFIED (UTC)", func(o scp.S3Object) any { return fmtTime(o.LastModified) }),
+)
 
 func newIsosGetAttachedCmd() *cobra.Command {
 	return &cobra.Command{
@@ -214,7 +224,7 @@ func newUserIsosCmd() *cobra.Command {
 }
 
 func newUserIsosListCmd() *cobra.Command {
-	return &cobra.Command{
+	cmd := &cobra.Command{
 		Use:   "list",
 		Short: "List your uploaded ISOs",
 		Args:  cobra.NoArgs,
@@ -229,15 +239,11 @@ func newUserIsosListCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			return printResult(cc, isos, func() {
-				t := newTable("KEY", "SIZE (bytes)", "LAST MODIFIED (UTC)")
-				for _, iso := range isos {
-					t.AppendRow(table.Row{derefStr(iso.Key), deref(iso.SizeInB), fmtTime(iso.LastModified)})
-				}
-				t.Render()
-			})
+			return s3ObjectDisplayer.print(cc, isos)
 		},
 	}
+	s3ObjectDisplayer.addFlags(cmd)
+	return cmd
 }
 
 func newUserIsosGetCmd() *cobra.Command {

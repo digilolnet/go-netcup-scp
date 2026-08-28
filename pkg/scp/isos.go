@@ -23,8 +23,14 @@ import (
 	"github.com/digilolnet/go-netcup-scp/internal/generated"
 )
 
+// IsoImage is a standard ISO image offered by netcup.
+type IsoImage = generated.IsoImage
+
+// S3Object is an uploaded user file (ISO or image) in netcup's object store.
+type S3Object = generated.S3Object
+
 // ListAvailableISOs retrieves all available ISO images for a server.
-func (c *Client) ListAvailableISOs(ctx context.Context, serverID int32) ([]generated.IsoImage, error) {
+func (c *Client) ListAvailableISOs(ctx context.Context, serverID int32) ([]IsoImage, error) {
 	resp, err := c.api.GetApiV1ServersServerIdIsoimagesWithResponse(ctx, serverID)
 	if err != nil {
 		return nil, fmt.Errorf("list available isos: %w", err)
@@ -111,7 +117,7 @@ func (c *Client) DetachISO(ctx context.Context, serverID int32) error {
 }
 
 // ListUserISOs retrieves all user-uploaded ISOs.
-func (c *Client) ListUserISOs(ctx context.Context, userID int32) ([]generated.S3Object, error) {
+func (c *Client) ListUserISOs(ctx context.Context, userID int32) ([]S3Object, error) {
 	resp, err := c.api.GetApiV1UsersUserIdIsosWithResponse(ctx, userID)
 	if err != nil {
 		return nil, fmt.Errorf("list user isos: %w", err)

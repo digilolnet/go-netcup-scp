@@ -21,6 +21,9 @@ import (
 	"github.com/digilolnet/go-netcup-scp/internal/generated"
 )
 
+// VLan is a private network between servers.
+type VLan = generated.VLan
+
 // ListVLansOptions configures the ListVLans operation.
 type ListVLansOptions struct {
 	// ServerId filters VLANs by server ID
@@ -28,7 +31,7 @@ type ListVLansOptions struct {
 }
 
 // ListVLans retrieves all VLANs for a user.
-func (c *Client) ListVLans(ctx context.Context, userID int32, opts *ListVLansOptions) ([]generated.VLan, error) {
+func (c *Client) ListVLans(ctx context.Context, userID int32, opts *ListVLansOptions) ([]VLan, error) {
 	params := &generated.GetApiV1UsersUserIdVlansParams{}
 	if opts != nil {
 		params.ServerId = opts.ServerId

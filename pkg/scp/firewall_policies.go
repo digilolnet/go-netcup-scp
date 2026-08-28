@@ -21,6 +21,9 @@ import (
 	"github.com/digilolnet/go-netcup-scp/internal/generated"
 )
 
+// FirewallPolicy is a reusable set of firewall rules.
+type FirewallPolicy = generated.FirewallPolicy
+
 // FirewallPolicySave is the request body for creating or updating a firewall policy.
 type FirewallPolicySave = generated.FirewallPolicySave
 
@@ -51,7 +54,7 @@ func (c *Client) ListFirewallPolicies(
 	ctx context.Context,
 	userID int32,
 	opts *ListFirewallPoliciesOptions,
-) ([]generated.FirewallPolicy, error) {
+) ([]FirewallPolicy, error) {
 	params := &generated.GetApiV1UsersUserIdFirewallPoliciesParams{}
 	if opts != nil {
 		params.Limit = opts.Limit

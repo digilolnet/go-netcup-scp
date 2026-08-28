@@ -59,6 +59,20 @@ func newServersCmd() *cobra.Command {
 	return cmd
 }
 
+var serverListDisplayer = newDisplayer(
+	column("id", "ID", func(s scp.ServerListMinimal) any { return derefInt32(s.Id) }),
+	column("name", "NAME", func(s scp.ServerListMinimal) any { return derefStr(s.Name) }),
+	column("nickname", "NICKNAME", func(s scp.ServerListMinimal) any { return derefStr(s.Nickname) }),
+	column("hostname", "HOSTNAME", func(s scp.ServerListMinimal) any { return derefStr(s.Hostname) }),
+	column("template", "TEMPLATE", func(s scp.ServerListMinimal) any {
+		if s.Template != nil {
+			return s.Template.Name
+		}
+		return ""
+	}),
+	column("disabled", "DISABLED", func(s scp.ServerListMinimal) any { return deref(s.Disabled) }),
+)
+
 func newServersListCmd() *cobra.Command {
 	var limit, offset int
 	var name, ip, q string
@@ -95,26 +109,10 @@ func newServersListCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			return printResult(cc, servers, func() {
-				t := newTable("ID", "NAME", "NICKNAME", "HOSTNAME", "TEMPLATE", "DISABLED")
-				for _, s := range servers {
-					tmpl := ""
-					if s.Template != nil {
-						tmpl = s.Template.Name
-					}
-					t.AppendRow(table.Row{
-						derefInt32(s.Id),
-						derefStr(s.Name),
-						derefStr(s.Nickname),
-						derefStr(s.Hostname),
-						tmpl,
-						deref(s.Disabled),
-					})
-				}
-				t.Render()
-			})
+			return serverListDisplayer.print(cc, servers)
 		},
 	}
+	serverListDisplayer.addFlags(cmd)
 	cmd.Flags().IntVar(&limit, "limit", 0, "max results")
 	cmd.Flags().IntVar(&offset, "offset", 0, "pagination offset")
 	cmd.Flags().StringVar(&name, "name", "", "filter by name")
@@ -487,19 +485,23 @@ func newServersLogsCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			return printResult(cc, logs, func() {
-				t := newTable("DATE (UTC)", "TYPE", "KEY", "MESSAGE")
-				for _, l := range logs {
-					t.AppendRow(table.Row{fmtTime(l.Date), derefStr((*string)(l.Type)), derefStr(l.LogKey), derefStr(l.Message)})
-				}
-				t.Render()
-			})
+			return logDisplayer.print(cc, logs)
 		},
 	}
 	cmd.Flags().IntVar(&limit, "limit", 0, "max results")
 	cmd.Flags().IntVar(&offset, "offset", 0, "pagination offset")
+	logDisplayer.addFlags(cmd)
 	return cmd
 }
+
+// logDisplayer renders event-log entries; shared by 'servers logs' and
+// 'users logs'.
+var logDisplayer = newDisplayer(
+	column("date", "DATE (UTC)", func(l scp.Log) any { return fmtTime(l.Date) }),
+	column("type", "TYPE", func(l scp.Log) any { return derefStr((*string)(l.Type)) }),
+	column("key", "KEY", func(l scp.Log) any { return derefStr(l.LogKey) }),
+	column("message", "MESSAGE", func(l scp.Log) any { return derefStr(l.Message) }),
+)
 
 func newServersCPUTopologyCmd() *cobra.Command {
 	var wait bool
@@ -609,8 +611,25 @@ func newServersGuestAgentCmd() *cobra.Command {
 	}
 }
 
+var imageFlavourDisplayer = newDisplayer(
+	column("id", "FLAVOUR ID", func(f scp.ImageFlavour) any { return derefInt32(f.Id) }),
+	column("image-id", "IMAGE ID", func(f scp.ImageFlavour) any {
+		if f.Image != nil {
+			return fmt.Sprintf("%d", derefInt32(f.Image.Id))
+		}
+		return ""
+	}),
+	column("image", "IMAGE", func(f scp.ImageFlavour) any {
+		if f.Image != nil {
+			return f.Image.Name
+		}
+		return ""
+	}),
+	column("description", "DESCRIPTION", func(f scp.ImageFlavour) any { return f.Text }),
+)
+
 func newServersImageFlavoursCmd() *cobra.Command {
-	return &cobra.Command{
+	cmd := &cobra.Command{
 		Use:               "image-flavours <server>",
 		Short:             "List available OS image flavours",
 		Args:              cobra.ExactArgs(1),
@@ -630,21 +649,11 @@ func newServersImageFlavoursCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			return printResult(cc, flavours, func() {
-				t := newTable("FLAVOUR ID", "IMAGE ID", "IMAGE", "DESCRIPTION")
-				for _, f := range flavours {
-					imgID := ""
-					imgName := ""
-					if f.Image != nil {
-						imgID = fmt.Sprintf("%d", derefInt32(f.Image.Id))
-						imgName = f.Image.Name
-					}
-					t.AppendRow(table.Row{derefInt32(f.Id), imgID, imgName, f.Text})
-				}
-				t.Render()
-			})
+			return imageFlavourDisplayer.print(cc, flavours)
 		},
 	}
+	imageFlavourDisplayer.addFlags(cmd)
+	return cmd
 }
 
 func newServersInstallImageCmd() *cobra.Command {
@@ -848,8 +857,16 @@ type serverQemuStatus struct {
 	ConfigChanged bool   `json:"configChanged"`
 }
 
+var qemuStatusDisplayer = newDisplayer(
+	column("id", "ID", func(r serverQemuStatus) any { return r.ID }),
+	column("nickname", "NICKNAME", func(r serverQemuStatus) any { return r.Nickname }),
+	column("state", "STATE", func(r serverQemuStatus) any { return r.State }),
+	column("latest-qemu", "LATEST QEMU", func(r serverQemuStatus) any { return r.LatestQemu }),
+	column("config-changed", "CONFIG CHANGED", func(r serverQemuStatus) any { return r.ConfigChanged }),
+)
+
 func newServersQemuStatusCmd() *cobra.Command {
-	return &cobra.Command{
+	cmd := &cobra.Command{
 		Use:   "qemu-status",
 		Short: "Show QEMU version status for all servers",
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -880,15 +897,11 @@ func newServersQemuStatusCmd() *cobra.Command {
 				}
 				rows = append(rows, row)
 			}
-			return printResult(cc, rows, func() {
-				t := newTable("ID", "NICKNAME", "STATE", "LATEST QEMU", "CONFIG CHANGED")
-				for _, r := range rows {
-					t.AppendRow(table.Row{r.ID, r.Nickname, r.State, r.LatestQemu, r.ConfigChanged})
-				}
-				t.Render()
-			})
+			return qemuStatusDisplayer.print(cc, rows)
 		},
 	}
+	qemuStatusDisplayer.addFlags(cmd)
+	return cmd
 }
 
 func newServersGPUDriverCmd() *cobra.Command {

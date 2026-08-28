@@ -23,11 +23,14 @@ import (
 	"github.com/digilolnet/go-netcup-scp/internal/generated"
 )
 
+// Disk is a virtual disk attached to a server.
+type Disk = generated.Disk
+
 // StorageDriver is the disk storage driver type.
 type StorageDriver = generated.StorageDriver
 
 // ListDisks retrieves all disks attached to a server.
-func (c *Client) ListDisks(ctx context.Context, serverID int32) ([]generated.Disk, error) {
+func (c *Client) ListDisks(ctx context.Context, serverID int32) ([]Disk, error) {
 	resp, err := c.api.GetApiV1ServersServerIdDisksWithResponse(ctx, serverID)
 	if err != nil {
 		return nil, fmt.Errorf("list disks: %w", err)

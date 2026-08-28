@@ -21,6 +21,9 @@ import (
 	"github.com/digilolnet/go-netcup-scp/internal/generated"
 )
 
+// SnapshotMinimal is one row of the snapshot list.
+type SnapshotMinimal = generated.SnapshotMinimal
+
 // CreateSnapshot creates a snapshot of a server.
 // The snapshot can be created online (while server is running) or offline.
 // Returns a TaskInfo when the API responds with 202 (async), or nil for 200/201.
@@ -43,7 +46,7 @@ func (c *Client) CreateSnapshot(ctx context.Context, serverID int32, name, descr
 }
 
 // ListSnapshots retrieves all snapshots for a server.
-func (c *Client) ListSnapshots(ctx context.Context, serverID int32) ([]generated.SnapshotMinimal, error) {
+func (c *Client) ListSnapshots(ctx context.Context, serverID int32) ([]SnapshotMinimal, error) {
 	resp, err := c.api.GetApiV1ServersServerIdSnapshotsWithResponse(ctx, serverID)
 	if err != nil {
 		return nil, fmt.Errorf("list snapshots: %w", err)

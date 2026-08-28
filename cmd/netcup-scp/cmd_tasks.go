@@ -15,7 +15,6 @@
 package main
 
 import (
-	"github.com/jedib0t/go-pretty/v6/table"
 	"github.com/spf13/cobra"
 
 	"github.com/digilolnet/go-netcup-scp/pkg/scp"
@@ -39,6 +38,14 @@ func newTasksCmd() *cobra.Command {
 	)
 	return cmd
 }
+
+var taskDisplayer = newDisplayer(
+	column("uuid", "UUID", func(t scp.TaskInfoMinimal) any { return derefStr(t.Uuid) }),
+	column("state", "STATE", func(t scp.TaskInfoMinimal) any { return derefStr((*string)(t.State)) }),
+	column("name", "NAME", func(t scp.TaskInfoMinimal) any { return derefStr(t.Name) }),
+	column("started", "STARTED (UTC)", func(t scp.TaskInfoMinimal) any { return fmtTime(t.StartedAt) }),
+	column("finished", "FINISHED (UTC)", func(t scp.TaskInfoMinimal) any { return fmtTime(t.FinishedAt) }),
+)
 
 func newTasksListCmd() *cobra.Command {
 	var server string
@@ -80,19 +87,7 @@ func newTasksListCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			return printResult(cc, tasks, func() {
-				tbl := newTable("UUID", "STATE", "NAME", "STARTED (UTC)", "FINISHED (UTC)")
-				for _, t := range tasks {
-					tbl.AppendRow(table.Row{
-						derefStr(t.Uuid),
-						derefStr((*string)(t.State)),
-						derefStr(t.Name),
-						fmtTime(t.StartedAt),
-						fmtTime(t.FinishedAt),
-					})
-				}
-				tbl.Render()
-			})
+			return taskDisplayer.print(cc, tasks)
 		},
 	}
 	cmd.Flags().StringVar(&server, "server", "", "filter by server (id, nickname, name, or hostname)")
@@ -106,6 +101,7 @@ func newTasksListCmd() *cobra.Command {
 	cmd.Flags().StringVar(&q, "q", "", "search query")
 	cmd.Flags().IntVar(&limit, "limit", 0, "max results")
 	cmd.Flags().IntVar(&offset, "offset", 0, "pagination offset")
+	taskDisplayer.addFlags(cmd)
 	return cmd
 }
 

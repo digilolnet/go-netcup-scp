@@ -17,7 +17,6 @@ package main
 import (
 	"fmt"
 
-	"github.com/jedib0t/go-pretty/v6/table"
 	"github.com/spf13/cobra"
 
 	"github.com/digilolnet/go-netcup-scp/pkg/scp"
@@ -156,17 +155,12 @@ func newUsersLogsCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			return printResult(cc, logs, func() {
-				t := newTable("DATE (UTC)", "TYPE", "KEY", "MESSAGE")
-				for _, l := range logs {
-					t.AppendRow(table.Row{fmtTime(l.Date), derefStr((*string)(l.Type)), derefStr(l.LogKey), derefStr(l.Message)})
-				}
-				t.Render()
-			})
+			return logDisplayer.print(cc, logs)
 		},
 	}
 	cmd.Flags().IntVar(&limit, "limit", 0, "max results")
 	cmd.Flags().IntVar(&offset, "offset", 0, "pagination offset")
+	logDisplayer.addFlags(cmd)
 	return cmd
 }
 
@@ -191,8 +185,14 @@ func newSSHKeysCmd() *cobra.Command {
 	return cmd
 }
 
+var sshKeyDisplayer = newDisplayer(
+	column("id", "ID", func(k scp.SSHKey) any { return derefInt32(k.Id) }),
+	column("name", "NAME", func(k scp.SSHKey) any { return k.Name }),
+	column("created", "CREATED (UTC)", func(k scp.SSHKey) any { return fmtTime(k.CreatedAt) }),
+)
+
 func newSSHKeysListCmd() *cobra.Command {
-	return &cobra.Command{
+	cmd := &cobra.Command{
 		Use:   "list",
 		Short: "List your SSH keys",
 		Args:  cobra.NoArgs,
@@ -207,15 +207,11 @@ func newSSHKeysListCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			return printResult(cc, keys, func() {
-				t := newTable("ID", "NAME", "CREATED (UTC)")
-				for _, k := range keys {
-					t.AppendRow(table.Row{derefInt32(k.Id), k.Name, fmtTime(k.CreatedAt)})
-				}
-				t.Render()
-			})
+			return sshKeyDisplayer.print(cc, keys)
 		},
 	}
+	sshKeyDisplayer.addFlags(cmd)
+	return cmd
 }
 
 func newSSHKeysCreateCmd() *cobra.Command {

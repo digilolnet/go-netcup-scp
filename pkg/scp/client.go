@@ -30,6 +30,9 @@ import (
 	"github.com/digilolnet/go-netcup-scp/pkg/scp/auth"
 )
 
+// Maintenance is an announced host maintenance window.
+type Maintenance = generated.Maintenance
+
 const (
 	BaseURL = "https://www.servercontrolpanel.de/scp-core"
 )
@@ -192,7 +195,7 @@ func (c *Client) Close() {
 // Deprecated: the upstream endpoint is deprecated and will be removed by 2026-12-31.
 // Note: the generated parser expects a JSON array but the live API returns a single
 // object, so we bypass the generated parser and handle both formats here.
-func (c *Client) GetMaintenance(ctx context.Context) ([]generated.Maintenance, error) {
+func (c *Client) GetMaintenance(ctx context.Context) ([]Maintenance, error) {
 	rawResp, err := c.api.GetApiV1Maintenance(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("get maintenance: %w", err)
@@ -209,10 +212,10 @@ func (c *Client) GetMaintenance(ctx context.Context) ([]generated.Maintenance, e
 	}
 
 	// Try array first (spec says it should be an array).
-	var windows []generated.Maintenance
+	var windows []Maintenance
 	if err := json.Unmarshal(bodyBytes, &windows); err == nil {
 		if windows == nil {
-			windows = []generated.Maintenance{}
+			windows = []Maintenance{}
 		}
 		return windows, nil
 	}
@@ -228,9 +231,9 @@ func (c *Client) GetMaintenance(ctx context.Context) ([]generated.Maintenance, e
 		return nil, fmt.Errorf("get maintenance: parse response: %w", err)
 	}
 	if single.StartAt == nil || single.FinishAt == nil {
-		return []generated.Maintenance{}, nil
+		return []Maintenance{}, nil
 	}
-	return []generated.Maintenance{{StartAt: single.StartAt, FinishAt: single.FinishAt}}, nil
+	return []Maintenance{{StartAt: single.StartAt, FinishAt: single.FinishAt}}, nil
 }
 
 // requireID rejects empty path identifiers: an empty segment would silently

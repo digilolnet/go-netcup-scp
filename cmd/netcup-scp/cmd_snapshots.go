@@ -17,8 +17,9 @@ package main
 import (
 	"fmt"
 
-	"github.com/jedib0t/go-pretty/v6/table"
 	"github.com/spf13/cobra"
+
+	"github.com/digilolnet/go-netcup-scp/pkg/scp"
 )
 
 func newSnapshotsCmd() *cobra.Command {
@@ -44,8 +45,16 @@ func newSnapshotsCmd() *cobra.Command {
 	return cmd
 }
 
+var snapshotDisplayer = newDisplayer(
+	column("name", "NAME", func(s scp.SnapshotMinimal) any { return derefStr(s.Name) }),
+	column("state", "STATE", func(s scp.SnapshotMinimal) any { return derefStr((*string)(s.State)) }),
+	column("online", "ONLINE", func(s scp.SnapshotMinimal) any { return deref(s.Online) }),
+	column("description", "DESCRIPTION", func(s scp.SnapshotMinimal) any { return derefStr(s.Description) }),
+	column("date", "DATE", func(s scp.SnapshotMinimal) any { return fmtTime(s.CreationTime) }),
+)
+
 func newSnapshotsListCmd() *cobra.Command {
-	return &cobra.Command{
+	cmd := &cobra.Command{
 		Use:               "list <server>",
 		Short:             "List snapshots",
 		Args:              cobra.ExactArgs(1),
@@ -65,21 +74,11 @@ func newSnapshotsListCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			return printResult(cc, snaps, func() {
-				t := newTable("NAME", "STATE", "ONLINE", "DESCRIPTION", "DATE")
-				for _, s := range snaps {
-					t.AppendRow(table.Row{
-						derefStr(s.Name),
-						derefStr((*string)(s.State)),
-						deref(s.Online),
-						derefStr(s.Description),
-						fmtTime(s.CreationTime),
-					})
-				}
-				t.Render()
-			})
+			return snapshotDisplayer.print(cc, snaps)
 		},
 	}
+	snapshotDisplayer.addFlags(cmd)
+	return cmd
 }
 
 func newSnapshotsGetCmd() *cobra.Command {

@@ -19,7 +19,6 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/jedib0t/go-pretty/v6/table"
 	"github.com/spf13/cobra"
 )
 
@@ -44,7 +43,7 @@ func newImagesCmd() *cobra.Command {
 }
 
 func newImagesListCmd() *cobra.Command {
-	return &cobra.Command{
+	cmd := &cobra.Command{
 		Use:   "list",
 		Short: "List your uploaded disk images",
 		Args:  cobra.NoArgs,
@@ -59,15 +58,11 @@ func newImagesListCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			return printResult(cc, images, func() {
-				t := newTable("KEY", "SIZE (bytes)", "LAST MODIFIED (UTC)")
-				for _, img := range images {
-					t.AppendRow(table.Row{derefStr(img.Key), deref(img.SizeInB), fmtTime(img.LastModified)})
-				}
-				t.Render()
-			})
+			return s3ObjectDisplayer.print(cc, images)
 		},
 	}
+	s3ObjectDisplayer.addFlags(cmd)
+	return cmd
 }
 
 func newImagesGetCmd() *cobra.Command {

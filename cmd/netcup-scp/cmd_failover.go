@@ -17,7 +17,6 @@ package main
 import (
 	"fmt"
 
-	"github.com/jedib0t/go-pretty/v6/table"
 	"github.com/spf13/cobra"
 
 	"github.com/digilolnet/go-netcup-scp/pkg/scp"
@@ -45,6 +44,24 @@ func newFailoverV4Cmd() *cobra.Command {
 func newFailoverV4ListCmd() *cobra.Command {
 	var ip string
 	var server string
+	failoverV4Displayer := newDisplayer(
+		column("id", "ID", func(f scp.FailoverIPv4) any { return derefInt32(f.Id) }),
+		column("ip", "IP", func(f scp.FailoverIPv4) any {
+			return fmt.Sprintf("%s/%d", derefStr(f.Ip), derefInt32(f.CidrSuffix))
+		}),
+		column("site", "SITE", func(f scp.FailoverIPv4) any {
+			if f.Site != nil {
+				return f.Site.City
+			}
+			return ""
+		}),
+		column("server", "ROUTED TO SERVER", func(f scp.FailoverIPv4) any {
+			if f.Server != nil {
+				return fmt.Sprintf("%d (%s)", derefInt32(f.Server.Id), derefStr(f.Server.Name))
+			}
+			return ""
+		}),
+	)
 	cmd := &cobra.Command{
 		Use:   "list",
 		Short: "List your IPv4 failover addresses",
@@ -71,27 +88,13 @@ func newFailoverV4ListCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			return printResult(cc, ips, func() {
-				t := newTable("ID", "IP", "SITE", "ROUTED TO SERVER")
-				for _, f := range ips {
-					serverName := ""
-					if f.Server != nil {
-						serverName = fmt.Sprintf("%d (%s)", derefInt32(f.Server.Id), derefStr(f.Server.Name))
-					}
-					site := ""
-					if f.Site != nil {
-						site = f.Site.City
-					}
-					ip := fmt.Sprintf("%s/%d", derefStr(f.Ip), derefInt32(f.CidrSuffix))
-					t.AppendRow(table.Row{derefInt32(f.Id), ip, site, serverName})
-				}
-				t.Render()
-			})
+			return failoverV4Displayer.print(cc, ips)
 		},
 	}
 	cmd.Flags().StringVar(&ip, "ip", "", "filter by IP address")
 	cmd.Flags().StringVar(&server, "server", "", "filter by server (id, nickname, name, or hostname)")
 	registerFlagCompleter(cmd, "server", serverIDCompletions)
+	failoverV4Displayer.addFlags(cmd)
 	return cmd
 }
 
@@ -179,6 +182,24 @@ func newFailoverV6Cmd() *cobra.Command {
 func newFailoverV6ListCmd() *cobra.Command {
 	var ip string
 	var server string
+	failoverV6Displayer := newDisplayer(
+		column("id", "ID", func(f scp.FailoverIPv6) any { return derefInt32(f.Id) }),
+		column("prefix", "PREFIX", func(f scp.FailoverIPv6) any {
+			return fmt.Sprintf("%s/%d", derefStr(f.NetworkPrefix), derefInt32(f.NetworkPrefixLength))
+		}),
+		column("site", "SITE", func(f scp.FailoverIPv6) any {
+			if f.Site != nil {
+				return f.Site.City
+			}
+			return ""
+		}),
+		column("server", "ROUTED TO SERVER", func(f scp.FailoverIPv6) any {
+			if f.Server != nil {
+				return fmt.Sprintf("%d (%s)", derefInt32(f.Server.Id), derefStr(f.Server.Name))
+			}
+			return ""
+		}),
+	)
 	cmd := &cobra.Command{
 		Use:   "list",
 		Short: "List your IPv6 failover prefixes",
@@ -205,27 +226,13 @@ func newFailoverV6ListCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			return printResult(cc, ips, func() {
-				t := newTable("ID", "PREFIX", "SITE", "ROUTED TO SERVER")
-				for _, f := range ips {
-					serverName := ""
-					if f.Server != nil {
-						serverName = fmt.Sprintf("%d (%s)", derefInt32(f.Server.Id), derefStr(f.Server.Name))
-					}
-					site := ""
-					if f.Site != nil {
-						site = f.Site.City
-					}
-					prefix := fmt.Sprintf("%s/%d", derefStr(f.NetworkPrefix), derefInt32(f.NetworkPrefixLength))
-					t.AppendRow(table.Row{derefInt32(f.Id), prefix, site, serverName})
-				}
-				t.Render()
-			})
+			return failoverV6Displayer.print(cc, ips)
 		},
 	}
 	cmd.Flags().StringVar(&ip, "ip", "", "filter by IP address")
 	cmd.Flags().StringVar(&server, "server", "", "filter by server (id, nickname, name, or hostname)")
 	registerFlagCompleter(cmd, "server", serverIDCompletions)
+	failoverV6Displayer.addFlags(cmd)
 	return cmd
 }
 

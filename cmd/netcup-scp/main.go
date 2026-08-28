@@ -47,6 +47,9 @@ var rootFlags struct {
 	configFile  string
 	force       bool
 	waitTimeout time.Duration
+	format      string
+	noHeader    bool
+	quiet       bool
 }
 
 func main() {

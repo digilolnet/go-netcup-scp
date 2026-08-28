@@ -1,5 +1,6 @@
 # Build output
 /netcup-scp
+cmd/netcup-scp/netcup-scp
 
 # Test artifacts
 *.test

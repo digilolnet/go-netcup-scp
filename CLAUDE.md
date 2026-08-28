@@ -22,7 +22,7 @@ Two-layer design:
 ## Wrapper pattern
 
 ```go
-func (c *Client) ListServers(ctx context.Context, opts *ListServersOptions) ([]generated.ServerListMinimal, error) {
+func (c *Client) ListServers(ctx context.Context, opts *ListServersOptions) ([]ServerListMinimal, error) {
     params := &generated.GetApiV1ServersParams{}
     if opts != nil { /* map fields */ }
 
@@ -42,6 +42,10 @@ func (c *Client) ListServers(ctx context.Context, opts *ListServersOptions) ([]g
 
 Some endpoints return `application/hal+json` — check `HALJSON200` before `JSON200`.
 
+Generated types returned by wrappers are aliased in `pkg/scp`
+(`type ServerListMinimal = generated.ServerListMinimal`, …) so callers never
+need `internal/generated`.
+
 ## Authentication
 
 `pkg/scp/auth/auth.go` implements OAuth2 device flow. `auth.Manager` handles token storage, auto-refresh (30s before expiry), and injects Bearer tokens into every request. See `Authentication.md`.
@@ -52,7 +56,12 @@ The CLI stores tokens as JSON files and extracts the user ID from the JWT `id` c
 
 - `makeCompleter(fn...)` — positional arg autocomplete with `makeCmdContext` built in
 - `registerFlagCompleter(cmd, flag, fn)` — same for flag completions
-- `printResult(cc, data, textFn)` — prints JSON (`-j`) or calls `textFn` for human output
+- `printResult(cc, data, textFn)` — prints JSON (`-j`) or calls `textFn` for human output (detail views)
+- `newDisplayer(column(name, header, extract), ...)` — per-resource list renderer; `d.print(cc, items)`
+  honors `-j`, `--format`, `--no-header`, `-q`; `d.addFlags(cmd)` registers those flags with
+  per-resource column help
+- `resolveServerArg(cc, arg)` — turns a server id/nickname/name/hostname (or unique prefix) into an id
+- `confirm(action)` / `confirmRetype(cc, id, action)` — destructive-op guards, skipped by `--force`
 - `fmtTime(*time.Time)` — formats UTC timestamps as `"2006-01-02 15:04:05"`; unit goes in column header, not value
 - `deref[T]`, `derefStr`, `derefInt32` — nil-safe pointer helpers
 

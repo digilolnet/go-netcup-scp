@@ -17,7 +17,6 @@ package main
 import (
 	"fmt"
 
-	"github.com/jedib0t/go-pretty/v6/table"
 	"github.com/spf13/cobra"
 
 	"github.com/digilolnet/go-netcup-scp/pkg/scp"
@@ -41,6 +40,23 @@ func newVLansCmd() *cobra.Command {
 	)
 	return cmd
 }
+
+var vlanDisplayer = newDisplayer(
+	column("id", "VLAN ID", func(v scp.VLan) any { return derefInt32(v.VlanId) }),
+	column("name", "NAME", func(v scp.VLan) any { return derefStr(v.Name) }),
+	column("site", "SITE", func(v scp.VLan) any {
+		if v.Site != nil {
+			return v.Site.City
+		}
+		return ""
+	}),
+	column("bandwidth", "BANDWIDTH (Mbit/s)", func(v scp.VLan) any {
+		if v.BandwidthClass != nil {
+			return fmt.Sprintf("%d", v.BandwidthClass.SpeedInMBit)
+		}
+		return ""
+	}),
+)
 
 func newVLansListCmd() *cobra.Command {
 	var server string
@@ -67,25 +83,12 @@ func newVLansListCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			return printResult(cc, vlans, func() {
-				t := newTable("VLAN ID", "NAME", "SITE", "BANDWIDTH (Mbit/s)")
-				for _, v := range vlans {
-					site := ""
-					if v.Site != nil {
-						site = v.Site.City
-					}
-					bw := ""
-					if v.BandwidthClass != nil {
-						bw = fmt.Sprintf("%d", v.BandwidthClass.SpeedInMBit)
-					}
-					t.AppendRow(table.Row{derefInt32(v.VlanId), derefStr(v.Name), site, bw})
-				}
-				t.Render()
-			})
+			return vlanDisplayer.print(cc, vlans)
 		},
 	}
 	cmd.Flags().StringVar(&server, "server", "", "filter by server (id, nickname, name, or hostname)")
 	registerFlagCompleter(cmd, "server", serverIDCompletions)
+	vlanDisplayer.addFlags(cmd)
 	return cmd
 }
 

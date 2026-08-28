@@ -23,6 +23,15 @@ import (
 	"github.com/digilolnet/go-netcup-scp/internal/generated"
 )
 
+// ServerListMinimal is one row of the server list.
+type ServerListMinimal = generated.ServerListMinimal
+
+// Log is one server or user event-log entry.
+type Log = generated.Log
+
+// ImageFlavour is an installable OS image variant for a server.
+type ImageFlavour = generated.ImageFlavour
+
 // ServerImageSetup is the request body for InstallImage.
 type ServerImageSetup = generated.ServerImageSetup
 
@@ -54,7 +63,7 @@ type GetServerOptions struct {
 }
 
 // ListServers retrieves a list of all servers.
-func (c *Client) ListServers(ctx context.Context, opts *ListServersOptions) ([]generated.ServerListMinimal, error) {
+func (c *Client) ListServers(ctx context.Context, opts *ListServersOptions) ([]ServerListMinimal, error) {
 	params := &generated.GetApiV1ServersParams{}
 	if opts != nil {
 		params.Ip = opts.Ip
@@ -305,7 +314,7 @@ func (c *Client) GetServerLogs(
 	ctx context.Context,
 	serverID int32,
 	opts *GetServerLogsOptions,
-) ([]generated.Log, error) {
+) ([]Log, error) {
 	params := &generated.GetApiV1ServersServerIdLogsParams{}
 	if opts != nil {
 		params.Limit = opts.Limit
@@ -321,7 +330,7 @@ func (c *Client) GetServerLogs(
 }
 
 // ListImageFlavours retrieves the available OS image flavours for a server.
-func (c *Client) ListImageFlavours(ctx context.Context, serverID int32) ([]generated.ImageFlavour, error) {
+func (c *Client) ListImageFlavours(ctx context.Context, serverID int32) ([]ImageFlavour, error) {
 	resp, err := c.api.GetApiV1ServersServerIdImageflavoursWithResponse(ctx, serverID)
 	if err != nil {
 		return nil, fmt.Errorf("list image flavours: %w", err)

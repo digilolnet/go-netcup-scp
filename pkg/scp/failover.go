@@ -21,6 +21,12 @@ import (
 	"github.com/digilolnet/go-netcup-scp/internal/generated"
 )
 
+// FailoverIPv4 is a routable failover IPv4 address.
+type FailoverIPv4 = generated.FailoverIPv4
+
+// FailoverIPv6 is a routable failover IPv6 network.
+type FailoverIPv6 = generated.FailoverIPv6
+
 // ListFailoverIPsOptions configures ListFailoverIPv4 and ListFailoverIPv6.
 type ListFailoverIPsOptions struct {
 	// Ip filters failover IPs by address.
@@ -34,7 +40,7 @@ func (c *Client) ListFailoverIPv4(
 	ctx context.Context,
 	userID int32,
 	opts *ListFailoverIPsOptions,
-) ([]generated.FailoverIPv4, error) {
+) ([]FailoverIPv4, error) {
 	params := &generated.GetApiV1UsersUserIdFailoveripsV4Params{}
 	if opts != nil {
 		params.Ip = opts.Ip
@@ -85,7 +91,7 @@ func (c *Client) ListFailoverIPv6(
 	ctx context.Context,
 	userID int32,
 	opts *ListFailoverIPsOptions,
-) ([]generated.FailoverIPv6, error) {
+) ([]FailoverIPv6, error) {
 	params := &generated.GetApiV1UsersUserIdFailoveripsV6Params{}
 	if opts != nil {
 		params.Ip = opts.Ip

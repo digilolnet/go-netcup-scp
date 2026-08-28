@@ -21,6 +21,9 @@ import (
 	"github.com/digilolnet/go-netcup-scp/internal/generated"
 )
 
+// TaskInfoMinimal is one row of the task list.
+type TaskInfoMinimal = generated.TaskInfoMinimal
+
 // TaskState is the state of an async task.
 type TaskState = generated.TaskState
 
@@ -49,7 +52,7 @@ type ListTasksOptions struct {
 }
 
 // ListTasks retrieves the list of async tasks.
-func (c *Client) ListTasks(ctx context.Context, opts *ListTasksOptions) ([]generated.TaskInfoMinimal, error) {
+func (c *Client) ListTasks(ctx context.Context, opts *ListTasksOptions) ([]TaskInfoMinimal, error) {
 	params := &generated.GetApiV1TasksParams{}
 	if opts != nil {
 		params.Limit = opts.Limit

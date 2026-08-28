@@ -247,6 +247,11 @@ All commands support `--json` / `-j` for raw JSON output and shell completion
 (`bash`, `zsh`, `fish`, `powershell`). Completions are cached per account for
 5 minutes and invalidated by mutating commands.
 
+List commands additionally take `--format col1,col2` to pick and order columns
+(each command's `--format` help lists its column names), `--no-header` for
+plain tab-separated rows, and `-q` / `--quiet` to print only the first (id)
+column — one value per line, ready for `xargs`.
+
 `<server>` arguments accept a numeric id, nickname, name, or hostname — or any
 unique prefix of one of those (`netcup-scp servers restart web-prod`). The
 resolver shares the completion cache; ambiguous and unknown names fail with a
