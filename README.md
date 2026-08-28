@@ -1,6 +1,5 @@
 # go-netcup-scp
 
-[![Go Report Card](https://goreportcard.com/badge/github.com/digilolnet/go-netcup-scp)](https://goreportcard.com/report/github.com/digilolnet/go-netcup-scp)
 [![GoDoc](https://pkg.go.dev/badge/github.com/digilolnet/go-netcup-scp.svg)](https://pkg.go.dev/github.com/digilolnet/go-netcup-scp)
 [![License](https://img.shields.io/github/license/digilolnet/go-netcup-scp.svg)](https://github.com/digilolnet/go-netcup-scp/blob/master/LICENSE.txt)
 [![Code with hearth by Stnby](https://img.shields.io/badge/%3C%2F%3E%20with%20%E2%99%A5%20by-Stnby-ff1414.svg)](https://github.com/stnby)
