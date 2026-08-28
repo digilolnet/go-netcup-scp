@@ -89,11 +89,13 @@ curl 'https://www.servercontrolpanel.de/realms/scp/protocol/openid-connect/revok
 **User Info**
 
 The numeric user ID (used in API paths like `/users/{userId}/...`) is embedded
-in the JWT access token as the `id` claim. The Go library extracts it directly
-from the token without an extra HTTP request. Note that the standard `sub`
-claim is the Keycloak account UUID, not the numeric SCP user ID.
+in the JWT access token as the `id` claim. The CLI extracts it directly from
+the token without an extra HTTP request, and falls back to the documented
+`/userinfo` endpoint (`auth.Manager.UserInfo`) if the claim is ever absent.
+Note that the standard `sub` claim is the Keycloak account UUID, not the
+numeric SCP user ID.
 
-For reference, the userinfo endpoint returns the same claims:
+The userinfo endpoint returns the same claims:
 
 ```bash
 curl 'https://www.servercontrolpanel.de/realms/scp/protocol/openid-connect/userinfo' \

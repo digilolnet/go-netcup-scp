@@ -315,6 +315,49 @@ func (am *Manager) ValidAccessToken(ctx context.Context) (string, error) {
 	return tok.AccessToken, nil
 }
 
+// UserInfo is the subset of the OpenID userinfo document the SCP API needs;
+// netcup's realm carries the numeric SCP user id in the "id" field.
+type UserInfo struct {
+	ID    string `json:"id"`
+	Sub   string `json:"sub"`
+	Email string `json:"email"`
+}
+
+// UserInfo fetches the documented /userinfo endpoint using a valid access
+// token (refreshing first if needed). The access token's "id" claim carries
+// the same value without a network round-trip; this is the documented way to
+// obtain it when the claim cannot be used.
+func (am *Manager) UserInfo(ctx context.Context) (*UserInfo, error) {
+	token, err := am.ValidAccessToken(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, am.authURL+"/userinfo", nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create request: %w", err)
+	}
+	req.Header.Set("Authorization", "Bearer "+token)
+	req.Header.Set("User-Agent", version.UserAgent())
+
+	resp, err := am.httpClient.Do(req)
+	if err != nil {
+		return nil, fmt.Errorf("failed to send request: %w", err)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		body, _ := io.ReadAll(resp.Body)
+		return nil, fmt.Errorf("userinfo request failed: status %d: %s", resp.StatusCode, string(body))
+	}
+
+	var info UserInfo
+	if err := json.NewDecoder(resp.Body).Decode(&info); err != nil {
+		return nil, fmt.Errorf("failed to decode response: %w", err)
+	}
+	return &info, nil
+}
+
 func (am *Manager) RevokeToken(ctx context.Context, refreshToken string) error {
 	data := url.Values{
 		"client_id":       {clientID},

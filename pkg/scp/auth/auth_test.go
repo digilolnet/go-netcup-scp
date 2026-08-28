@@ -503,3 +503,47 @@ func TestSetToken_DoesNotAliasCaller(t *testing.T) {
 		t.Fatalf("manager state affected by caller mutation: %q, %v", got, err)
 	}
 }
+
+func TestUserInfo(t *testing.T) {
+	mux := http.NewServeMux()
+	mux.HandleFunc("/userinfo", func(w http.ResponseWriter, r *http.Request) {
+		if r.Header.Get("Authorization") != "Bearer valid-token" {
+			w.WriteHeader(http.StatusUnauthorized)
+			return
+		}
+		writeJSON(w, UserInfo{ID: "555001", Sub: "abc", Email: "user@example.com"})
+	})
+	srv := httptest.NewServer(mux)
+	t.Cleanup(srv.Close)
+
+	mgr := NewManager(WithAutoRefresh(false), WithAuthURL(srv.URL))
+	mgr.LoadToken(&TokenResponse{
+		AccessToken: "valid-token",
+		ExpiresIn:   3600,
+		ObtainedAt:  time.Now(),
+	})
+
+	info, err := mgr.UserInfo(context.Background())
+	if err != nil {
+		t.Fatalf("UserInfo() error = %v", err)
+	}
+	if info.ID != "555001" {
+		t.Errorf("ID = %q, want 555001", info.ID)
+	}
+}
+
+func TestUserInfo_Unauthorized(t *testing.T) {
+	mux := http.NewServeMux()
+	mux.HandleFunc("/userinfo", func(w http.ResponseWriter, _ *http.Request) {
+		w.WriteHeader(http.StatusUnauthorized)
+	})
+	srv := httptest.NewServer(mux)
+	t.Cleanup(srv.Close)
+
+	mgr := NewManager(WithAutoRefresh(false), WithAuthURL(srv.URL))
+	mgr.LoadToken(&TokenResponse{AccessToken: "x", ExpiresIn: 3600, ObtainedAt: time.Now()})
+
+	if _, err := mgr.UserInfo(context.Background()); err == nil {
+		t.Error("want error on 401")
+	}
+}
