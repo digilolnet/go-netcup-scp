@@ -255,9 +255,8 @@ Environment variables: `NETCUP_SCP_JSON=1` (default to JSON output),
 ```bash
 task build       # build all packages
 task test        # run tests with race detection
-task lint        # run golangci-lint
 task generate    # regenerate client from openapi.json
-task check       # build + test + lint
+task check       # build + test
 ```
 
 Regenerate the client after updating `openapi.json`:
