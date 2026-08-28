@@ -44,7 +44,7 @@ func newFailoverV4Cmd() *cobra.Command {
 
 func newFailoverV4ListCmd() *cobra.Command {
 	var ip string
-	var serverID int
+	var server string
 	cmd := &cobra.Command{
 		Use:   "list",
 		Short: "List your IPv4 failover addresses",
@@ -60,8 +60,12 @@ func newFailoverV4ListCmd() *cobra.Command {
 			if ip != "" {
 				opts.Ip = &ip
 			}
-			if serverID > 0 {
-				opts.ServerId = new(int32(serverID))
+			if server != "" {
+				id, err := resolveServerArg(cc, server)
+				if err != nil {
+					return err
+				}
+				opts.ServerId = &id
 			}
 			ips, err := cc.client.ListFailoverIPv4(cc.ctx, cc.userID, opts)
 			if err != nil {
@@ -86,14 +90,15 @@ func newFailoverV4ListCmd() *cobra.Command {
 		},
 	}
 	cmd.Flags().StringVar(&ip, "ip", "", "filter by IP address")
-	cmd.Flags().IntVar(&serverID, "server-id", 0, "filter by server ID")
+	cmd.Flags().StringVar(&server, "server", "", "filter by server (id, nickname, name, or hostname)")
+	registerFlagCompleter(cmd, "server", serverIDCompletions)
 	return cmd
 }
 
 func newFailoverV4RouteCmd() *cobra.Command {
 	var wait bool
 	cmd := &cobra.Command{
-		Use:               "route <failover-id> <server-id>",
+		Use:               "route <failover-id> <server>",
 		Short:             "Route a failover IPv4 to a server",
 		Args:              cobra.ExactArgs(2),
 		ValidArgsFunction: makeCompleter(failoverV4IDCompletions, serverIDCompletions),
@@ -108,7 +113,7 @@ func newFailoverV4RouteCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			serverID, err := parseID(args[1], "server-id")
+			serverID, err := resolveServerArg(cc, args[1])
 			if err != nil {
 				return err
 			}
@@ -173,7 +178,7 @@ func newFailoverV6Cmd() *cobra.Command {
 
 func newFailoverV6ListCmd() *cobra.Command {
 	var ip string
-	var serverID int
+	var server string
 	cmd := &cobra.Command{
 		Use:   "list",
 		Short: "List your IPv6 failover prefixes",
@@ -189,8 +194,12 @@ func newFailoverV6ListCmd() *cobra.Command {
 			if ip != "" {
 				opts.Ip = &ip
 			}
-			if serverID > 0 {
-				opts.ServerId = new(int32(serverID))
+			if server != "" {
+				id, err := resolveServerArg(cc, server)
+				if err != nil {
+					return err
+				}
+				opts.ServerId = &id
 			}
 			ips, err := cc.client.ListFailoverIPv6(cc.ctx, cc.userID, opts)
 			if err != nil {
@@ -215,7 +224,8 @@ func newFailoverV6ListCmd() *cobra.Command {
 		},
 	}
 	cmd.Flags().StringVar(&ip, "ip", "", "filter by IP address")
-	cmd.Flags().IntVar(&serverID, "server-id", 0, "filter by server ID")
+	cmd.Flags().StringVar(&server, "server", "", "filter by server (id, nickname, name, or hostname)")
+	registerFlagCompleter(cmd, "server", serverIDCompletions)
 	return cmd
 }
 
@@ -251,7 +261,7 @@ func newFailoverV6UnrouteCmd() *cobra.Command {
 func newFailoverV6RouteCmd() *cobra.Command {
 	var wait bool
 	cmd := &cobra.Command{
-		Use:               "route <failover-id> <server-id>",
+		Use:               "route <failover-id> <server>",
 		Short:             "Route a failover IPv6 to a server",
 		Args:              cobra.ExactArgs(2),
 		ValidArgsFunction: makeCompleter(failoverV6IDCompletions, serverIDCompletions),
@@ -266,7 +276,7 @@ func newFailoverV6RouteCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			serverID, err := parseID(args[1], "server-id")
+			serverID, err := resolveServerArg(cc, args[1])
 			if err != nil {
 				return err
 			}

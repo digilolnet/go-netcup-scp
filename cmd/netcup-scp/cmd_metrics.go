@@ -86,7 +86,7 @@ func newMetricsSubCmd(spec metricSpec) *cobra.Command {
 	var seriesGlobs []string
 	var total bool
 	cmd := &cobra.Command{
-		Use:               spec.use + " <server-id>",
+		Use:               spec.use + " <server>",
 		Short:             spec.short,
 		Args:              cobra.ExactArgs(1),
 		ValidArgsFunction: makeCompleter(serverIDCompletions),
@@ -97,7 +97,7 @@ func newMetricsSubCmd(spec metricSpec) *cobra.Command {
 			}
 			defer cleanup()
 
-			id, err := parseID(args[0], "server-id")
+			id, err := resolveServerArg(cc, args[0])
 			if err != nil {
 				return err
 			}
@@ -136,7 +136,7 @@ func newMetricsSubCmd(spec metricSpec) *cobra.Command {
 		if len(args) == 0 {
 			return nil, cobra.ShellCompDirectiveNoFileComp
 		}
-		id, err := parseID(args[0], "server-id")
+		id, err := resolveServerArg(cc, args[0])
 		if err != nil {
 			return nil, cobra.ShellCompDirectiveNoFileComp
 		}

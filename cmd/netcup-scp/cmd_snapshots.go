@@ -46,7 +46,7 @@ func newSnapshotsCmd() *cobra.Command {
 
 func newSnapshotsListCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:               "list <server-id>",
+		Use:               "list <server>",
 		Short:             "List snapshots",
 		Args:              cobra.ExactArgs(1),
 		ValidArgsFunction: makeCompleter(serverIDCompletions),
@@ -57,7 +57,7 @@ func newSnapshotsListCmd() *cobra.Command {
 			}
 			defer cleanup()
 
-			id, err := parseID(args[0], "server-id")
+			id, err := resolveServerArg(cc, args[0])
 			if err != nil {
 				return err
 			}
@@ -84,7 +84,7 @@ func newSnapshotsListCmd() *cobra.Command {
 
 func newSnapshotsGetCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:               "get <server-id> <name>",
+		Use:               "get <server> <name>",
 		Short:             "Get snapshot details",
 		Args:              cobra.ExactArgs(2),
 		ValidArgsFunction: makeCompleter(serverIDCompletions, snapshotNameCompletions),
@@ -95,7 +95,7 @@ func newSnapshotsGetCmd() *cobra.Command {
 			}
 			defer cleanup()
 
-			id, err := parseID(args[0], "server-id")
+			id, err := resolveServerArg(cc, args[0])
 			if err != nil {
 				return err
 			}
@@ -120,7 +120,7 @@ func newSnapshotsCreateCmd() *cobra.Command {
 	var description string
 	var wait bool
 	cmd := &cobra.Command{
-		Use:               "create <server-id> <name>",
+		Use:               "create <server> <name>",
 		Short:             "Create a snapshot",
 		Args:              cobra.ExactArgs(2),
 		ValidArgsFunction: makeCompleter(serverIDCompletions),
@@ -131,7 +131,7 @@ func newSnapshotsCreateCmd() *cobra.Command {
 			}
 			defer cleanup()
 
-			id, err := parseID(args[0], "server-id")
+			id, err := resolveServerArg(cc, args[0])
 			if err != nil {
 				return err
 			}
@@ -150,7 +150,7 @@ func newSnapshotsCreateCmd() *cobra.Command {
 func newSnapshotsDeleteCmd() *cobra.Command {
 	var wait bool
 	cmd := &cobra.Command{
-		Use:               "delete <server-id> <name>",
+		Use:               "delete <server> <name>",
 		Short:             "Delete a snapshot",
 		Args:              cobra.ExactArgs(2),
 		ValidArgsFunction: makeCompleter(serverIDCompletions, snapshotNameCompletions),
@@ -161,7 +161,7 @@ func newSnapshotsDeleteCmd() *cobra.Command {
 			}
 			defer cleanup()
 
-			id, err := parseID(args[0], "server-id")
+			id, err := resolveServerArg(cc, args[0])
 			if err != nil {
 				return err
 			}
@@ -179,7 +179,7 @@ func newSnapshotsDeleteCmd() *cobra.Command {
 func newSnapshotsRevertCmd() *cobra.Command {
 	var wait bool
 	cmd := &cobra.Command{
-		Use:               "revert <server-id> <name>",
+		Use:               "revert <server> <name>",
 		Short:             "Revert server to a snapshot",
 		Args:              cobra.ExactArgs(2),
 		ValidArgsFunction: makeCompleter(serverIDCompletions, snapshotNameCompletions),
@@ -190,7 +190,7 @@ func newSnapshotsRevertCmd() *cobra.Command {
 			}
 			defer cleanup()
 
-			id, err := parseID(args[0], "server-id")
+			id, err := resolveServerArg(cc, args[0])
 			if err != nil {
 				return err
 			}
@@ -209,7 +209,7 @@ func newSnapshotsDryRunCmd() *cobra.Command {
 	var online bool
 	var disk string
 	cmd := &cobra.Command{
-		Use:               "dry-run <server-id>",
+		Use:               "dry-run <server>",
 		Short:             "Check if snapshot can be created",
 		Args:              cobra.ExactArgs(1),
 		ValidArgsFunction: makeCompleter(serverIDCompletions),
@@ -220,7 +220,7 @@ func newSnapshotsDryRunCmd() *cobra.Command {
 			}
 			defer cleanup()
 
-			id, err := parseID(args[0], "server-id")
+			id, err := resolveServerArg(cc, args[0])
 			if err != nil {
 				return err
 			}
@@ -252,7 +252,7 @@ func newSnapshotsDryRunCmd() *cobra.Command {
 func newSnapshotsExportCmd() *cobra.Command {
 	var wait bool
 	cmd := &cobra.Command{
-		Use:               "export <server-id> <name>",
+		Use:               "export <server> <name>",
 		Short:             "Export a snapshot",
 		Args:              cobra.ExactArgs(2),
 		ValidArgsFunction: makeCompleter(serverIDCompletions, snapshotNameCompletions),
@@ -263,7 +263,7 @@ func newSnapshotsExportCmd() *cobra.Command {
 			}
 			defer cleanup()
 
-			id, err := parseID(args[0], "server-id")
+			id, err := resolveServerArg(cc, args[0])
 			if err != nil {
 				return err
 			}

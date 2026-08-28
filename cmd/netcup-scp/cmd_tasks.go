@@ -41,7 +41,7 @@ func newTasksCmd() *cobra.Command {
 }
 
 func newTasksListCmd() *cobra.Command {
-	var serverID int
+	var server string
 	var state, q string
 	var limit, offset int
 	cmd := &cobra.Command{
@@ -55,8 +55,12 @@ func newTasksListCmd() *cobra.Command {
 			defer cleanup()
 
 			opts := &scp.ListTasksOptions{}
-			if serverID > 0 {
-				opts.ServerId = new(int32(serverID))
+			if server != "" {
+				id, err := resolveServerArg(cc, server)
+				if err != nil {
+					return err
+				}
+				opts.ServerId = &id
 			}
 			if state != "" {
 				s := scp.TaskState(state)
@@ -91,7 +95,8 @@ func newTasksListCmd() *cobra.Command {
 			})
 		},
 	}
-	cmd.Flags().IntVar(&serverID, "server-id", 0, "filter by server ID")
+	cmd.Flags().StringVar(&server, "server", "", "filter by server (id, nickname, name, or hostname)")
+	registerFlagCompleter(cmd, "server", serverIDCompletions)
 	cmd.Flags().StringVar(
 		&state,
 		"state",

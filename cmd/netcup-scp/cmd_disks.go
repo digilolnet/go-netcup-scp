@@ -46,7 +46,7 @@ func newDisksCmd() *cobra.Command {
 
 func newDisksListCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:               "list <server-id>",
+		Use:               "list <server>",
 		Short:             "List disks attached to a server",
 		Args:              cobra.ExactArgs(1),
 		ValidArgsFunction: makeCompleter(serverIDCompletions),
@@ -57,7 +57,7 @@ func newDisksListCmd() *cobra.Command {
 			}
 			defer cleanup()
 
-			id, err := parseID(args[0], "server-id")
+			id, err := resolveServerArg(cc, args[0])
 			if err != nil {
 				return err
 			}
@@ -83,7 +83,7 @@ func newDisksListCmd() *cobra.Command {
 
 func newDisksGetCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:               "get <server-id> <name>",
+		Use:               "get <server> <name>",
 		Short:             "Get disk details",
 		Args:              cobra.ExactArgs(2),
 		ValidArgsFunction: makeCompleter(serverIDCompletions, diskNameCompletions),
@@ -94,7 +94,7 @@ func newDisksGetCmd() *cobra.Command {
 			}
 			defer cleanup()
 
-			id, err := parseID(args[0], "server-id")
+			id, err := resolveServerArg(cc, args[0])
 			if err != nil {
 				return err
 			}
@@ -117,7 +117,7 @@ func newDisksGetCmd() *cobra.Command {
 func newDisksFormatCmd() *cobra.Command {
 	var wait bool
 	cmd := &cobra.Command{
-		Use:               "format <server-id> <name>",
+		Use:               "format <server> <name>",
 		Short:             "Format a disk (destroys data)",
 		Args:              cobra.ExactArgs(2),
 		ValidArgsFunction: makeCompleter(serverIDCompletions, diskNameCompletions),
@@ -128,7 +128,7 @@ func newDisksFormatCmd() *cobra.Command {
 			}
 			defer cleanup()
 
-			id, err := parseID(args[0], "server-id")
+			id, err := resolveServerArg(cc, args[0])
 			if err != nil {
 				return err
 			}
@@ -146,7 +146,7 @@ func newDisksFormatCmd() *cobra.Command {
 func newDisksSetDriverCmd() *cobra.Command {
 	var wait bool
 	cmd := &cobra.Command{
-		Use:               "set-driver <server-id> <driver>",
+		Use:               "set-driver <server> <driver>",
 		Short:             "Change storage driver for all disks",
 		Args:              cobra.ExactArgs(2),
 		ValidArgsFunction: makeCompleter(serverIDCompletions, diskDriverCompletions),
@@ -157,7 +157,7 @@ func newDisksSetDriverCmd() *cobra.Command {
 			}
 			defer cleanup()
 
-			id, err := parseID(args[0], "server-id")
+			id, err := resolveServerArg(cc, args[0])
 			if err != nil {
 				return err
 			}
@@ -174,7 +174,7 @@ func newDisksSetDriverCmd() *cobra.Command {
 
 func newDisksSupportedDriversCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:               "supported-drivers <server-id>",
+		Use:               "supported-drivers <server>",
 		Short:             "List supported storage drivers",
 		Args:              cobra.ExactArgs(1),
 		ValidArgsFunction: makeCompleter(serverIDCompletions),
@@ -185,7 +185,7 @@ func newDisksSupportedDriversCmd() *cobra.Command {
 			}
 			defer cleanup()
 
-			id, err := parseID(args[0], "server-id")
+			id, err := resolveServerArg(cc, args[0])
 			if err != nil {
 				return err
 			}

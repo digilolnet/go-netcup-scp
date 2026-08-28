@@ -170,55 +170,55 @@ netcup-scp context list
 ```
 servers
   list                            list servers (--sort, filters)
-  get <server-id>                 server details (live info included)
-  start/stop/restart <server-id>  power management (--wait)
-  autostart <server-id> <on|off>  configure autostart
-  uefi <server-id> <on|off>       configure UEFI boot
-  rescue <server-id> <on|off>     enable/disable the rescue system
-  nickname <server-id> <name>     set nickname
-  cpu-topology <server-id> <sockets> <cores>
-  logs <server-id>                event log
-  guest-agent <server-id>         guest agent info
-  image-flavours <server-id>      list installable OS images
-  install-image <server-id> <flavour-id>       install official OS image
-  install-user-image <server-id> <image-name>  install user-uploaded image
-  optimize-storage <server-id>    compact disk allocation
+  get <server>                    server details (live info included)
+  start/stop/restart <server>     power management (--wait)
+  autostart <server> <on|off>     configure autostart
+  uefi <server> <on|off>          configure UEFI boot
+  rescue <server> <on|off>        enable/disable the rescue system
+  nickname <server> <name>        set nickname
+  cpu-topology <server> <sockets> <cores>
+  logs <server>                   event log
+  guest-agent <server>            guest agent info
+  image-flavours <server>         list installable OS images
+  install-image <server> <flavour-id>  install official OS image
+  install-user-image <server> <image-name>  install user-uploaded image
+  optimize-storage <server>       compact disk allocation
   qemu-status                     QEMU version status across all servers
-  gpu-driver <server-id>          GPU driver download URL
-  vnc <server-id>                 bridge the VNC console (native port + noVNC)
+  gpu-driver <server>             GPU driver download URL
+  vnc <server>                    bridge the VNC console (native port + noVNC)
 
 disks
-  list/get <server-id> [name]     list or inspect disks
-  format <server-id> <name>       format disk (destructive)
-  set-driver <server-id> <driver> change storage driver
-  supported-drivers <server-id>
+  list/get <server> [name]        list or inspect disks
+  format <server> <name>          format disk (destructive)
+  set-driver <server> <driver>    change storage driver
+  supported-drivers <server>
 
 snapshots                         (BIOS-mode servers only; UEFI is refused by the API)
-  list/get/create/revert/delete/export <server-id> [name]
-  dry-run <server-id>             check whether a snapshot is possible
+  list/get/create/revert/delete/export <server> [name]
+  dry-run <server>                check whether a snapshot is possible
 
 interfaces
-  list/get <server-id> [mac]      list or inspect NICs
-  create-vlan <server-id> <vlan-id>
-  delete <server-id> <mac>        (primary NICs are refused)
-  update-driver <server-id> <mac> <driver>
+  list/get <server> [mac]         list or inspect NICs
+  create-vlan <server> <vlan-id>
+  delete <server> <mac>           (primary NICs are refused)
+  update-driver <server> <mac> <driver>
 
 rdns-v4 / rdns-v6
   get/set/delete <ip>             manage reverse DNS
 
 firewall
-  get/update/reapply/clear/restore-copied-policies <server-id> <mac>
-  active <server-id> <mac> <on|off>
+  get/update/reapply/clear/restore-copied-policies <server> <mac>
+  active <server> <mac> <on|off>
 
 firewall-policies
   list/get/create/update/delete/add-rule
 
 failover-v4 / failover-v6
-  list / route <failover-id> <server-id> / unroute <failover-id>
+  list / route <failover-id> <server> / unroute <failover-id>
 
 isos
-  list/attached <server-id>       available and currently attached ISO
-  attach/detach <server-id>       (--iso-id, --user-iso, --boot-cdrom)
+  list/attached <server>          available and currently attached ISO
+  attach/detach <server>          (--iso-id, --user-iso, --boot-cdrom)
 
 user-isos / user-images
   list/upload/delete/download-url <key>
@@ -228,7 +228,7 @@ vlans
   list / get <vlan-id> / update <vlan-id> <name>
 
 metrics
-  cpu/disk/network/network-packet <server-id>   ASCII time-series charts
+  cpu/disk/network/network-packet <server>  ASCII time-series charts
     --hours N     window (default 6)
     --series ...  filter series by case-insensitive globs (tab-completes)
     --total       sum the series into one line
@@ -246,6 +246,11 @@ system
 All commands support `--json` / `-j` for raw JSON output and shell completion
 (`bash`, `zsh`, `fish`, `powershell`). Completions are cached per account for
 5 minutes and invalidated by mutating commands.
+
+`<server>` arguments accept a numeric id, nickname, name, or hostname — or any
+unique prefix of one of those (`netcup-scp servers restart web-prod`). The
+resolver shares the completion cache; ambiguous and unknown names fail with a
+clear error.
 
 Environment variables: `NETCUP_SCP_JSON=1` (default to JSON output),
 `NETCUP_SCP_CONTEXT` (select a named account context),

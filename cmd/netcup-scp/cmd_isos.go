@@ -55,7 +55,7 @@ func newIsosCmd() *cobra.Command {
 
 func newIsosListAvailableCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:               "list <server-id>",
+		Use:               "list <server>",
 		Short:             "List available ISO images for a server",
 		Args:              cobra.ExactArgs(1),
 		ValidArgsFunction: makeCompleter(serverIDCompletions),
@@ -66,7 +66,7 @@ func newIsosListAvailableCmd() *cobra.Command {
 			}
 			defer cleanup()
 
-			id, err := parseID(args[0], "server-id")
+			id, err := resolveServerArg(cc, args[0])
 			if err != nil {
 				return err
 			}
@@ -87,7 +87,7 @@ func newIsosListAvailableCmd() *cobra.Command {
 
 func newIsosGetAttachedCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:               "attached <server-id>",
+		Use:               "attached <server>",
 		Short:             "Get the currently attached ISO",
 		Args:              cobra.ExactArgs(1),
 		ValidArgsFunction: makeCompleter(serverIDCompletions),
@@ -98,7 +98,7 @@ func newIsosGetAttachedCmd() *cobra.Command {
 			}
 			defer cleanup()
 
-			id, err := parseID(args[0], "server-id")
+			id, err := resolveServerArg(cc, args[0])
 			if err != nil {
 				return err
 			}
@@ -125,7 +125,7 @@ func newIsosAttachCmd() *cobra.Command {
 	var userIso string
 	var bootCdrom, wait bool
 	cmd := &cobra.Command{
-		Use:               "attach <server-id>",
+		Use:               "attach <server>",
 		Short:             "Attach an ISO to a server",
 		Args:              cobra.ExactArgs(1),
 		ValidArgsFunction: makeCompleter(serverIDCompletions),
@@ -136,7 +136,7 @@ func newIsosAttachCmd() *cobra.Command {
 			}
 			defer cleanup()
 
-			id, err := parseID(args[0], "server-id")
+			id, err := resolveServerArg(cc, args[0])
 			if err != nil {
 				return err
 			}
@@ -166,7 +166,7 @@ func newIsosAttachCmd() *cobra.Command {
 
 func newIsosDetachCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:               "detach <server-id>",
+		Use:               "detach <server>",
 		Short:             "Detach the current ISO from a server",
 		Args:              cobra.ExactArgs(1),
 		ValidArgsFunction: makeCompleter(serverIDCompletions),
@@ -177,7 +177,7 @@ func newIsosDetachCmd() *cobra.Command {
 			}
 			defer cleanup()
 
-			id, err := parseID(args[0], "server-id")
+			id, err := resolveServerArg(cc, args[0])
 			if err != nil {
 				return err
 			}

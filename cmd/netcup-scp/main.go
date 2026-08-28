@@ -56,8 +56,11 @@ func main() {
 
 func newRootCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:           "netcup-scp",
-		Short:         "CLI for the netcup Server Control Panel API",
+		Use:   "netcup-scp",
+		Short: "CLI for the netcup Server Control Panel API",
+		Long: "CLI for the netcup Server Control Panel API.\n\n" +
+			"<server> arguments accept a numeric id, nickname, name, or hostname,\n" +
+			"or a unique prefix of one of those.",
 		SilenceUsage:  true,
 		SilenceErrors: true,
 		PersistentPreRunE: func(cmd *cobra.Command, args []string) error {

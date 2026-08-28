@@ -69,33 +69,55 @@ func static(values ...string) posCompleter {
 
 // --- per-position completion functions ---
 
-func serverIDCompletions(cc *cmdContext, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
-	return cc.completionWithCache("servers", func() ([]string, error) {
-		servers, err := cc.client.ListServers(cc.ctx, nil)
-		if err != nil {
-			return nil, err
-		}
+func serverIDCompletions(cc *cmdContext, _ []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	servers, _, err := cc.serverRefs()
+	if err != nil {
+		return nil, cobra.ShellCompDirectiveError
+	}
+
+	// A non-numeric prefix means the user is typing a name — offer
+	// nicknames/names instead of ids (both resolve, see resolveServerArg).
+	if toComplete != "" && !isDigits(toComplete) {
 		out := make([]string, 0, len(servers))
 		for _, s := range servers {
-			name := derefStr(s.Name)
-			nickname := derefStr(s.Nickname)
-			var desc string
-			if nickname != "" {
-				desc = nickname + " (" + name + ")"
-			} else {
-				desc = name
+			label := s.Nickname
+			if label == "" {
+				label = s.Name
 			}
-			out = append(out, fmt.Sprintf("%d\t%s", derefInt32(s.Id), desc))
+			if label == "" {
+				continue
+			}
+			out = append(out, fmt.Sprintf("%s\tid %d (%s)", label, s.ID, s.Name))
 		}
-		return out, nil
-	})
+		return out, cobra.ShellCompDirectiveNoFileComp
+	}
+
+	out := make([]string, 0, len(servers))
+	for _, s := range servers {
+		desc := s.Name
+		if s.Nickname != "" {
+			desc = s.Nickname + " (" + s.Name + ")"
+		}
+		out = append(out, fmt.Sprintf("%d\t%s", s.ID, desc))
+	}
+	return out, cobra.ShellCompDirectiveNoFileComp
+}
+
+// isDigits reports whether s consists solely of ASCII digits.
+func isDigits(s string) bool {
+	for _, r := range s {
+		if r < '0' || r > '9' {
+			return false
+		}
+	}
+	return true
 }
 
 func macCompletions(cc *cmdContext, args []string, _ string) ([]string, cobra.ShellCompDirective) {
 	if len(args) == 0 {
 		return nil, cobra.ShellCompDirectiveNoFileComp
 	}
-	serverID, err := parseID(args[0], "server-id")
+	serverID, err := resolveServerArg(cc, args[0])
 	if err != nil {
 		return nil, cobra.ShellCompDirectiveNoFileComp
 	}
@@ -116,7 +138,7 @@ func deletableInterfaceMACCompletions(cc *cmdContext, args []string, _ string) (
 	if len(args) == 0 {
 		return nil, cobra.ShellCompDirectiveNoFileComp
 	}
-	serverID, err := parseID(args[0], "server-id")
+	serverID, err := resolveServerArg(cc, args[0])
 	if err != nil {
 		return nil, cobra.ShellCompDirectiveNoFileComp
 	}
@@ -139,7 +161,7 @@ func snapshotNameCompletions(cc *cmdContext, args []string, _ string) ([]string,
 	if len(args) == 0 {
 		return nil, cobra.ShellCompDirectiveNoFileComp
 	}
-	serverID, err := parseID(args[0], "server-id")
+	serverID, err := resolveServerArg(cc, args[0])
 	if err != nil {
 		return nil, cobra.ShellCompDirectiveNoFileComp
 	}
@@ -162,7 +184,7 @@ func diskNameCompletions(cc *cmdContext, args []string, _ string) ([]string, cob
 	if len(args) == 0 {
 		return nil, cobra.ShellCompDirectiveNoFileComp
 	}
-	serverID, err := parseID(args[0], "server-id")
+	serverID, err := resolveServerArg(cc, args[0])
 	if err != nil {
 		return nil, cobra.ShellCompDirectiveNoFileComp
 	}
@@ -183,7 +205,7 @@ func diskDriverCompletions(cc *cmdContext, args []string, _ string) ([]string, c
 	if len(args) == 0 {
 		return nil, cobra.ShellCompDirectiveNoFileComp
 	}
-	serverID, err := parseID(args[0], "server-id")
+	serverID, err := resolveServerArg(cc, args[0])
 	if err != nil {
 		return nil, cobra.ShellCompDirectiveNoFileComp
 	}
@@ -279,7 +301,7 @@ func imageFlavourIDCompletions(cc *cmdContext, args []string, _ string) ([]strin
 	if len(args) == 0 {
 		return nil, cobra.ShellCompDirectiveNoFileComp
 	}
-	serverID, err := parseID(args[0], "server-id")
+	serverID, err := resolveServerArg(cc, args[0])
 	if err != nil {
 		return nil, cobra.ShellCompDirectiveNoFileComp
 	}

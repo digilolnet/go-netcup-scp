@@ -130,7 +130,7 @@ func newServersListCmd() *cobra.Command {
 
 func newServersGetCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:               "get <server-id>",
+		Use:               "get <server>",
 		Short:             "Get server details",
 		Args:              cobra.ExactArgs(1),
 		ValidArgsFunction: makeCompleter(serverIDCompletions),
@@ -141,7 +141,7 @@ func newServersGetCmd() *cobra.Command {
 			}
 			defer cleanup()
 
-			id, err := parseID(args[0], "server-id")
+			id, err := resolveServerArg(cc, args[0])
 			if err != nil {
 				return err
 			}
@@ -279,7 +279,7 @@ func newServersGetCmd() *cobra.Command {
 func newServersStartCmd() *cobra.Command {
 	var wait bool
 	cmd := &cobra.Command{
-		Use:               "start <server-id>",
+		Use:               "start <server>",
 		Short:             "Power on a server",
 		Args:              cobra.ExactArgs(1),
 		ValidArgsFunction: makeCompleter(serverIDCompletions),
@@ -290,7 +290,7 @@ func newServersStartCmd() *cobra.Command {
 			}
 			defer cleanup()
 
-			id, err := parseID(args[0], "server-id")
+			id, err := resolveServerArg(cc, args[0])
 			if err != nil {
 				return err
 			}
@@ -308,7 +308,7 @@ func newServersStartCmd() *cobra.Command {
 func newServersStopCmd() *cobra.Command {
 	var powerOff, wait bool
 	cmd := &cobra.Command{
-		Use:               "stop <server-id>",
+		Use:               "stop <server>",
 		Short:             "Shut down a server",
 		Args:              cobra.ExactArgs(1),
 		ValidArgsFunction: makeCompleter(serverIDCompletions),
@@ -319,7 +319,7 @@ func newServersStopCmd() *cobra.Command {
 			}
 			defer cleanup()
 
-			id, err := parseID(args[0], "server-id")
+			id, err := resolveServerArg(cc, args[0])
 			if err != nil {
 				return err
 			}
@@ -338,7 +338,7 @@ func newServersStopCmd() *cobra.Command {
 func newServersRestartCmd() *cobra.Command {
 	var reset, wait bool
 	cmd := &cobra.Command{
-		Use:               "restart <server-id>",
+		Use:               "restart <server>",
 		Short:             "Reboot a server",
 		Args:              cobra.ExactArgs(1),
 		ValidArgsFunction: makeCompleter(serverIDCompletions),
@@ -349,7 +349,7 @@ func newServersRestartCmd() *cobra.Command {
 			}
 			defer cleanup()
 
-			id, err := parseID(args[0], "server-id")
+			id, err := resolveServerArg(cc, args[0])
 			if err != nil {
 				return err
 			}
@@ -368,7 +368,7 @@ func newServersRestartCmd() *cobra.Command {
 func newServersAutostartCmd() *cobra.Command {
 	var wait bool
 	cmd := &cobra.Command{
-		Use:               "autostart <server-id> <on|off>",
+		Use:               "autostart <server> <on|off>",
 		Short:             "Configure autostart",
 		Args:              cobra.ExactArgs(2),
 		ValidArgsFunction: makeCompleter(serverIDCompletions, static("on", "off")),
@@ -379,7 +379,7 @@ func newServersAutostartCmd() *cobra.Command {
 			}
 			defer cleanup()
 
-			id, err := parseID(args[0], "server-id")
+			id, err := resolveServerArg(cc, args[0])
 			if err != nil {
 				return err
 			}
@@ -401,7 +401,7 @@ func newServersAutostartCmd() *cobra.Command {
 func newServersUEFICmd() *cobra.Command {
 	var wait bool
 	cmd := &cobra.Command{
-		Use:               "uefi <server-id> <on|off>",
+		Use:               "uefi <server> <on|off>",
 		Short:             "Configure UEFI boot",
 		Args:              cobra.ExactArgs(2),
 		ValidArgsFunction: makeCompleter(serverIDCompletions, static("on", "off")),
@@ -412,7 +412,7 @@ func newServersUEFICmd() *cobra.Command {
 			}
 			defer cleanup()
 
-			id, err := parseID(args[0], "server-id")
+			id, err := resolveServerArg(cc, args[0])
 			if err != nil {
 				return err
 			}
@@ -433,7 +433,7 @@ func newServersUEFICmd() *cobra.Command {
 
 func newServersNicknameCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:               "nickname <server-id> <nickname>",
+		Use:               "nickname <server> <nickname>",
 		Short:             "Set server nickname",
 		Args:              cobra.ExactArgs(2),
 		ValidArgsFunction: makeCompleter(serverIDCompletions),
@@ -444,7 +444,7 @@ func newServersNicknameCmd() *cobra.Command {
 			}
 			defer cleanup()
 
-			id, err := parseID(args[0], "server-id")
+			id, err := resolveServerArg(cc, args[0])
 			if err != nil {
 				return err
 			}
@@ -461,7 +461,7 @@ func newServersNicknameCmd() *cobra.Command {
 func newServersLogsCmd() *cobra.Command {
 	var limit, offset int
 	cmd := &cobra.Command{
-		Use:               "logs <server-id>",
+		Use:               "logs <server>",
 		Short:             "Get server event log",
 		Args:              cobra.ExactArgs(1),
 		ValidArgsFunction: makeCompleter(serverIDCompletions),
@@ -472,7 +472,7 @@ func newServersLogsCmd() *cobra.Command {
 			}
 			defer cleanup()
 
-			id, err := parseID(args[0], "server-id")
+			id, err := resolveServerArg(cc, args[0])
 			if err != nil {
 				return err
 			}
@@ -504,7 +504,7 @@ func newServersLogsCmd() *cobra.Command {
 func newServersCPUTopologyCmd() *cobra.Command {
 	var wait bool
 	cmd := &cobra.Command{
-		Use:               "cpu-topology <server-id> <sockets> <cores>",
+		Use:               "cpu-topology <server> <sockets> <cores>",
 		Short:             "Set CPU topology",
 		Args:              cobra.ExactArgs(3),
 		ValidArgsFunction: makeCompleter(serverIDCompletions),
@@ -515,7 +515,7 @@ func newServersCPUTopologyCmd() *cobra.Command {
 			}
 			defer cleanup()
 
-			id, err := parseID(args[0], "server-id")
+			id, err := resolveServerArg(cc, args[0])
 			if err != nil {
 				return err
 			}
@@ -540,7 +540,7 @@ func newServersCPUTopologyCmd() *cobra.Command {
 
 func newServersGuestAgentCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:               "guest-agent <server-id>",
+		Use:               "guest-agent <server>",
 		Short:             "Get guest agent info",
 		Args:              cobra.ExactArgs(1),
 		ValidArgsFunction: makeCompleter(serverIDCompletions),
@@ -551,7 +551,7 @@ func newServersGuestAgentCmd() *cobra.Command {
 			}
 			defer cleanup()
 
-			id, err := parseID(args[0], "server-id")
+			id, err := resolveServerArg(cc, args[0])
 			if err != nil {
 				return err
 			}
@@ -611,7 +611,7 @@ func newServersGuestAgentCmd() *cobra.Command {
 
 func newServersImageFlavoursCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:               "image-flavours <server-id>",
+		Use:               "image-flavours <server>",
 		Short:             "List available OS image flavours",
 		Args:              cobra.ExactArgs(1),
 		ValidArgsFunction: makeCompleter(serverIDCompletions),
@@ -622,7 +622,7 @@ func newServersImageFlavoursCmd() *cobra.Command {
 			}
 			defer cleanup()
 
-			id, err := parseID(args[0], "server-id")
+			id, err := resolveServerArg(cc, args[0])
 			if err != nil {
 				return err
 			}
@@ -663,7 +663,7 @@ func newServersInstallImageCmd() *cobra.Command {
 		wait           bool
 	)
 	cmd := &cobra.Command{
-		Use:               "install-image <server-id> <flavour-id>",
+		Use:               "install-image <server> <flavour-id>",
 		Short:             "Install OS image on a server",
 		Args:              cobra.ExactArgs(2),
 		ValidArgsFunction: makeCompleter(serverIDCompletions, imageFlavourIDCompletions),
@@ -674,7 +674,7 @@ func newServersInstallImageCmd() *cobra.Command {
 			}
 			defer cleanup()
 
-			id, err := parseID(args[0], "server-id")
+			id, err := resolveServerArg(cc, args[0])
 			if err != nil {
 				return err
 			}
@@ -753,7 +753,7 @@ func newServersInstallUserImageCmd() *cobra.Command {
 		wait        bool
 	)
 	cmd := &cobra.Command{
-		Use:               "install-user-image <server-id> <image-name>",
+		Use:               "install-user-image <server> <image-name>",
 		Short:             "Install a user-uploaded image on a server",
 		Args:              cobra.ExactArgs(2),
 		ValidArgsFunction: makeCompleter(serverIDCompletions, imageKeyCompletions),
@@ -764,7 +764,7 @@ func newServersInstallUserImageCmd() *cobra.Command {
 			}
 			defer cleanup()
 
-			id, err := parseID(args[0], "server-id")
+			id, err := resolveServerArg(cc, args[0])
 			if err != nil {
 				return err
 			}
@@ -793,7 +793,7 @@ func newServersOptimizeStorageCmd() *cobra.Command {
 	var disksFlag string
 	var startAfter, wait bool
 	cmd := &cobra.Command{
-		Use:               "optimize-storage <server-id>",
+		Use:               "optimize-storage <server>",
 		Short:             "Optimize disk storage",
 		Args:              cobra.ExactArgs(1),
 		ValidArgsFunction: makeCompleter(serverIDCompletions),
@@ -804,7 +804,7 @@ func newServersOptimizeStorageCmd() *cobra.Command {
 			}
 			defer cleanup()
 
-			id, err := parseID(args[0], "server-id")
+			id, err := resolveServerArg(cc, args[0])
 			if err != nil {
 				return err
 			}
@@ -882,7 +882,7 @@ func newServersQemuStatusCmd() *cobra.Command {
 
 func newServersGPUDriverCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:               "gpu-driver <server-id>",
+		Use:               "gpu-driver <server>",
 		Short:             "Get GPU driver download info for a server",
 		Args:              cobra.ExactArgs(1),
 		ValidArgsFunction: makeCompleter(serverIDCompletions),
@@ -893,7 +893,7 @@ func newServersGPUDriverCmd() *cobra.Command {
 			}
 			defer cleanup()
 
-			id, err := parseID(args[0], "server-id")
+			id, err := resolveServerArg(cc, args[0])
 			if err != nil {
 				return err
 			}

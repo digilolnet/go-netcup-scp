@@ -48,7 +48,7 @@ func newFirewallCmd() *cobra.Command {
 func newFirewallGetCmd() *cobra.Command {
 	var checkConsistency bool
 	cmd := &cobra.Command{
-		Use:               "get <server-id> <mac>",
+		Use:               "get <server> <mac>",
 		Short:             "Get firewall config for an interface",
 		Args:              cobra.ExactArgs(2),
 		ValidArgsFunction: makeCompleter(serverIDCompletions, macCompletions),
@@ -59,7 +59,7 @@ func newFirewallGetCmd() *cobra.Command {
 			}
 			defer cleanup()
 
-			serverID, err := parseID(args[0], "server-id")
+			serverID, err := resolveServerArg(cc, args[0])
 			if err != nil {
 				return err
 			}
@@ -102,7 +102,7 @@ func newFirewallGetCmd() *cobra.Command {
 func newFirewallUpdateCmd() *cobra.Command {
 	var wait bool
 	cmd := &cobra.Command{
-		Use:               "update <server-id> <mac>",
+		Use:               "update <server> <mac>",
 		Short:             "Replace firewall config for an interface (JSON body from stdin)",
 		Args:              cobra.ExactArgs(2),
 		ValidArgsFunction: makeCompleter(serverIDCompletions, macCompletions),
@@ -113,7 +113,7 @@ func newFirewallUpdateCmd() *cobra.Command {
 			}
 			defer cleanup()
 
-			serverID, err := parseID(args[0], "server-id")
+			serverID, err := resolveServerArg(cc, args[0])
 			if err != nil {
 				return err
 			}
@@ -135,7 +135,7 @@ func newFirewallUpdateCmd() *cobra.Command {
 func newFirewallReapplyCmd() *cobra.Command {
 	var wait bool
 	cmd := &cobra.Command{
-		Use:               "reapply <server-id> <mac>",
+		Use:               "reapply <server> <mac>",
 		Short:             "Re-apply firewall rules without changing configuration",
 		Args:              cobra.ExactArgs(2),
 		ValidArgsFunction: makeCompleter(serverIDCompletions, macCompletions),
@@ -146,7 +146,7 @@ func newFirewallReapplyCmd() *cobra.Command {
 			}
 			defer cleanup()
 
-			serverID, err := parseID(args[0], "server-id")
+			serverID, err := resolveServerArg(cc, args[0])
 			if err != nil {
 				return err
 			}
@@ -164,7 +164,7 @@ func newFirewallReapplyCmd() *cobra.Command {
 func newFirewallRestoreCopiedCmd() *cobra.Command {
 	var wait bool
 	cmd := &cobra.Command{
-		Use:               "restore-copied-policies <server-id> <mac>",
+		Use:               "restore-copied-policies <server> <mac>",
 		Short:             "Restore copied firewall policies for an interface",
 		Args:              cobra.ExactArgs(2),
 		ValidArgsFunction: makeCompleter(serverIDCompletions, macCompletions),
@@ -175,7 +175,7 @@ func newFirewallRestoreCopiedCmd() *cobra.Command {
 			}
 			defer cleanup()
 
-			serverID, err := parseID(args[0], "server-id")
+			serverID, err := resolveServerArg(cc, args[0])
 			if err != nil {
 				return err
 			}
@@ -193,7 +193,7 @@ func newFirewallRestoreCopiedCmd() *cobra.Command {
 func newFirewallClearCmd() *cobra.Command {
 	var keepCopied, wait bool
 	cmd := &cobra.Command{
-		Use:               "clear <server-id> <mac>",
+		Use:               "clear <server> <mac>",
 		Short:             "Remove all policies from an interface",
 		Args:              cobra.ExactArgs(2),
 		ValidArgsFunction: makeCompleter(serverIDCompletions, macCompletions),
@@ -204,7 +204,7 @@ func newFirewallClearCmd() *cobra.Command {
 			}
 			defer cleanup()
 
-			serverID, err := parseID(args[0], "server-id")
+			serverID, err := resolveServerArg(cc, args[0])
 			if err != nil {
 				return err
 			}
@@ -230,7 +230,7 @@ func newFirewallClearCmd() *cobra.Command {
 func newFirewallActiveCmd() *cobra.Command {
 	var wait bool
 	cmd := &cobra.Command{
-		Use:               "active <server-id> <mac> <on|off>",
+		Use:               "active <server> <mac> <on|off>",
 		Short:             "Enable or disable the firewall for an interface",
 		Args:              cobra.ExactArgs(3),
 		ValidArgsFunction: makeCompleter(serverIDCompletions, macCompletions, static("on", "off")),
@@ -241,7 +241,7 @@ func newFirewallActiveCmd() *cobra.Command {
 			}
 			defer cleanup()
 
-			serverID, err := parseID(args[0], "server-id")
+			serverID, err := resolveServerArg(cc, args[0])
 			if err != nil {
 				return err
 			}

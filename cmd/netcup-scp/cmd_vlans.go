@@ -43,7 +43,7 @@ func newVLansCmd() *cobra.Command {
 }
 
 func newVLansListCmd() *cobra.Command {
-	var serverID int
+	var server string
 	cmd := &cobra.Command{
 		Use:   "list",
 		Short: "List your VLANs",
@@ -56,8 +56,12 @@ func newVLansListCmd() *cobra.Command {
 			defer cleanup()
 
 			opts := &scp.ListVLansOptions{}
-			if serverID > 0 {
-				opts.ServerId = new(int32(serverID))
+			if server != "" {
+				id, err := resolveServerArg(cc, server)
+				if err != nil {
+					return err
+				}
+				opts.ServerId = &id
 			}
 			vlans, err := cc.client.ListVLans(cc.ctx, cc.userID, opts)
 			if err != nil {
@@ -80,7 +84,8 @@ func newVLansListCmd() *cobra.Command {
 			})
 		},
 	}
-	cmd.Flags().IntVar(&serverID, "server-id", 0, "filter by server ID")
+	cmd.Flags().StringVar(&server, "server", "", "filter by server (id, nickname, name, or hostname)")
+	registerFlagCompleter(cmd, "server", serverIDCompletions)
 	return cmd
 }
 

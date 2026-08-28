@@ -23,12 +23,12 @@ import (
 )
 
 // newServersRescueCmd toggles the rescue system, following the same
-// `<property> <server-id> <on|off>` idiom as autostart and uefi. Whether
+// `<property> <server> <on|off>` idiom as autostart and uefi. Whether
 // rescue is currently active is part of `servers get`.
 func newServersRescueCmd() *cobra.Command {
 	var wait bool
 	cmd := &cobra.Command{
-		Use:   "rescue <server-id> <on|off>",
+		Use:   "rescue <server> <on|off>",
 		Short: "Enable or disable the rescue system",
 		Long: "Enable or disable the rescue system. The server must be powered off;\n" +
 			"enabling boots the rescue environment on the next start. With --wait, the\n" +
@@ -42,7 +42,7 @@ func newServersRescueCmd() *cobra.Command {
 			}
 			defer cleanup()
 
-			id, err := parseID(args[0], "server-id")
+			id, err := resolveServerArg(cc, args[0])
 			if err != nil {
 				return err
 			}

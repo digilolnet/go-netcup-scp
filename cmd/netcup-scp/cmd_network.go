@@ -49,7 +49,7 @@ func newInterfacesCmd() *cobra.Command {
 func newInterfacesListCmd() *cobra.Command {
 	var loadRdns bool
 	cmd := &cobra.Command{
-		Use:               "list <server-id>",
+		Use:               "list <server>",
 		Short:             "List network interfaces",
 		Args:              cobra.ExactArgs(1),
 		ValidArgsFunction: makeCompleter(serverIDCompletions),
@@ -60,7 +60,7 @@ func newInterfacesListCmd() *cobra.Command {
 			}
 			defer cleanup()
 
-			id, err := parseID(args[0], "server-id")
+			id, err := resolveServerArg(cc, args[0])
 			if err != nil {
 				return err
 			}
@@ -88,7 +88,7 @@ func newInterfacesListCmd() *cobra.Command {
 func newInterfacesGetCmd() *cobra.Command {
 	var loadRdns bool
 	cmd := &cobra.Command{
-		Use:               "get <server-id> <mac>",
+		Use:               "get <server> <mac>",
 		Short:             "Get interface details",
 		Args:              cobra.ExactArgs(2),
 		ValidArgsFunction: makeCompleter(serverIDCompletions, macCompletions),
@@ -99,7 +99,7 @@ func newInterfacesGetCmd() *cobra.Command {
 			}
 			defer cleanup()
 
-			id, err := parseID(args[0], "server-id")
+			id, err := resolveServerArg(cc, args[0])
 			if err != nil {
 				return err
 			}
@@ -180,7 +180,7 @@ func newInterfacesGetCmd() *cobra.Command {
 func newInterfacesDeleteCmd() *cobra.Command {
 	var wait bool
 	cmd := &cobra.Command{
-		Use:               "delete <server-id> <mac>",
+		Use:               "delete <server> <mac>",
 		Short:             "Delete a network interface",
 		Args:              cobra.ExactArgs(2),
 		ValidArgsFunction: makeCompleter(serverIDCompletions, deletableInterfaceMACCompletions),
@@ -191,7 +191,7 @@ func newInterfacesDeleteCmd() *cobra.Command {
 			}
 			defer cleanup()
 
-			id, err := parseID(args[0], "server-id")
+			id, err := resolveServerArg(cc, args[0])
 			if err != nil {
 				return err
 			}
@@ -225,7 +225,7 @@ func newInterfacesDeleteCmd() *cobra.Command {
 func newInterfacesUpdateDriverCmd() *cobra.Command {
 	var wait bool
 	cmd := &cobra.Command{
-		Use:   "update-driver <server-id> <mac> <driver>",
+		Use:   "update-driver <server> <mac> <driver>",
 		Short: "Change interface driver",
 		Args:  cobra.ExactArgs(3),
 		ValidArgsFunction: makeCompleter(
@@ -242,7 +242,7 @@ func newInterfacesUpdateDriverCmd() *cobra.Command {
 			}
 			defer cleanup()
 
-			id, err := parseID(args[0], "server-id")
+			id, err := resolveServerArg(cc, args[0])
 			if err != nil {
 				return err
 			}
@@ -268,7 +268,7 @@ func newInterfacesCreateVLANCmd() *cobra.Command {
 	var driver string
 	var wait bool
 	cmd := &cobra.Command{
-		Use:               "create-vlan <server-id> <vlan-id>",
+		Use:               "create-vlan <server> <vlan-id>",
 		Short:             "Create a VLAN interface",
 		Args:              cobra.ExactArgs(2),
 		ValidArgsFunction: makeCompleter(serverIDCompletions, vlanIDCompletions),
@@ -279,7 +279,7 @@ func newInterfacesCreateVLANCmd() *cobra.Command {
 			}
 			defer cleanup()
 
-			serverID, err := parseID(args[0], "server-id")
+			serverID, err := resolveServerArg(cc, args[0])
 			if err != nil {
 				return err
 			}
