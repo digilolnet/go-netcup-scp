@@ -19,8 +19,6 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
-	"net/url"
-	"strings"
 	"sync"
 	"sync/atomic"
 	"testing"
@@ -37,31 +35,9 @@ func testServer(t *testing.T, mux *http.ServeMux) (*httptest.Server, *Manager) {
 	mgr := NewManager(
 		WithAutoRefresh(false),
 		WithHTTPClient(&http.Client{Timeout: 5 * time.Second}),
+		WithAuthURL(srv.URL),
 	)
-	// Point the manager at the test server by overriding authURL for tests.
-	// We do this by patching the httpClient transport to rewrite requests.
-	mgr.httpClient.Transport = rewriteTransport{base: http.DefaultTransport, from: DefaultAuthURL, to: srv.URL}
 	return srv, mgr
-}
-
-// rewriteTransport rewrites the scheme+host of every request from `from` to `to`.
-type rewriteTransport struct {
-	base http.RoundTripper
-	from string
-	to   string
-}
-
-func (rt rewriteTransport) RoundTrip(req *http.Request) (*http.Response, error) {
-	cloned := req.Clone(req.Context())
-	cloned.URL.Scheme = "http"
-	toURL, _ := url.Parse(rt.to)
-	cloned.URL.Host = toURL.Host
-	// Strip the authURL prefix from the path, keep the path suffix
-	path := req.URL.String()
-	if strings.HasPrefix(path, rt.from) {
-		cloned.URL.Path = path[len(rt.from):]
-	}
-	return rt.base.RoundTrip(cloned)
 }
 
 func writeJSON(w http.ResponseWriter, v any) {
@@ -440,7 +416,6 @@ func TestClose_StopsTimer(t *testing.T) {
 func TestWithTokenRefreshCallback(t *testing.T) {
 	called := false
 	cb := func(_ *TokenResponse) { called = true }
-	mgr := NewManager(WithAutoRefresh(false), WithTokenRefreshCallback(cb))
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("/token", func(w http.ResponseWriter, r *http.Request) {
@@ -448,7 +423,7 @@ func TestWithTokenRefreshCallback(t *testing.T) {
 	})
 	srv := httptest.NewServer(mux)
 	t.Cleanup(srv.Close)
-	mgr.httpClient.Transport = rewriteTransport{base: http.DefaultTransport, from: DefaultAuthURL, to: srv.URL}
+	mgr := NewManager(WithAutoRefresh(false), WithTokenRefreshCallback(cb), WithAuthURL(srv.URL))
 
 	if _, err := mgr.RefreshToken(context.Background(), "ref"); err != nil {
 		t.Fatalf("unexpected error: %v", err)
