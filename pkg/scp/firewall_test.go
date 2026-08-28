@@ -18,6 +18,7 @@ import (
 	"context"
 	"net/http"
 	"testing"
+	"time"
 
 	"github.com/digilolnet/go-netcup-scp/internal/generated"
 )
@@ -106,5 +107,62 @@ func TestRestoreCopiedFirewallPolicies(t *testing.T) {
 
 	if task == nil || task.Uuid == nil || *task.Uuid != "fw-task-3" {
 		t.Errorf("unexpected task: %v", task)
+	}
+}
+
+func TestClearFirewall_WaitsForClearTaskBeforeRestore(t *testing.T) {
+	oldPoll := taskDonePollInterval
+	taskDonePollInterval = time.Millisecond
+	defer func() { taskDonePollInterval = oldPoll }()
+
+	const mac = "aa:bb:cc:dd:ee:ff"
+	clearUUID, restoreUUID := "clear-task", "restore-task"
+	policyID := int32(1)
+	var taskPolls, restoreCalls int
+	clearDone := false
+
+	client, cleanup := newTestClient(t, func(w http.ResponseWriter, r *http.Request) {
+		switch {
+		case r.Method == http.MethodGet && r.URL.Path == "/api/v1/servers/123/interfaces/"+mac+"/firewall":
+			writeJSON(w, http.StatusOK, generated.ServerFirewall{
+				CopiedPolicies: &[]generated.FirewallPolicy{{Id: &policyID}},
+			})
+		case r.Method == http.MethodPut && r.URL.Path == "/api/v1/servers/123/interfaces/"+mac+"/firewall":
+			writeJSON(w, http.StatusAccepted, generated.TaskInfo{Uuid: &clearUUID})
+		case r.Method == http.MethodGet && r.URL.Path == "/api/v1/tasks/"+clearUUID:
+			taskPolls++
+			state := generated.TaskStateRUNNING
+			if taskPolls >= 3 {
+				state = generated.TaskStateFINISHED
+				clearDone = true
+			}
+			writeJSON(w, http.StatusOK, generated.TaskInfo{Uuid: &clearUUID, State: &state})
+		case r.Method == http.MethodPost &&
+			r.URL.Path == "/api/v1/servers/123/interfaces/"+mac+"/firewall:restore-copied-policies":
+			restoreCalls++
+			// The real API refuses while the clear task holds the write lock.
+			if !clearDone {
+				w.WriteHeader(http.StatusConflict)
+				return
+			}
+			writeJSON(w, http.StatusAccepted, generated.TaskInfo{Uuid: &restoreUUID})
+		default:
+			w.WriteHeader(http.StatusNotFound)
+		}
+	})
+	defer cleanup()
+
+	tasks, err := client.ClearFirewall(context.Background(), 123, mac, true)
+	if err != nil {
+		t.Fatalf("ClearFirewall() error = %v", err)
+	}
+	if len(tasks) != 2 || *tasks[0].Uuid != clearUUID || *tasks[1].Uuid != restoreUUID {
+		t.Errorf("unexpected tasks: %+v", tasks)
+	}
+	if taskPolls < 3 {
+		t.Errorf("polled clear task %d times, want it awaited to FINISHED", taskPolls)
+	}
+	if restoreCalls != 1 {
+		t.Errorf("restore called %d times, want exactly 1 (after the clear task finished)", restoreCalls)
 	}
 }

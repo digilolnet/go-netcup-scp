@@ -17,6 +17,7 @@ package scp
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"github.com/digilolnet/go-netcup-scp/internal/generated"
 )
@@ -155,6 +156,13 @@ func (c *Client) ClearFirewall(
 	tasks := []*TaskInfo{task}
 
 	if restoreCopied && hasCopied {
+		// The restore endpoint answers 409 while the clear task still holds
+		// the server's write lock; wait for it to reach a terminal state.
+		if task != nil && task.Uuid != nil {
+			if err := c.waitTaskDone(ctx, *task.Uuid, 2*time.Minute); err != nil {
+				return tasks, fmt.Errorf("clear firewall: %w", err)
+			}
+		}
 		task2, err := c.RestoreCopiedFirewallPolicies(ctx, serverID, mac)
 		if err != nil {
 			return tasks, fmt.Errorf("clear firewall: restore copied policies: %w", err)

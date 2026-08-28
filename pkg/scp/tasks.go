@@ -17,6 +17,7 @@ package scp
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"github.com/digilolnet/go-netcup-scp/internal/generated"
 )
@@ -80,11 +81,42 @@ func (c *Client) GetTask(ctx context.Context, uuid string) (*TaskInfo, error) {
 	return pickBody("get task", resp, resp.JSON200, resp.HALJSON200, 200)
 }
 
+// taskDonePollInterval is how often waitTaskDone polls; a variable so tests
+// can shrink it.
+var taskDonePollInterval = time.Second
+
+// waitTaskDone polls a task until it reaches a terminal state, the timeout
+// elapses, or ctx is canceled. Any terminal state counts as done — callers
+// use this to wait out the server's write lock, not to check for success.
+func (c *Client) waitTaskDone(ctx context.Context, uuid string, timeout time.Duration) error {
+	deadline := time.Now().Add(timeout)
+	for {
+		task, err := c.GetTask(ctx, uuid)
+		if err != nil {
+			return err
+		}
+		if task.State != nil {
+			switch *task.State {
+			case TaskStateFINISHED, TaskStateERROR, TaskStateCANCELED:
+				return nil
+			}
+		}
+		if time.Now().After(deadline) {
+			return fmt.Errorf("task %s still running after %s", uuid, timeout)
+		}
+		select {
+		case <-ctx.Done():
+			return ctx.Err()
+		case <-time.After(taskDonePollInterval):
+		}
+	}
+}
+
 // CancelTask cancels a running async task.
 // Returns the updated task info for a 202 answer, or nil for a bodiless 204;
 // the task may still be in progress if cancellation is pending.
 func (c *Client) CancelTask(ctx context.Context, uuid string) (*TaskInfo, error) {
-	resp, err := c.api.PutApiV1TasksUuidCancelWithResponse(ctx, uuid)
+	resp, err := c.api.PutApiV1TasksUuidCancelWithResponse(ctx, uuid, setContentTypeJSON)
 	if err != nil {
 		return nil, fmt.Errorf("cancel task: %w", err)
 	}
