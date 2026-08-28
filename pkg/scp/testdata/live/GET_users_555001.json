@@ -1,0 +1,19 @@
+{
+  "method": "GET",
+  "url": "https://www.servercontrolpanel.de/scp-core/api/v1/users/555001",
+  "status": 200,
+  "contentType": "application/json",
+  "responseBody": {
+    "company": "Example Org",
+    "email": "user@example.com",
+    "firstname": "Max",
+    "id": 555001,
+    "lastname": "Mustermann",
+    "username": "100000",
+    "apiIpLoginRestrictions": null,
+    "language": "en",
+    "passwordlessMode": false,
+    "showNickname": true,
+    "timeZone": "Europe/Berlin"
+  }
+}

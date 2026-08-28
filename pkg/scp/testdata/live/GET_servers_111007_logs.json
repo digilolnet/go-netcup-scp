@@ -1,0 +1,2318 @@
+{
+  "method": "GET",
+  "url": "https://www.servercontrolpanel.de/scp-core/api/v1/servers/111007/logs",
+  "status": 200,
+  "contentType": "application/json",
+  "responseBody": [
+    {
+      "date": "2026-08-26T20:46:25.849167Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.cdrom.detached",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-08-26T20:44:25.445793Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.start",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-08-26T20:44:22.676558Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.cdrom.attached",
+      "message": "customos-v9.9.9-metal-nohalt.iso",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-08-26T20:43:45.632309Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.powercycle",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-08-26T20:42:15.456848Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.cdrom.attached",
+      "message": "customos-v9.9.9-metal-wipe.iso",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-08-26T19:59:23.819182Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.powercycle",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-08-26T19:58:13.681983Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.cdrom.attached",
+      "message": "customos-v9.9.9-metal-nohalt.iso",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-08-26T19:45:26.868439Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.powercycle",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-08-26T19:40:25.613457Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.cdrom.attached",
+      "message": "customos-v9.9.9-metal-amd64.iso",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-15T21:45:10.517968Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.start",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-15T21:44:21.012677Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.cdrom.attached",
+      "message": "customos-v9.9.8-nocloud-amd64-0000000000000000000000000000000000000000000000000000000000000000-v0000000000000000007.iso",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-15T21:44:18.038638Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.formatDisk.do",
+      "message": "vda",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-15T21:44:17.408659Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.cdrom.detached",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-15T21:44:10.857196Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.poweroff",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-14T21:07:28.685660Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.start",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-14T21:07:18.789564Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.cdrom.attached",
+      "message": "customos-v9.9.8-nocloud-amd64-0000000000000000000000000000000000000000000000000000000000000000-v0000000000000000007.iso",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-14T21:07:15.927824Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.formatDisk.do",
+      "message": "vda",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-14T21:07:15.383570Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.cdrom.detached",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-14T21:07:09.003994Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.poweroff",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-13T18:46:51.647070Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.start",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-13T18:46:41.770041Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.cdrom.attached",
+      "message": "customos-v9.9.8-nocloud-amd64-0000000000000000000000000000000000000000000000000000000000000000-v0000000000000000007.iso",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-13T18:46:38.750321Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.formatDisk.do",
+      "message": "vda",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-13T18:46:38.168831Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.cdrom.detached",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-13T18:46:28.725830Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.poweroff",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-13T18:05:23.670477Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.start",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-13T18:05:13.419604Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.cdrom.attached",
+      "message": "customos-v9.9.8-nocloud-amd64-0000000000000000000000000000000000000000000000000000000000000000-v0000000000000000007.iso",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-13T18:05:10.481008Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.formatDisk.do",
+      "message": "vda",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-13T18:05:09.964068Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.cdrom.detached",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-13T18:05:03.513452Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.poweroff",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-13T16:49:45.680165Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.start",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-13T16:49:36.043380Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.cdrom.attached",
+      "message": "customos-v9.9.8-nocloud-amd64-0000000000000000000000000000000000000000000000000000000000000000-v0000000000000000007.iso",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-13T16:49:33.122377Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.formatDisk.do",
+      "message": "vda",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-13T16:49:32.608440Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.cdrom.detached",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-13T16:49:26.319562Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.poweroff",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-13T16:21:57.505005Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.start",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-13T16:21:47.195165Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.cdrom.attached",
+      "message": "customos-v9.9.8-nocloud-amd64-0000000000000000000000000000000000000000000000000000000000000000-v0000000000000000007.iso",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-13T16:21:44.317212Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.formatDisk.do",
+      "message": "vda",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-13T16:21:43.725673Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.cdrom.detached",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-13T16:21:40.146488Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.poweroff",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-13T15:57:27.215147Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.start",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-13T15:57:16.244621Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.cdrom.attached",
+      "message": "customos-v9.9.8-nocloud-amd64-0000000000000000000000000000000000000000000000000000000000000000-v0000000000000000007.iso",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-13T15:57:13.351484Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.formatDisk.do",
+      "message": "vda",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-13T15:57:12.710977Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.cdrom.detached",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-13T15:56:58.248205Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.poweroff",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-13T15:51:38.548145Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.start",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-13T15:51:28.631853Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.cdrom.attached",
+      "message": "customos-v9.9.8-nocloud-amd64-0000000000000000000000000000000000000000000000000000000000000000-v0000000000000000007.iso",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-13T15:51:25.637859Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.formatDisk.do",
+      "message": "vda",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-13T15:51:25.110581Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.cdrom.detached",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-13T15:51:17.186357Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.poweroff",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-13T12:13:26.062569Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.start",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-13T12:13:01.421891Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.cdrom.attached",
+      "message": "customos-v9.9.8-nocloud-amd64-0000000000000000000000000000000000000000000000000000000000000000-v0000000000000000007.iso",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-13T12:12:58.549244Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.formatDisk.do",
+      "message": "vda",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-13T12:12:57.995874Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.cdrom.detached",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-13T12:11:45.307869Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.poweroff",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-13T12:06:19.312711Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.start",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-13T12:06:08.540676Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.cdrom.attached",
+      "message": "customos-v9.9.8-0000000000000000000000000000000000000000000000000000000000000000-v0000000000000000007.iso",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-13T12:06:05.613594Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.formatDisk.do",
+      "message": "vda",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-13T12:06:05.003468Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.cdrom.detached",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-13T12:05:59.795064Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.poweroff",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-13T08:45:57.735388Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.start",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-13T08:45:47.529174Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.cdrom.attached",
+      "message": "customos-v9.9.8-0000000000000000000000000000000000000000000000000000000000000000-v0000000000000000007.iso",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-13T08:45:44.626793Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.formatDisk.do",
+      "message": "vda",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-13T08:45:44.077113Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.cdrom.detached",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-13T08:45:39.108831Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.poweroff",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-13T07:59:31.984141Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.start",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-13T07:59:21.689738Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.cdrom.attached",
+      "message": "customos-v9.9.8-0000000000000000000000000000000000000000000000000000000000000000-v0000000000000000007.iso",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-13T07:59:18.943139Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.formatDisk.do",
+      "message": "vda",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-13T07:59:18.228985Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.cdrom.detached",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-13T07:59:14.744313Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.poweroff",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-13T00:44:51.431778Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.start",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-13T00:44:42.021992Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.cdrom.attached",
+      "message": "customos-v9.9.8-0000000000000000000000000000000000000000000000000000000000000000-v0000000000000000007.iso",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-13T00:44:39.037563Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.formatDisk.do",
+      "message": "vda",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-13T00:44:38.480644Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.cdrom.detached",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-13T00:44:36.829073Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.poweroff",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-13T00:42:42.999896Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.start",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-13T00:42:33.456530Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.cdrom.attached",
+      "message": "customos-v9.9.8-0000000000000000000000000000000000000000000000000000000000000000-v0000000000000000007.iso",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-13T00:42:30.468814Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.formatDisk.do",
+      "message": "vda",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-13T00:42:30.001558Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.cdrom.detached",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-13T00:42:24.757229Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.poweroff",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-13T00:41:56.282868Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.start",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-13T00:41:47.987582Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.poweroff",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-13T00:35:28.804620Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.cdrom.detached",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-13T00:34:43.988501Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.start",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-13T00:34:35.237237Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.poweroff",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-13T00:32:11.552971Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.start",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-13T00:32:03.192036Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.poweroff",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-13T00:28:28.546857Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.start",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-13T00:28:20.360599Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.poweroff",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-13T00:26:31.467786Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.start",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-13T00:26:23.173356Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.poweroff",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-13T00:24:09.381113Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.start",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-13T00:23:58.702134Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.poweroff",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-12T23:28:43.935424Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.start",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-12T23:28:33.047868Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.poweroff",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-12T23:05:06.306695Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.start",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-12T23:04:56.847106Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.poweroff",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-12T22:58:58.893971Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.start",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-12T22:58:51.122100Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.poweroff",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-12T22:50:22.488508Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.start",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-12T22:50:15.263625Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.poweroff",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-12T22:46:50.296856Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.start",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-12T22:46:40.778692Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.cdrom.attached",
+      "message": "customos-v9.9.8-0000000000000000000000000000000000000000000000000000000000000000-v0000000000000000007.iso",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-12T22:46:37.794407Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.formatDisk.do",
+      "message": "vda",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-12T22:46:37.282700Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.cdrom.detached",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-12T22:46:32.867508Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.poweroff",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-12T22:21:11.843604Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.start",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-12T22:21:01.272655Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.cdrom.attached",
+      "message": "customos-v9.9.8-0000000000000000000000000000000000000000000000000000000000000000-v0000000000000000007.iso",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-12T22:21:01.116903Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.cdrom.detached",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-12T22:19:30.070311Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.poweroff",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-12T22:18:51.580687Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.cdrom.detached",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-12T22:17:51.330475Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.start",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-12T22:17:41.617338Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.cdrom.attached",
+      "message": "customos-v9.9.8-0000000000000000000000000000000000000000000000000000000000000000-v0000000000000000007.iso",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-12T22:17:41.416718Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.cdrom.detached",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-12T22:17:37.134813Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.poweroff",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-12T22:06:02.744830Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.start",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-12T22:05:32.957400Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.cdrom.attached",
+      "message": "customos-v9.9.8-0000000000000000000000000000000000000000000000000000000000000000-v0000000000000000007.iso",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-12T22:05:32.778009Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.cdrom.detached",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-12T22:04:06.109814Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.poweroff",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-12T22:03:51.197584Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.start",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-12T22:03:41.160125Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.poweroff",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-12T21:42:47.366948Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.start",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-12T21:42:35.629140Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.cdrom.attached",
+      "message": "customos-v9.9.8-00000000.iso",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-12T21:42:29.386076Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.setupImage.do",
+      "message": "share/100000/image/demo-demo-k8s-wrk-02.example.com-cidata.qcow2",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-12T21:42:20.513212Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.formatDisk.do",
+      "message": "vda",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-12T21:42:19.999153Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.cdrom.detached",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-12T21:42:16.230957Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.poweroff",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-12T21:36:06.675029Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.cdrom.detached",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-12T21:36:04.493638Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.poweroff",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-12T21:27:50.027574Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.start",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-12T21:27:35.087767Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.cdrom.attached",
+      "message": "customos-v9.9.8-00000000.iso",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-12T21:27:28.853496Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.setupImage.do",
+      "message": "share/100000/image/demo-demo-k8s-wrk-02.example.com-cidata.qcow2",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-12T21:27:23.489136Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.cdrom.detached",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-12T21:27:18.424146Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.poweroff",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-12T20:49:51.828624Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.start",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-12T20:49:38.981975Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.cdrom.attached",
+      "message": "customos-v9.9.8-00000000.iso",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-12T20:49:32.167893Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.setupImage.do",
+      "message": "share/100000/image/demo-demo-k8s-wrk-02.example.com-cidata.qcow2",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-12T20:49:19.905900Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.poweroff",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-12T20:43:16.130464Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.start",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-12T20:43:03.332052Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.cdrom.attached",
+      "message": "customos-v9.9.8-00000000.iso",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-12T20:42:56.693633Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.setupImage.do",
+      "message": "share/100000/image/demo-demo-k8s-wrk-02.example.com-cidata.qcow2",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-12T20:42:43.971318Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.poweroff",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-12T20:40:19.265777Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.poweroff",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-12T20:38:51.674203Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.start",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-12T20:38:41.065877Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.poweroff",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-12T20:29:10.239488Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.start",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-12T20:28:59.296787Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.cdrom.attached",
+      "message": "customos-v9.9.8-00000000.iso",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-12T20:28:55.381811Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.poweroff",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-12T20:17:46.312062Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.cdrom.attached",
+      "message": "customos-v9.9.8-00000000.iso",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-12T20:17:04.597890Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.poweroff",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-12T20:07:13.726212Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.changeEFIStubBoot.start",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-12T20:06:26.952480Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.poweroff",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-12T20:04:33.183204Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.poweroff",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-12T19:58:15.046702Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.poweroff",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-12T19:56:23.950349Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.poweroff",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-12T19:54:10.967399Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.poweroff",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-12T19:52:02.704795Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.changedNICDriver",
+      "message": "Changed nic driver to: virtio",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-12T19:52:02.685521Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.addedVXLANNIC",
+      "message": "Added network interface for VxLan 222001",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-12T19:51:59.308039Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.poweroff",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-12T19:22:31.238640Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.poweroff",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-11T17:12:08.907769Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.start",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-11T17:11:24.351701Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.removedVXLAN",
+      "message": "Removed network interface for VxLan 222001",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-04-11T17:10:58.193534Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.stop",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-01-29T09:32:10.865308Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.powercycle",
+      "message": "",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-01-29T09:30:49.547117Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.changedNICDriver",
+      "message": "Changed nic driver to: virtio",
+      "type": "INFO"
+    },
+    {
+      "date": "2026-01-29T09:30:49.527015Z",
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "logKey": "log.addedVXLANNIC",
+      "message": "Added network interface for VxLan 222001",
+      "type": "INFO"
+    }
+  ]
+}

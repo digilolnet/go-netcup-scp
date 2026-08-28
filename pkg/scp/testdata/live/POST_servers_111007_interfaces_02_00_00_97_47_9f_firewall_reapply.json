@@ -1,0 +1,45 @@
+{
+  "method": "POST",
+  "url": "https://www.servercontrolpanel.de/scp-core/api/v1/servers/111007/interfaces/02:00:00:97:47:9f/firewall:reapply",
+  "status": 202,
+  "contentType": "application/json",
+  "responseBody": {
+    "executingUser": {
+      "company": "Example Org",
+      "email": "user@example.com",
+      "firstname": "Max",
+      "id": 555001,
+      "lastname": "Mustermann",
+      "username": "100000"
+    },
+    "finishedAt": null,
+    "message": "Firewall configuration is running.",
+    "name": "ServerFirewallReapplyTask",
+    "startedAt": "2026-08-27T17:20:28.370609287Z",
+    "state": "PENDING",
+    "taskProgress": {
+      "expectedFinishedAt": "2026-08-27T17:20:28.370174511Z",
+      "progressInPercent": 0.0
+    },
+    "uuid": "00000000-0000-4000-8000-000000000204",
+    "responseError": null,
+    "result": {},
+    "serverActionId": null,
+    "steps": [
+      {
+        "finishedAt": null,
+        "name": "ServerFirewallConfigureStepUpdate",
+        "startedAt": null,
+        "state": "PENDING",
+        "uuid": "00000000-0000-4000-8000-000000000206"
+      },
+      {
+        "finishedAt": null,
+        "name": "ServerFirewallConfigureStepLog",
+        "startedAt": null,
+        "state": "PENDING",
+        "uuid": "00000000-0000-4000-8000-000000000121"
+      }
+    ]
+  }
+}

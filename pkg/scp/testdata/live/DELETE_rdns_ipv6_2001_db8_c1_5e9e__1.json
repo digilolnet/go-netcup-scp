@@ -1,0 +1,5 @@
+{
+  "method": "DELETE",
+  "url": "https://www.servercontrolpanel.de/scp-core/api/v1/rdns/ipv6/2001:db8:c1:5e9e::1",
+  "status": 204
+}

@@ -1,0 +1,15 @@
+{
+  "method": "POST",
+  "url": "https://www.servercontrolpanel.de/scp-core/api/v1/users/555001/firewall-policies",
+  "status": 201,
+  "contentType": "application/json",
+  "requestBody": {
+    "name": "audit-test-policy"
+  },
+  "responseBody": {
+    "description": null,
+    "id": 444001,
+    "name": "audit-test-policy",
+    "rules": []
+  }
+}

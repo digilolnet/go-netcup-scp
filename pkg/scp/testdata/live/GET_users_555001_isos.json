@@ -1,0 +1,28 @@
+{
+  "method": "GET",
+  "url": "https://www.servercontrolpanel.de/scp-core/api/v1/users/555001/isos",
+  "status": 200,
+  "contentType": "application/json",
+  "responseBody": [
+    {
+      "key": "boot-menu.iso",
+      "lastModified": "2026-08-25T13:06:03.467Z",
+      "sizeInB": 2424832
+    },
+    {
+      "key": "customos-v9.9.9-metal-amd64.iso",
+      "lastModified": "2026-08-26T19:39:41.328Z",
+      "sizeInB": 336932864
+    },
+    {
+      "key": "customos-v9.9.9-metal-nohalt.iso",
+      "lastModified": "2026-08-26T19:57:28.425Z",
+      "sizeInB": 336932864
+    },
+    {
+      "key": "customos-v9.9.9-metal-wipe.iso",
+      "lastModified": "2026-08-26T20:02:52.911Z",
+      "sizeInB": 336932864
+    }
+  ]
+}

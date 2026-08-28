@@ -1,0 +1,15 @@
+{
+  "method": "POST",
+  "url": "https://www.servercontrolpanel.de/scp-core/api/v1/servers/111007/snapshots",
+  "status": 400,
+  "contentType": "application/json",
+  "requestBody": {
+    "description": "",
+    "name": "audit-test",
+    "onlineSnapshot": true
+  },
+  "responseBody": {
+    "code": "server.snapshot.create.error.online.uefi",
+    "message": "Online snapshot creation is not possible if UEFI is activated."
+  }
+}

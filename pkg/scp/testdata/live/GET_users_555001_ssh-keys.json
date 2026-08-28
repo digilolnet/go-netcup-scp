@@ -1,0 +1,7 @@
+{
+  "method": "GET",
+  "url": "https://www.servercontrolpanel.de/scp-core/api/v1/users/555001/ssh-keys",
+  "status": 200,
+  "contentType": "application/json",
+  "responseBody": []
+}

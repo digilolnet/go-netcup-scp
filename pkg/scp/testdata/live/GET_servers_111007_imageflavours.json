@@ -1,0 +1,288 @@
+{
+  "method": "GET",
+  "url": "https://www.servercontrolpanel.de/scp-core/api/v1/servers/111007/imageflavours",
+  "status": 200,
+  "contentType": "application/json",
+  "responseBody": [
+    {
+      "alias": "Minimal",
+      "id": 123,
+      "name": "minimal",
+      "text": "Minimal installation",
+      "image": {
+        "id": 35,
+        "name": "AlmaLinux 10.2 UEFI amd64"
+      }
+    },
+    {
+      "alias": "Minimal",
+      "id": 52,
+      "name": "minimal",
+      "text": "minimal system with ssh preinstalled",
+      "image": {
+        "id": 20,
+        "name": "AlmaLinux 8.10 UEFI amd64"
+      }
+    },
+    {
+      "alias": "Minimal",
+      "id": 22,
+      "name": "minimal",
+      "text": "minimal system with ssh preinstalled",
+      "image": {
+        "id": 12,
+        "name": "AlmaLinux 9.6 BIOS amd64"
+      }
+    },
+    {
+      "alias": "Minimal",
+      "id": 126,
+      "name": "minimal",
+      "text": "Minimal installation",
+      "image": {
+        "id": 38,
+        "name": "AlmaLinux 9.8 UEFI amd64"
+      }
+    },
+    {
+      "alias": "Minimal",
+      "id": 12,
+      "name": "minimal",
+      "text": "minimal system with ssh preinstalled",
+      "image": {
+        "id": 9,
+        "name": "ArchLinux 2026.08.01 UEFI amd64"
+      }
+    },
+    {
+      "alias": "Minimal",
+      "id": 10,
+      "name": "minimal",
+      "text": "minimal system with ssh preinstalled",
+      "image": {
+        "id": 7,
+        "name": "Debian (11) Bullseye"
+      }
+    },
+    {
+      "alias": "Minimal",
+      "id": 111,
+      "name": "minimal",
+      "text": "minimal system with ssh preinstalled",
+      "image": {
+        "id": 29,
+        "name": "Debian 12.15.0 BIOS amd64"
+      }
+    },
+    {
+      "alias": "Minimal",
+      "id": 119,
+      "name": "minimal",
+      "text": "minimal system with ssh preinstalled",
+      "image": {
+        "id": 32,
+        "name": "Debian 13.6.0 BIOS amd64"
+      }
+    },
+    {
+      "alias": "Minimal",
+      "id": 128,
+      "name": "minimal",
+      "text": "Minimal image",
+      "image": {
+        "id": 39,
+        "name": "Debian 13.6.0 UEFI amd64"
+      }
+    },
+    {
+      "alias": "Minimal",
+      "id": 110,
+      "name": "minimal",
+      "text": "minimal system with ssh preinstalled",
+      "image": {
+        "id": 10,
+        "name": "FreeBSD 14.4 BIOS amd64"
+      }
+    },
+    {
+      "alias": "Minimal",
+      "id": 129,
+      "name": "minimal",
+      "text": "Minimal",
+      "image": {
+        "id": 40,
+        "name": "FreeBSD 14.4 UEFI amd64"
+      }
+    },
+    {
+      "alias": "Minimal",
+      "id": 136,
+      "name": "minimal",
+      "text": "minimal system with ssh preinstalled",
+      "image": {
+        "id": 44,
+        "name": "FreeBSD 15.1 BIOS amd64"
+      }
+    },
+    {
+      "alias": "Minimal",
+      "id": 135,
+      "name": "minimal",
+      "text": "minimal system with ssh preinstalled",
+      "image": {
+        "id": 45,
+        "name": "FreeBSD 15.1 UEFI amd64"
+      }
+    },
+    {
+      "alias": "Minimal",
+      "id": 83,
+      "name": "minimal",
+      "text": "minimal system with ssh preinstalled",
+      "image": {
+        "id": 26,
+        "name": "OpenSUSE 15.6 BIOS amd64"
+      }
+    },
+    {
+      "alias": "minimal",
+      "id": 127,
+      "name": "minimal",
+      "text": "Minimal",
+      "image": {
+        "id": 31,
+        "name": "OpenSUSE 15.6 UEFI amd64"
+      }
+    },
+    {
+      "alias": "Minimal",
+      "id": 121,
+      "name": "minimal",
+      "text": "Minimal installation",
+      "image": {
+        "id": 17,
+        "name": "RockyLinux 10.2 UEFI amd64"
+      }
+    },
+    {
+      "alias": "Minimal",
+      "id": 80,
+      "name": "minimal",
+      "text": "minimal system with ssh preinstalled",
+      "image": {
+        "id": 25,
+        "name": "RockyLinux 8.10 UEFI amd64"
+      }
+    },
+    {
+      "alias": "Minimal",
+      "id": 21,
+      "name": "minimal",
+      "text": "minimal system with ssh preinstalled",
+      "image": {
+        "id": 11,
+        "name": "RockyLinux 9.6 BIOS amd64"
+      }
+    },
+    {
+      "alias": "Minimal",
+      "id": 125,
+      "name": "minimal",
+      "text": "Minimal installation",
+      "image": {
+        "id": 37,
+        "name": "RockyLinux 9.8 UEFI amd64"
+      }
+    },
+    {
+      "alias": "minimal",
+      "id": 131,
+      "name": "minimal",
+      "text": "Minimal",
+      "image": {
+        "id": 41,
+        "name": "Ubuntu 22.04.5 BIOS amd64"
+      }
+    },
+    {
+      "alias": "Minimal",
+      "id": 11,
+      "name": "minimal",
+      "text": "minimal system with ssh preinstalled",
+      "image": {
+        "id": 8,
+        "name": "Ubuntu 22.04.5 UEFI amd64"
+      }
+    },
+    {
+      "alias": "Minimal",
+      "id": 100,
+      "name": "minimal",
+      "text": "minimal system with ssh preinstalled",
+      "image": {
+        "id": 18,
+        "name": "Ubuntu 24.04.4 BIOS amd64"
+      }
+    },
+    {
+      "alias": "Minimal",
+      "id": 116,
+      "name": "minimal",
+      "text": "Minimal image",
+      "image": {
+        "id": 24,
+        "name": "Ubuntu 24.04.4 UEFI amd64"
+      }
+    },
+    {
+      "alias": "Minimal",
+      "id": 141,
+      "name": "minimal",
+      "text": "Minimal installation",
+      "image": {
+        "id": 3,
+        "name": "Ubuntu 26.04 BIOS amd64"
+      }
+    },
+    {
+      "alias": "Minimal",
+      "id": 142,
+      "name": "minimal",
+      "text": "Minimal installation",
+      "image": {
+        "id": 48,
+        "name": "Ubuntu 26.04 UEFI amd64"
+      }
+    },
+    {
+      "alias": "Minimal",
+      "id": 117,
+      "name": "minimal",
+      "text": "Minimal installation",
+      "image": {
+        "id": 14,
+        "name": "Ubuntu cloudimg 24.04.4 UEFI amd64"
+      }
+    },
+    {
+      "alias": "Minimal",
+      "id": 144,
+      "name": "minimal",
+      "text": "Minimal installation",
+      "image": {
+        "id": 50,
+        "name": "Ubuntu cloudimg 26.04 UEFI amd64"
+      }
+    },
+    {
+      "alias": "Minimal",
+      "id": 137,
+      "name": "minimal",
+      "text": "Minimal installation",
+      "image": {
+        "id": 47,
+        "name": "Ubuntu openclaw 24.04.4 UEFI amd64"
+      }
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "method": "GET",
+  "url": "https://www.servercontrolpanel.de/scp-core/api/v1/users/555001/vlans",
+  "status": 200,
+  "contentType": "application/json",
+  "responseBody": [
+    {
+      "bandwidthClass": {
+        "id": 5,
+        "name": "2500Mbit",
+        "speedInMBit": 2500
+      },
+      "name": "lan-2500-1",
+      "site": {
+        "city": "Nuremberg",
+        "id": 1
+      },
+      "user": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "vlanId": 222001
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+{
+ "method": "PUT",
+ "status": 204,
+ "url": "https://www.servercontrolpanel.de/scp-core/api/v1/tasks/00000000-0000-4000-8000-000000000092:cancel"
+}

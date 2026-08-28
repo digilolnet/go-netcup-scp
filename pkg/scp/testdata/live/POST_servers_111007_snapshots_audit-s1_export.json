@@ -1,0 +1,10 @@
+{
+  "method": "POST",
+  "url": "https://www.servercontrolpanel.de/scp-core/api/v1/servers/111007/snapshots/audit-s1/export",
+  "status": 400,
+  "contentType": "application/json",
+  "responseBody": {
+    "code": "server.snapshot.export.wrongstate",
+    "message": "Only snapshots of state 'SHUTOFF' can be exported."
+  }
+}

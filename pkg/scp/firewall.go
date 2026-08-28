@@ -137,16 +137,16 @@ func (c *Client) ClearFirewall(
 	mac string,
 	restoreCopied bool,
 ) ([]*TaskInfo, error) {
-	var hasCopied bool
-	if restoreCopied {
-		fw, err := c.GetFirewall(ctx, serverID, mac, nil)
-		if err != nil {
-			return nil, fmt.Errorf("clear firewall: %w", err)
-		}
-		hasCopied = fw.CopiedPolicies != nil && len(*fw.CopiedPolicies) > 0
+	// The API treats an omitted Active as "activate" — a clear must not
+	// silently switch on a disabled firewall, so preserve the current flag.
+	fw, err := c.GetFirewall(ctx, serverID, mac, nil)
+	if err != nil {
+		return nil, fmt.Errorf("clear firewall: %w", err)
 	}
+	hasCopied := fw.CopiedPolicies != nil && len(*fw.CopiedPolicies) > 0
 
 	task, err := c.UpdateFirewall(ctx, serverID, mac, ServerFirewallSave{
+		Active:         fw.Active,
 		UserPolicies:   []IdentifierInt{},
 		CopiedPolicies: []IdentifierInt{},
 	})

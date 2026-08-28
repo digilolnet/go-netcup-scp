@@ -17,10 +17,14 @@ package scp
 import (
 	"context"
 	"encoding/json"
+	"io"
 	"net/http"
 	"os"
 	"path/filepath"
+	"regexp"
+	"strings"
 	"testing"
+	"time"
 
 	"github.com/digilolnet/go-netcup-scp/internal/generated"
 )
@@ -217,6 +221,20 @@ func TestLiveFixtures(t *testing.T) {
 			call:    func(c *Client) (any, error) { return c.ListTasks(ctx, nil) },
 		},
 		{
+			// Cancelling an already-finished task: live 204 no-op, nil TaskInfo.
+			// Recorded after the Content-Type fix — before it, every cancel
+			// died with 400 "The HTTP header Content-Type must be 'type/subtype'".
+			fixture: "PUT_tasks_cancel_finished.json",
+			call: func(c *Client) (any, error) {
+				return c.CancelTask(ctx, "00000000-0000-4000-8000-000000000092")
+			},
+			check: func(t *testing.T, got any) {
+				if got.(*TaskInfo) != nil {
+					t.Error("204 no-op cancel should return nil TaskInfo")
+				}
+			},
+		},
+		{
 			fixture: "GET_users_555001.json",
 			call:    func(c *Client) (any, error) { return c.GetUser(ctx, 555001) },
 			check: func(t *testing.T, got any) {
@@ -390,6 +408,125 @@ func TestLiveFixtures(t *testing.T) {
 				tc.check(t, got)
 			}
 		})
+	}
+}
+
+// TestClearFirewallFlow_LiveFixtures replays the full recorded
+// clear-and-restore exchange: GET current config, PUT the wipe (task
+// PENDING), poll the task through RUNNING to FINISHED, then POST
+// restore-copied-policies. It pins the two behaviors live testing caught:
+// the restore must wait out the clear task's write lock (the API 409s
+// otherwise), and the wipe body must carry the interface's current active
+// flag — the API treats an omitted "active" as "activate".
+func TestClearFirewallFlow_LiveFixtures(t *testing.T) {
+	oldPoll := taskDonePollInterval
+	taskDonePollInterval = time.Millisecond
+	defer func() { taskDonePollInterval = oldPoll }()
+
+	const fwPath = "/api/v1/servers/111007/interfaces/02:00:00:97:47:9f/firewall"
+	var clearBody []byte
+	taskPolls := 0
+	restores := 0
+
+	mux := http.NewServeMux()
+	mux.HandleFunc("GET "+fwPath, fixtureHandler(t, "GET_servers_111007_interfaces_02_00_00_97_47_9f_firewall_pre-clear.json"))
+	mux.HandleFunc("PUT "+fwPath, func(w http.ResponseWriter, r *http.Request) {
+		clearBody, _ = io.ReadAll(r.Body)
+		fixtureHandler(t, "PUT_servers_111007_interfaces_02_00_00_97_47_9f_firewall_clear.json")(w, r)
+	})
+	mux.HandleFunc("GET /api/v1/tasks/", func(w http.ResponseWriter, r *http.Request) {
+		taskPolls++
+		name := "GET_tasks_firewall-clear_finished.json"
+		if taskPolls == 1 {
+			name = "GET_tasks_firewall-clear_running.json"
+		}
+		fixtureHandler(t, name)(w, r)
+	})
+	mux.HandleFunc("POST "+fwPath+":restore-copied-policies", func(w http.ResponseWriter, r *http.Request) {
+		restores++
+		if taskPolls < 2 {
+			t.Error("restore fired before the clear task reported FINISHED")
+		}
+		fixtureHandler(t, "POST_servers_111007_interfaces_02_00_00_97_47_9f_firewall_restore-copied-policies.json")(w, r)
+	})
+
+	client, cleanup := newTestClient(t, mux.ServeHTTP)
+	defer cleanup()
+
+	tasks, err := client.ClearFirewall(context.Background(), 111007, "02:00:00:97:47:9f", true)
+	if err != nil {
+		t.Fatalf("ClearFirewall() error = %v", err)
+	}
+	if len(tasks) != 2 {
+		t.Errorf("want 2 tasks (clear + restore), got %d", len(tasks))
+	}
+	if restores != 1 {
+		t.Errorf("restore called %d times, want 1", restores)
+	}
+	// The recorded pre-clear config has the firewall disabled; the wipe body
+	// must say so explicitly or netcup switches it on.
+	if !strings.Contains(string(clearBody), `"active":false`) {
+		t.Errorf("clear body must preserve active=false, got: %s", clearBody)
+	}
+}
+
+// TestFixturesSanitized scans every recorded fixture for secrets that the
+// sanitization pass must have replaced: passwords, presigned-URL signatures,
+// bearer tokens, and any email other than the standard fake. It exists
+// because a real rootPassword once slipped through into a public commit.
+func TestFixturesSanitized(t *testing.T) {
+	leakPatterns := []*regexp.Regexp{
+		// Any *password*/*secret*-ish field whose value is not the fake.
+		regexp.MustCompile(`(?i)"[a-z]*(password|secret|passphrase)[a-z]*"\s*:\s*"(?:[^R"]|R[^E])`),
+		// Presigned-URL credentials must be REDACTED.
+		regexp.MustCompile(`X-Amz-(Signature|Credential)=(?:[^R&"\\]|R[^E])`),
+		regexp.MustCompile(`(?i)(bearer |"authorization")`),
+		// JWTs.
+		regexp.MustCompile(`eyJ[A-Za-z0-9_-]{10,}\.`),
+		// EUI-64 link-locals with a real OUI (four interface-id groups) leak
+		// the original MAC; fabricated 02:00:00 MACs yield fe80::ff:feXX:YYZZ.
+		regexp.MustCompile(`fe80::[0-9a-f]{1,4}:[0-9a-f]{1,4}ff:fe`),
+	}
+	emailRe := regexp.MustCompile(`[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[a-z]{2,}`)
+
+	// Environment-specific identifiers that must never appear in fixtures
+	// (real hostnames, address ranges, account/server ids from the machine
+	// that records them). The list itself must not be public, so it lives in
+	// an untracked local file; without it only the generic checks run.
+	var forbidden []string
+	if raw, err := os.ReadFile(filepath.Join("testdata", "banned-identifiers.txt")); err == nil {
+		for _, line := range strings.Split(string(raw), "\n") {
+			if line = strings.TrimSpace(line); line != "" && !strings.HasPrefix(line, "#") {
+				forbidden = append(forbidden, strings.ToLower(line))
+			}
+		}
+	}
+
+	files, err := filepath.Glob(filepath.Join("testdata", "live", "*.json"))
+	if err != nil || len(files) == 0 {
+		t.Fatalf("glob fixtures: %v (%d files)", err, len(files))
+	}
+	for _, f := range files {
+		data, err := os.ReadFile(f)
+		if err != nil {
+			t.Fatal(err)
+		}
+		for _, re := range leakPatterns {
+			if m := re.Find(data); m != nil {
+				t.Errorf("%s: possible unsanitized secret: %q", filepath.Base(f), m)
+			}
+		}
+		for _, m := range emailRe.FindAll(data, -1) {
+			if string(m) != "user@example.com" {
+				t.Errorf("%s: unsanitized email %q", filepath.Base(f), m)
+			}
+		}
+		lower := strings.ToLower(string(data) + filepath.Base(f))
+		for _, s := range forbidden {
+			if strings.Contains(lower, s) {
+				t.Errorf("%s: contains real identifier %q", filepath.Base(f), s)
+			}
+		}
 	}
 }
 

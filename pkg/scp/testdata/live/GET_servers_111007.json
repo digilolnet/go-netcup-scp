@@ -1,0 +1,115 @@
+{
+  "method": "GET",
+  "url": "https://www.servercontrolpanel.de/scp-core/api/v1/servers/111007",
+  "status": 200,
+  "contentType": "application/json",
+  "responseBody": {
+    "id": 111007,
+    "name": "v0000000000000000007",
+    "disabled": false,
+    "hostname": "v0000000000000000007.supersrv.de",
+    "nickname": "demo-k8s-wrk-02",
+    "template": {
+      "id": 1358,
+      "name": "RS 2000 G12 Pro"
+    },
+    "architecture": "AMD64",
+    "disksAvailableSpaceInMiB": 7340032,
+    "gpuDriverAvailable": false,
+    "ipv4Addresses": [
+      {
+        "broadcast": "198.18.31.255",
+        "gateway": "198.18.28.1",
+        "id": 666006,
+        "ip": "198.18.28.137",
+        "netmask": "255.255.252.0"
+      }
+    ],
+    "ipv6Addresses": [
+      {
+        "gateway": "fe80::1",
+        "id": 666016,
+        "networkPrefix": "2001:db8:c1:5e9e::",
+        "networkPrefixLength": 64
+      }
+    ],
+    "maxCpuCount": 8,
+    "rescueSystemActive": false,
+    "serverLiveInfo": {
+      "autostart": true,
+      "bootorder": [
+        "HDD",
+        "NETWORK",
+        "CDROM"
+      ],
+      "cloudinitAttached": false,
+      "configChanged": true,
+      "coresPerSocket": 1,
+      "cpuCount": 8,
+      "cpuMaxCount": 8,
+      "currentServerMemoryInMiB": 16384,
+      "disks": [
+        {
+          "allocationInMiB": 1557,
+          "capacityInMiB": 1048576,
+          "dev": "vda",
+          "driver": "virtio"
+        }
+      ],
+      "interfaces": [
+        {
+          "driver": "virtio",
+          "ipv4Addresses": [
+            "198.18.28.137"
+          ],
+          "ipv6LinkLocalAddresses": [
+            "fe80::ff:fe97:479f"
+          ],
+          "ipv6NetworkPrefixes": [
+            "2001:db8:c1:5e9e::/64"
+          ],
+          "mac": "02:00:00:97:47:9f",
+          "mtu": 1500,
+          "rxMonthlyInMiB": 497,
+          "speedInMBits": 2500,
+          "trafficThrottled": false,
+          "txMonthlyInMiB": 18,
+          "vlanId": null,
+          "vlanInterface": false
+        },
+        {
+          "driver": "virtio",
+          "ipv4Addresses": [],
+          "ipv6LinkLocalAddresses": [],
+          "ipv6NetworkPrefixes": [],
+          "mac": "02:00:00:97:47:a0",
+          "mtu": 0,
+          "rxMonthlyInMiB": 16,
+          "speedInMBits": 2500,
+          "trafficThrottled": false,
+          "txMonthlyInMiB": 14,
+          "vlanId": 222001,
+          "vlanInterface": true
+        }
+      ],
+      "keyboardLayout": "en-us",
+      "latestQemu": true,
+      "machineType": "pc-i440fx-9.2",
+      "maxServerMemoryInMiB": 16384,
+      "nestedGuest": false,
+      "osOptimization": "LINUX",
+      "requiredStorageOptimization": "NO",
+      "sockets": 8,
+      "state": "RUNNING",
+      "template": "RS 2000 G12 Pro",
+      "uefi": true,
+      "uptimeInSeconds": 68763
+    },
+    "site": {
+      "city": "Nuremberg",
+      "id": 1
+    },
+    "snapshotAllowed": true,
+    "snapshotCount": 1
+  }
+}

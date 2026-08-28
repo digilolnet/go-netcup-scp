@@ -1,0 +1,10 @@
+{
+  "method": "GET",
+  "url": "https://www.servercontrolpanel.de/scp-core/api/v1/users/555001/images/audit-dummy.img",
+  "status": 404,
+  "contentType": "application/json",
+  "responseBody": {
+    "code": "error.notfound",
+    "message": "Resource not found"
+  }
+}

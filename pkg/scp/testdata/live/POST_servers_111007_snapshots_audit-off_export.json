@@ -1,0 +1,59 @@
+{
+  "method": "POST",
+  "url": "https://www.servercontrolpanel.de/scp-core/api/v1/servers/111007/snapshots/audit-off/export",
+  "status": 202,
+  "contentType": "application/json",
+  "responseBody": {
+    "executingUser": {
+      "company": "Example Org",
+      "email": "user@example.com",
+      "firstname": "Max",
+      "id": 555001,
+      "lastname": "Mustermann",
+      "username": "100000"
+    },
+    "finishedAt": null,
+    "message": "Snapshot export is running.",
+    "name": "ServerSnapshotExportTask",
+    "startedAt": "2026-08-27T16:48:30.880590033Z",
+    "state": "PENDING",
+    "taskProgress": {
+      "expectedFinishedAt": "2026-08-27T16:56:43.879845861Z",
+      "progressInPercent": 0.0
+    },
+    "uuid": "00000000-0000-4000-8000-000000000076",
+    "responseError": null,
+    "result": {},
+    "serverActionId": null,
+    "steps": [
+      {
+        "finishedAt": null,
+        "name": "ServerSnapshotExportTaskStepExport",
+        "startedAt": null,
+        "state": "PENDING",
+        "uuid": "00000000-0000-4000-8000-000000000142"
+      },
+      {
+        "finishedAt": null,
+        "name": "ServerSnapshotExportTaskStepExportWait",
+        "startedAt": null,
+        "state": "PENDING",
+        "uuid": "00000000-0000-4000-8000-000000000163"
+      },
+      {
+        "finishedAt": null,
+        "name": "ServerSnapshotExportTaskStepSendMail",
+        "startedAt": null,
+        "state": "PENDING",
+        "uuid": "00000000-0000-4000-8000-000000000147"
+      },
+      {
+        "finishedAt": null,
+        "name": "ServerSnapshotExportTaskStepLog",
+        "startedAt": null,
+        "state": "PENDING",
+        "uuid": "00000000-0000-4000-8000-000000000078"
+      }
+    ]
+  }
+}

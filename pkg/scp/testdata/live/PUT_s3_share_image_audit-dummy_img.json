@@ -1,0 +1,8 @@
+{
+  "method": "PUT",
+  "url": "https://s3.example.com/bucket-0000000000/share/100000/image/audit-dummy.img?X-Amz-Algorithm=AWS4-HMAC-SHA256\u0026X-Amz-Date=20260827T155133Z\u0026X-Amz-SignedHeaders=host\u0026X-Amz-Credential=REDACTED\u0026X-Amz-Expires=86400\u0026X-Amz-Signature=REDACTED",
+  "status": 501,
+  "contentType": "application/xml",
+  "requestBody": "audit-dummy-image-data",
+  "responseBody": "\u003c?xml version=\"1.0\" encoding=\"UTF-8\"?\u003e\n\u003cError\u003e\u003cCode\u003eNotImplemented\u003c/Code\u003e\u003cMessage\u003eA header you provided implies functionality that is not implemented\u003c/Message\u003e\u003cResource\u003e/bucket-0000000000/share/100000/image/audit-dummy.img?X-Amz-Algorithm=AWS4-HMAC-SHA256\u0026amp;X-Amz-Date=20260827T155133Z\u0026amp;X-Amz-SignedHeaders=host\u0026amp;X-Amz-Credential=REDACTED\u0026amp;X-Amz-Expires=86400\u0026amp;X-Amz-Signature=REDACTED\u003c/Resource\u003e\u003cRequestId\u003e1787845893051352\u003c/RequestId\u003e\u003cHeader\u003eTransfer-Encoding\u003c/Header\u003e\u003c/Error\u003e"
+}

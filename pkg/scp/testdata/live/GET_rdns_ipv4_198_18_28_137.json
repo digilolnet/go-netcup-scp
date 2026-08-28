@@ -1,0 +1,9 @@
+{
+  "method": "GET",
+  "url": "https://www.servercontrolpanel.de/scp-core/api/v1/rdns/ipv4/198.18.28.137",
+  "status": 200,
+  "contentType": "application/json",
+  "responseBody": {
+    "rdns": "demo-k8s-wrk-02.example.com"
+  }
+}

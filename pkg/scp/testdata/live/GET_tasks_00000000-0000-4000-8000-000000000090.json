@@ -1,0 +1,52 @@
+{
+  "method": "GET",
+  "url": "https://www.servercontrolpanel.de/scp-core/api/v1/tasks/00000000-0000-4000-8000-000000000090",
+  "status": 200,
+  "contentType": "application/json",
+  "responseBody": {
+    "executingUser": {
+      "company": "Example Org",
+      "email": "user@example.com",
+      "firstname": "Max",
+      "id": 555001,
+      "lastname": "Mustermann",
+      "username": "100000"
+    },
+    "finishedAt": "2026-08-27T15:53:24.333273Z",
+    "message": null,
+    "name": "ServerStateChangeTask",
+    "startedAt": "2026-08-27T15:53:17.800331Z",
+    "state": "FINISHED",
+    "taskProgress": {
+      "expectedFinishedAt": "2026-08-27T15:53:24.333273Z",
+      "progressInPercent": 100.0
+    },
+    "uuid": "00000000-0000-4000-8000-000000000090",
+    "responseError": null,
+    "result": {},
+    "serverActionId": null,
+    "steps": [
+      {
+        "finishedAt": "2026-08-27T15:53:17.856685Z",
+        "name": "ServerStateChangeStartTaskStep",
+        "startedAt": "2026-08-27T15:53:17.821593Z",
+        "state": "FINISHED",
+        "uuid": "00000000-0000-4000-8000-000000000220"
+      },
+      {
+        "finishedAt": "2026-08-27T15:53:24.308724Z",
+        "name": "ServerStateChangeStartTaskStepWait",
+        "startedAt": "2026-08-27T15:53:17.873453Z",
+        "state": "FINISHED",
+        "uuid": "00000000-0000-4000-8000-000000000123"
+      },
+      {
+        "finishedAt": "2026-08-27T15:53:24.330520Z",
+        "name": "ServerStateChangeWriteServerLog",
+        "startedAt": "2026-08-27T15:53:24.324139Z",
+        "state": "FINISHED",
+        "uuid": "00000000-0000-4000-8000-000000000021"
+      }
+    ]
+  }
+}

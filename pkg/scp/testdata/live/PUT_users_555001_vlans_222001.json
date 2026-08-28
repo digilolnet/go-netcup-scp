@@ -1,0 +1,8 @@
+{
+  "method": "PUT",
+  "url": "https://www.servercontrolpanel.de/scp-core/api/v1/users/555001/vlans/222001",
+  "status": 204,
+  "requestBody": {
+    "name": "lan-2500-1"
+  }
+}

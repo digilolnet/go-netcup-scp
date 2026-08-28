@@ -1,0 +1,99 @@
+{
+  "method": "GET",
+  "url": "https://www.servercontrolpanel.de/scp-core/api/v1/servers/111007/interfaces/02:00:00:97:47:9f/firewall",
+  "status": 200,
+  "contentType": "application/json",
+  "responseBody": {
+    "active": true,
+    "consistent": null,
+    "copiedPolicies": [
+      {
+        "description": "blocks outgoing SMTP (Mail) traffic",
+        "id": 666001,
+        "name": "netcup Mail block",
+        "rules": [
+          {
+            "action": "DROP",
+            "description": "drop outgoing SMTP",
+            "destinationPorts": "25",
+            "destinations": [],
+            "direction": "EGRESS",
+            "protocol": "TCP",
+            "sourcePorts": null,
+            "sources": []
+          },
+          {
+            "action": "DROP",
+            "description": "drop outgoing SMTPS",
+            "destinationPorts": "465",
+            "destinations": [],
+            "direction": "EGRESS",
+            "protocol": "TCP",
+            "sourcePorts": null,
+            "sources": []
+          },
+          {
+            "action": "DROP",
+            "description": "drop outgoing submission",
+            "destinationPorts": "587",
+            "destinations": [],
+            "direction": "EGRESS",
+            "protocol": "TCP",
+            "sourcePorts": null,
+            "sources": []
+          }
+        ]
+      },
+      {
+        "description": "allow ICMP (ping) on IPv4 and IPv6",
+        "id": 666002,
+        "name": "netcup Ping allow",
+        "rules": [
+          {
+            "action": "ACCEPT",
+            "description": "allow incoming ping",
+            "destinationPorts": null,
+            "destinations": [],
+            "direction": "INGRESS",
+            "protocol": "ICMP",
+            "sourcePorts": null,
+            "sources": []
+          },
+          {
+            "action": "ACCEPT",
+            "description": "allow incoming ping6",
+            "destinationPorts": null,
+            "destinations": [],
+            "direction": "INGRESS",
+            "protocol": "ICMPv6",
+            "sourcePorts": null,
+            "sources": []
+          },
+          {
+            "action": "ACCEPT",
+            "description": "allow outgoing ping",
+            "destinationPorts": null,
+            "destinations": [],
+            "direction": "EGRESS",
+            "protocol": "ICMP",
+            "sourcePorts": null,
+            "sources": []
+          },
+          {
+            "action": "ACCEPT",
+            "description": "allow outgoing ping6",
+            "destinationPorts": null,
+            "destinations": [],
+            "direction": "EGRESS",
+            "protocol": "ICMPv6",
+            "sourcePorts": null,
+            "sources": []
+          }
+        ]
+      }
+    ],
+    "egressImplicitRule": "ACCEPT_ALL",
+    "ingressImplicitRule": "ACCEPT_ALL",
+    "userPolicies": []
+  }
+}

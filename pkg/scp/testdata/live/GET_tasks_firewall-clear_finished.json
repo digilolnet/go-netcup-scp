@@ -1,0 +1,45 @@
+{
+ "contentType": "application/json",
+ "method": "GET",
+ "responseBody": {
+  "executingUser": {
+   "company": "Example Org",
+   "email": "user@example.com",
+   "firstname": "Max",
+   "id": 555001,
+   "lastname": "Mustermann",
+   "username": "100000"
+  },
+  "finishedAt": "2026-08-28T20:55:46.554834Z",
+  "message": null,
+  "name": "ServerFirewallConfigureTask",
+  "responseError": null,
+  "result": {},
+  "serverActionId": null,
+  "startedAt": "2026-08-28T20:55:46.364958Z",
+  "state": "FINISHED",
+  "steps": [
+   {
+    "finishedAt": "2026-08-28T20:55:46.527291Z",
+    "name": "ServerFirewallConfigureStepUpdate",
+    "startedAt": "2026-08-28T20:55:46.385595Z",
+    "state": "FINISHED",
+    "uuid": "00000000-0000-4000-8000-000000000150"
+   },
+   {
+    "finishedAt": "2026-08-28T20:55:46.551423Z",
+    "name": "ServerFirewallConfigureStepLog",
+    "startedAt": "2026-08-28T20:55:46.545377Z",
+    "state": "FINISHED",
+    "uuid": "00000000-0000-4000-8000-000000000223"
+   }
+  ],
+  "taskProgress": {
+   "expectedFinishedAt": "2026-08-28T20:55:46.554834Z",
+   "progressInPercent": 100.0
+  },
+  "uuid": "00000000-0000-4000-8000-000000000045"
+ },
+ "status": 200,
+ "url": "https://www.servercontrolpanel.de/scp-core/api/v1/tasks/00000000-0000-4000-8000-000000000045"
+}

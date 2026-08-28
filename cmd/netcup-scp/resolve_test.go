@@ -67,7 +67,7 @@ func TestServerRefCodec(t *testing.T) {
 			t.Errorf("roundtrip %+v = %+v (ok=%v)", r, got, ok)
 		}
 	}
-	if _, ok := decodeServerRef("111007\tdemo-c1 (v9001)"); ok {
+	if _, ok := decodeServerRef("111007\tweb-prod (v9001)"); ok {
 		t.Error("legacy two-field cache entry must not decode")
 	}
 	if _, ok := decodeServerRef("notanid\ta\tb\tc"); ok {

@@ -1,0 +1,5 @@
+{
+  "method": "DELETE",
+  "url": "https://www.servercontrolpanel.de/scp-core/api/v1/servers/111007/iso",
+  "status": 204
+}

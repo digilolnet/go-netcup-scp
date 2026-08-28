@@ -1,0 +1,30 @@
+{
+  "method": "GET",
+  "url": "https://www.servercontrolpanel.de/scp-core/api/v1/users/555001/failoverips/v4",
+  "status": 200,
+  "contentType": "application/json",
+  "responseBody": [
+    {
+      "cidrSuffix": 32,
+      "editable": true,
+      "id": 333001,
+      "ip": "198.18.88.63",
+      "server": {
+        "id": 111003,
+        "name": "v0000000000000000003"
+      },
+      "site": {
+        "city": "Nuremberg",
+        "id": 1
+      },
+      "user": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      }
+    }
+  ]
+}

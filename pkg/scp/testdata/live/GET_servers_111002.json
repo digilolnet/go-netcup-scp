@@ -1,0 +1,101 @@
+{
+  "method": "GET",
+  "url": "https://www.servercontrolpanel.de/scp-core/api/v1/servers/111002",
+  "status": 200,
+  "contentType": "application/json",
+  "responseBody": {
+    "id": 111002,
+    "name": "v0000000000000000002",
+    "disabled": false,
+    "hostname": "v0000000000000000002.megasrv.de",
+    "nickname": "pentest-box",
+    "template": {
+      "id": 1159,
+      "name": "RS 1000 G11"
+    },
+    "architecture": "AMD64",
+    "disksAvailableSpaceInMiB": 8126464,
+    "gpuDriverAvailable": false,
+    "ipv4Addresses": [
+      {
+        "broadcast": "100.64.47.255",
+        "gateway": null,
+        "id": 666004,
+        "ip": "100.64.46.230",
+        "netmask": "255.255.252.0"
+      }
+    ],
+    "ipv6Addresses": [
+      {
+        "gateway": "fe80::1",
+        "id": 666012,
+        "networkPrefix": "2001:db8:a:67:a4a::",
+        "networkPrefixLength": 64
+      }
+    ],
+    "maxCpuCount": 4,
+    "rescueSystemActive": false,
+    "serverLiveInfo": {
+      "autostart": true,
+      "bootorder": [
+        "HDD",
+        "NETWORK",
+        "CDROM"
+      ],
+      "cloudinitAttached": false,
+      "configChanged": false,
+      "coresPerSocket": 1,
+      "cpuCount": 4,
+      "cpuMaxCount": 4,
+      "currentServerMemoryInMiB": 8192,
+      "disks": [
+        {
+          "allocationInMiB": 33803,
+          "capacityInMiB": 262144,
+          "dev": "vda",
+          "driver": "virtio"
+        }
+      ],
+      "interfaces": [
+        {
+          "driver": "virtio",
+          "ipv4Addresses": [
+            "100.64.46.230"
+          ],
+          "ipv6LinkLocalAddresses": [
+            "fe80::ff:fe2c:d3ad"
+          ],
+          "ipv6NetworkPrefixes": [
+            "2001:db8:a:67:a4a::/64"
+          ],
+          "mac": "02:00:00:2c:d3:ad",
+          "mtu": 1500,
+          "rxMonthlyInMiB": 198,
+          "speedInMBits": 2500,
+          "trafficThrottled": false,
+          "txMonthlyInMiB": 96,
+          "vlanId": null,
+          "vlanInterface": false
+        }
+      ],
+      "keyboardLayout": "en-us",
+      "latestQemu": true,
+      "machineType": "pc-i440fx-9.2",
+      "maxServerMemoryInMiB": 8192,
+      "nestedGuest": false,
+      "osOptimization": "LINUX",
+      "requiredStorageOptimization": "NO",
+      "sockets": 4,
+      "state": "RUNNING",
+      "template": "RS 1000 G11",
+      "uefi": true,
+      "uptimeInSeconds": 17840984
+    },
+    "site": {
+      "city": "Nuremberg",
+      "id": 1
+    },
+    "snapshotAllowed": true,
+    "snapshotCount": 1
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "method": "GET",
+  "url": "https://www.servercontrolpanel.de/scp-core/api/v1/users/555001/images",
+  "status": 200,
+  "contentType": "application/json",
+  "responseBody": []
+}

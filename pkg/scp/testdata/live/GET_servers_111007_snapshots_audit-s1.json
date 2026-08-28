@@ -1,0 +1,20 @@
+{
+  "method": "GET",
+  "url": "https://www.servercontrolpanel.de/scp-core/api/v1/servers/111007/snapshots/audit-s1",
+  "status": 200,
+  "contentType": "application/json",
+  "responseBody": {
+    "creationTime": "2026-08-27T16:47:27Z",
+    "description": "",
+    "disks": [
+      "vda"
+    ],
+    "exported": false,
+    "exportedSizeInKiB": null,
+    "name": "audit-s1",
+    "online": true,
+    "state": "RUNNING",
+    "uuid": "00000000-0000-4000-8000-000000000105",
+    "downloadInfos": null
+  }
+}

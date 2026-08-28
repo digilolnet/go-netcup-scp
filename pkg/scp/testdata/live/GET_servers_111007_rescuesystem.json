@@ -1,0 +1,10 @@
+{
+  "method": "GET",
+  "url": "https://www.servercontrolpanel.de/scp-core/api/v1/servers/111007/rescuesystem",
+  "status": 200,
+  "contentType": "application/json",
+  "responseBody": {
+    "active": true,
+    "password": "REDACTED-PASSWORD"
+  }
+}

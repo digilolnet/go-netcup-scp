@@ -1,0 +1,76 @@
+{
+  "method": "POST",
+  "url": "https://www.servercontrolpanel.de/scp-core/api/v1/servers/111007/user-image",
+  "status": 202,
+  "contentType": "application/json",
+  "requestBody": {
+    "userImageName": "20260827184829_v0000000000000000007_vda_audit-off.raw"
+  },
+  "responseBody": {
+    "executingUser": {
+      "company": "Example Org",
+      "email": "user@example.com",
+      "firstname": "Max",
+      "id": 555001,
+      "lastname": "Mustermann",
+      "username": "100000"
+    },
+    "finishedAt": null,
+    "message": "Custom image installation is running.",
+    "name": "ServerUserImageSetupTask",
+    "startedAt": "2026-08-27T17:01:59.094957063Z",
+    "state": "PENDING",
+    "taskProgress": {
+      "expectedFinishedAt": "2026-08-27T17:03:04.094394225Z",
+      "progressInPercent": 0.0
+    },
+    "uuid": "00000000-0000-4000-8000-000000000047",
+    "responseError": null,
+    "result": {},
+    "serverActionId": null,
+    "steps": [
+      {
+        "finishedAt": null,
+        "name": "ServerUserImageSetupTaskStepResetBootorder",
+        "startedAt": null,
+        "state": "PENDING",
+        "uuid": "00000000-0000-4000-8000-000000000187"
+      },
+      {
+        "finishedAt": null,
+        "name": "ServerUserImageSetupTaskStepPoweroff",
+        "startedAt": null,
+        "state": "PENDING",
+        "uuid": "00000000-0000-4000-8000-000000000224"
+      },
+      {
+        "finishedAt": null,
+        "name": "ServerUserImageSetupTaskStepPoweroffWait",
+        "startedAt": null,
+        "state": "PENDING",
+        "uuid": "00000000-0000-4000-8000-000000000183"
+      },
+      {
+        "finishedAt": null,
+        "name": "ServerUserImageSetupTaskStepSetupUserImage",
+        "startedAt": null,
+        "state": "PENDING",
+        "uuid": "00000000-0000-4000-8000-000000000075"
+      },
+      {
+        "finishedAt": null,
+        "name": "ServerUserImageSetupTaskStepSetupUserImageWait",
+        "startedAt": null,
+        "state": "PENDING",
+        "uuid": "00000000-0000-4000-8000-000000000144"
+      },
+      {
+        "finishedAt": null,
+        "name": "ServerUserImageSetupTaskStepSendMail",
+        "startedAt": null,
+        "state": "PENDING",
+        "uuid": "00000000-0000-4000-8000-000000000161"
+      }
+    ]
+  }
+}

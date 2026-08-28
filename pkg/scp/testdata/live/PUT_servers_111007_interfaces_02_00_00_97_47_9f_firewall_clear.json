@@ -1,0 +1,49 @@
+{
+ "contentType": "application/json",
+ "method": "PUT",
+ "requestBody": {
+  "copiedPolicies": [],
+  "userPolicies": []
+ },
+ "responseBody": {
+  "executingUser": {
+   "company": "Example Org",
+   "email": "user@example.com",
+   "firstname": "Max",
+   "id": 555001,
+   "lastname": "Mustermann",
+   "username": "100000"
+  },
+  "finishedAt": null,
+  "message": "Firewall configuration is running.",
+  "name": "ServerFirewallConfigureTask",
+  "responseError": null,
+  "result": {},
+  "serverActionId": null,
+  "startedAt": "2026-08-28T20:55:46.364958389Z",
+  "state": "PENDING",
+  "steps": [
+   {
+    "finishedAt": null,
+    "name": "ServerFirewallConfigureStepUpdate",
+    "startedAt": null,
+    "state": "PENDING",
+    "uuid": "00000000-0000-4000-8000-000000000150"
+   },
+   {
+    "finishedAt": null,
+    "name": "ServerFirewallConfigureStepLog",
+    "startedAt": null,
+    "state": "PENDING",
+    "uuid": "00000000-0000-4000-8000-000000000223"
+   }
+  ],
+  "taskProgress": {
+   "expectedFinishedAt": "2026-08-28T20:55:46.364537254Z",
+   "progressInPercent": 0.0
+  },
+  "uuid": "00000000-0000-4000-8000-000000000045"
+ },
+ "status": 202,
+ "url": "https://www.servercontrolpanel.de/scp-core/api/v1/servers/111007/interfaces/02:00:00:97:47:9f/firewall"
+}

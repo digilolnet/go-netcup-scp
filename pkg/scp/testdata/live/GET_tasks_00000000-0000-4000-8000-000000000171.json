@@ -1,0 +1,45 @@
+{
+  "method": "GET",
+  "url": "https://www.servercontrolpanel.de/scp-core/api/v1/tasks/00000000-0000-4000-8000-000000000171",
+  "status": 200,
+  "contentType": "application/json",
+  "responseBody": {
+    "executingUser": {
+      "company": "Example Org",
+      "email": "user@example.com",
+      "firstname": "Max",
+      "id": 555001,
+      "lastname": "Mustermann",
+      "username": "100000"
+    },
+    "finishedAt": "2026-08-27T15:51:29.761277Z",
+    "message": null,
+    "name": "ServerAttachIsoTask",
+    "startedAt": "2026-08-27T15:51:28.577198Z",
+    "state": "FINISHED",
+    "taskProgress": {
+      "expectedFinishedAt": "2026-08-27T15:51:29.761277Z",
+      "progressInPercent": 100.0
+    },
+    "uuid": "00000000-0000-4000-8000-000000000171",
+    "responseError": null,
+    "result": {},
+    "serverActionId": null,
+    "steps": [
+      {
+        "finishedAt": "2026-08-27T15:51:28.649613Z",
+        "name": "ServerAttachIsoTaskStepAttach",
+        "startedAt": "2026-08-27T15:51:28.598657Z",
+        "state": "FINISHED",
+        "uuid": "00000000-0000-4000-8000-000000000028"
+      },
+      {
+        "finishedAt": "2026-08-27T15:51:29.757589Z",
+        "name": "ServerAttachIsoTaskStepAttachWait",
+        "startedAt": "2026-08-27T15:51:28.666499Z",
+        "state": "FINISHED",
+        "uuid": "00000000-0000-4000-8000-000000000001"
+      }
+    ]
+  }
+}

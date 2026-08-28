@@ -1,0 +1,87 @@
+{
+  "method": "GET",
+  "url": "https://www.servercontrolpanel.de/scp-core/api/v1/tasks/00000000-0000-4000-8000-000000000085",
+  "status": 200,
+  "contentType": "application/json",
+  "responseBody": {
+    "executingUser": {
+      "company": "Example Org",
+      "email": "user@example.com",
+      "firstname": "Max",
+      "id": 555001,
+      "lastname": "Mustermann",
+      "username": "100000"
+    },
+    "finishedAt": "2026-08-27T15:59:35.428185Z",
+    "message": null,
+    "name": "ServerDeactivateRescueSystemTask",
+    "startedAt": "2026-08-27T15:58:30.464783Z",
+    "state": "FINISHED",
+    "taskProgress": {
+      "expectedFinishedAt": "2026-08-27T15:59:35.428185Z",
+      "progressInPercent": 100.0
+    },
+    "uuid": "00000000-0000-4000-8000-000000000085",
+    "responseError": null,
+    "result": {},
+    "serverActionId": null,
+    "steps": [
+      {
+        "finishedAt": "2026-08-27T15:58:30.518536Z",
+        "name": "ServerDeactivateRescueSystemTaskStepAcpiShutdown",
+        "startedAt": "2026-08-27T15:58:30.488063Z",
+        "state": "FINISHED",
+        "uuid": "00000000-0000-4000-8000-000000000108"
+      },
+      {
+        "finishedAt": "2026-08-27T15:59:34.896783Z",
+        "name": "ServerDeactivateRescueSystemTaskStepAcpiShutdownWait",
+        "startedAt": "2026-08-27T15:58:30.538046Z",
+        "state": "FINISHED",
+        "uuid": "00000000-0000-4000-8000-000000000175"
+      },
+      {
+        "finishedAt": "2026-08-27T15:59:34.991329Z",
+        "name": "ServerDeactivateRescueSystemTaskStepFirewall",
+        "startedAt": "2026-08-27T15:59:34.914224Z",
+        "state": "FINISHED",
+        "uuid": "00000000-0000-4000-8000-000000000181"
+      },
+      {
+        "finishedAt": "2026-08-27T15:59:35.108696Z",
+        "name": "ServerDeactivateRescueSystemTaskStepDetachIso",
+        "startedAt": "2026-08-27T15:59:35.008912Z",
+        "state": "FINISHED",
+        "uuid": "00000000-0000-4000-8000-000000000115"
+      },
+      {
+        "finishedAt": "2026-08-27T15:59:35.129300Z",
+        "name": "ServerDeactivateRescueSystemTaskStepResetPassword",
+        "startedAt": "2026-08-27T15:59:35.123737Z",
+        "state": "FINISHED",
+        "uuid": "00000000-0000-4000-8000-000000000011"
+      },
+      {
+        "finishedAt": "2026-08-27T15:59:35.189302Z",
+        "name": "ServerDeactivateRescueSystemTaskStepResetBootorder",
+        "startedAt": "2026-08-27T15:59:35.145122Z",
+        "state": "FINISHED",
+        "uuid": "00000000-0000-4000-8000-000000000058"
+      },
+      {
+        "finishedAt": "2026-08-27T15:59:35.401092Z",
+        "name": "ServerDeactivateRescueSystemTaskStepRemoveCloudinitDisk",
+        "startedAt": "2026-08-27T15:59:35.209403Z",
+        "state": "FINISHED",
+        "uuid": "00000000-0000-4000-8000-000000000133"
+      },
+      {
+        "finishedAt": "2026-08-27T15:59:35.424174Z",
+        "name": "ServerDeactivateRescueSystemTaskStepLog",
+        "startedAt": "2026-08-27T15:59:35.418043Z",
+        "state": "FINISHED",
+        "uuid": "00000000-0000-4000-8000-000000000017"
+      }
+    ]
+  }
+}

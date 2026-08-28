@@ -1,0 +1,101 @@
+{
+  "method": "GET",
+  "url": "https://www.servercontrolpanel.de/scp-core/api/v1/servers/111001",
+  "status": 200,
+  "contentType": "application/json",
+  "responseBody": {
+    "id": 111001,
+    "name": "v0000000000000000001",
+    "disabled": false,
+    "hostname": "mail.example.net",
+    "nickname": "mail-box",
+    "template": {
+      "id": 809,
+      "name": "VPS 200 G10s"
+    },
+    "architecture": "AMD64",
+    "disksAvailableSpaceInMiB": 0,
+    "gpuDriverAvailable": false,
+    "ipv4Addresses": [
+      {
+        "broadcast": "198.19.27.255",
+        "gateway": null,
+        "id": 666003,
+        "ip": "198.19.24.121",
+        "netmask": "255.255.252.0"
+      }
+    ],
+    "ipv6Addresses": [
+      {
+        "gateway": "fe80::1",
+        "id": 666011,
+        "networkPrefix": "2001:db8:a:2b:109d::",
+        "networkPrefixLength": 64
+      }
+    ],
+    "maxCpuCount": 2,
+    "rescueSystemActive": false,
+    "serverLiveInfo": {
+      "autostart": true,
+      "bootorder": [
+        "HDD",
+        "CDROM",
+        "NETWORK"
+      ],
+      "cloudinitAttached": false,
+      "configChanged": false,
+      "coresPerSocket": 2,
+      "cpuCount": 2,
+      "cpuMaxCount": 2,
+      "currentServerMemoryInMiB": 2048,
+      "disks": [
+        {
+          "allocationInMiB": 20891,
+          "capacityInMiB": 40960,
+          "dev": "vda",
+          "driver": "virtio"
+        }
+      ],
+      "interfaces": [
+        {
+          "driver": "virtio",
+          "ipv4Addresses": [
+            "198.19.24.121"
+          ],
+          "ipv6LinkLocalAddresses": [
+            "fe80::ff:fe5f:83dc"
+          ],
+          "ipv6NetworkPrefixes": [
+            "2001:db8:a:2b:109d::/64"
+          ],
+          "mac": "02:00:00:5f:83:dc",
+          "mtu": 1500,
+          "rxMonthlyInMiB": 14167,
+          "speedInMBits": 1000,
+          "trafficThrottled": false,
+          "txMonthlyInMiB": 21631,
+          "vlanId": null,
+          "vlanInterface": false
+        }
+      ],
+      "keyboardLayout": "en-us",
+      "latestQemu": true,
+      "machineType": "pc-i440fx-9.2",
+      "maxServerMemoryInMiB": 2048,
+      "nestedGuest": false,
+      "osOptimization": "LINUX",
+      "requiredStorageOptimization": "NO",
+      "sockets": 1,
+      "state": "RUNNING",
+      "template": "VPS 200 G10s",
+      "uefi": false,
+      "uptimeInSeconds": 276579
+    },
+    "site": {
+      "city": "Nuremberg",
+      "id": 1
+    },
+    "snapshotAllowed": true,
+    "snapshotCount": 1
+  }
+}

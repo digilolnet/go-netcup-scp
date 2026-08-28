@@ -1,0 +1,66 @@
+{
+  "method": "GET",
+  "url": "https://www.servercontrolpanel.de/scp-core/api/v1/tasks/00000000-0000-4000-8000-000000000006",
+  "status": 200,
+  "contentType": "application/json",
+  "responseBody": {
+    "executingUser": {
+      "company": "Example Org",
+      "email": "user@example.com",
+      "firstname": "Max",
+      "id": 555001,
+      "lastname": "Mustermann",
+      "username": "100000"
+    },
+    "finishedAt": "2026-08-27T15:54:38.911176Z",
+    "message": null,
+    "name": "ServerStateChangeTask",
+    "startedAt": "2026-08-27T15:54:13.585531Z",
+    "state": "FINISHED",
+    "taskProgress": {
+      "expectedFinishedAt": "2026-08-27T15:54:38.911176Z",
+      "progressInPercent": 100.0
+    },
+    "uuid": "00000000-0000-4000-8000-000000000006",
+    "responseError": null,
+    "result": {},
+    "serverActionId": null,
+    "steps": [
+      {
+        "finishedAt": "2026-08-27T15:54:13.648899Z",
+        "name": "ServerStateChangeShutdownTaskStep",
+        "startedAt": "2026-08-27T15:54:13.606458Z",
+        "state": "FINISHED",
+        "uuid": "00000000-0000-4000-8000-000000000112"
+      },
+      {
+        "finishedAt": "2026-08-27T15:54:31.819740Z",
+        "name": "ServerStateChangeShutdownTaskStepWait",
+        "startedAt": "2026-08-27T15:54:13.666535Z",
+        "state": "FINISHED",
+        "uuid": "00000000-0000-4000-8000-000000000034"
+      },
+      {
+        "finishedAt": "2026-08-27T15:54:31.873608Z",
+        "name": "ServerStateChangeStartTaskStep",
+        "startedAt": "2026-08-27T15:54:31.836607Z",
+        "state": "FINISHED",
+        "uuid": "00000000-0000-4000-8000-000000000020"
+      },
+      {
+        "finishedAt": "2026-08-27T15:54:38.886388Z",
+        "name": "ServerStateChangeStartTaskStepWait",
+        "startedAt": "2026-08-27T15:54:31.891305Z",
+        "state": "FINISHED",
+        "uuid": "00000000-0000-4000-8000-000000000022"
+      },
+      {
+        "finishedAt": "2026-08-27T15:54:38.907507Z",
+        "name": "ServerStateChangeWriteServerLog",
+        "startedAt": "2026-08-27T15:54:38.902622Z",
+        "state": "FINISHED",
+        "uuid": "00000000-0000-4000-8000-000000000093"
+      }
+    ]
+  }
+}

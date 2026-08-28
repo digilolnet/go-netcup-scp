@@ -1,0 +1,2148 @@
+{
+  "method": "GET",
+  "url": "https://www.servercontrolpanel.de/scp-core/api/v1/tasks",
+  "status": 200,
+  "contentType": "application/json",
+  "responseBody": [
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-27T12:13:30.362066Z",
+      "message": null,
+      "name": "ServerStateChangeTask",
+      "startedAt": "2026-08-27T12:12:29.997198Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-27T12:13:30.362066Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000014"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-27T12:11:32.546857Z",
+      "message": null,
+      "name": "ServerStateChangeTask",
+      "startedAt": "2026-08-27T12:11:22.685852Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-27T12:11:32.546857Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000030"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-27T11:44:59.675591Z",
+      "message": null,
+      "name": "ServerStateChangeTask",
+      "startedAt": "2026-08-27T11:44:42.925340Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-27T11:44:59.675591Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000159"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-27T11:03:34.218395Z",
+      "message": null,
+      "name": "RouteFailoverIpTask",
+      "startedAt": "2026-08-27T11:03:33.793728Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-27T11:03:34.218395Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000029"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-27T11:03:24.041326Z",
+      "message": null,
+      "name": "ClearFailoverIpTask",
+      "startedAt": "2026-08-27T11:03:23.678417Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-27T11:03:24.041326Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000176"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-27T11:01:40.512918Z",
+      "message": null,
+      "name": "RouteFailoverIpTask",
+      "startedAt": "2026-08-27T11:01:39.733094Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-27T11:01:40.512918Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000225"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-27T10:44:52.876676Z",
+      "message": null,
+      "name": "RouteFailoverIpTask",
+      "startedAt": "2026-08-27T10:44:52.508615Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-27T10:44:52.876676Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000135"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-27T09:58:16.688404Z",
+      "message": null,
+      "name": "ServerStateChangeTask",
+      "startedAt": "2026-08-27T09:57:05.256822Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-27T09:58:16.688404Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000219"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-27T09:50:47.641804Z",
+      "message": null,
+      "name": "ServerStateChangeTask",
+      "startedAt": "2026-08-27T09:50:38.537585Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-27T09:50:47.641804Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000170"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-27T09:37:43.008706Z",
+      "message": null,
+      "name": "ServerStateChangeTask",
+      "startedAt": "2026-08-27T09:37:30.443093Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-27T09:37:43.008706Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000215"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-27T09:37:29.359815Z",
+      "message": null,
+      "name": "ServerAttachIsoTask",
+      "startedAt": "2026-08-27T09:37:28.246489Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-27T09:37:29.359815Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000117"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-27T04:25:16.582663Z",
+      "message": null,
+      "name": "ServerStateChangeTask",
+      "startedAt": "2026-08-27T04:24:07.093232Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-27T04:25:16.582663Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000041"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-27T04:23:48.342879Z",
+      "message": null,
+      "name": "ServerStateChangeTask",
+      "startedAt": "2026-08-27T04:22:38.885476Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-27T04:23:48.342879Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000049"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-27T03:59:40.820954Z",
+      "message": null,
+      "name": "ServerStateChangeTask",
+      "startedAt": "2026-08-27T03:59:28.817627Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-27T03:59:40.820954Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000138"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-27T03:59:27.957370Z",
+      "message": null,
+      "name": "ServerAttachIsoTask",
+      "startedAt": "2026-08-27T03:59:26.706558Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-27T03:59:27.957370Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000099"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-27T03:45:36.377101Z",
+      "message": null,
+      "name": "ServerStateChangeTask",
+      "startedAt": "2026-08-27T03:44:26.724689Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-27T03:45:36.377101Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000102"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-27T03:44:25.826823Z",
+      "message": null,
+      "name": "ServerAttachIsoTask",
+      "startedAt": "2026-08-27T03:44:24.600212Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-27T03:44:25.826823Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000032"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-27T03:33:19.620208Z",
+      "message": null,
+      "name": "ServerStateChangeTask",
+      "startedAt": "2026-08-27T03:32:10.032430Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-27T03:33:19.620208Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000012"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-27T03:32:09.138080Z",
+      "message": null,
+      "name": "ServerAttachIsoTask",
+      "startedAt": "2026-08-27T03:32:07.932255Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-27T03:32:09.138080Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000213"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-27T03:16:36.603017Z",
+      "message": null,
+      "name": "ServerAttachIsoTask",
+      "startedAt": "2026-08-27T03:16:34.309400Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-27T03:16:36.603017Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000141"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-27T02:52:15.820836Z",
+      "message": null,
+      "name": "RouteFailoverIpTask",
+      "startedAt": "2026-08-27T02:52:15.460511Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-27T02:52:15.820836Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000100"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-27T02:52:13.781770Z",
+      "message": null,
+      "name": "RouteFailoverIpTask",
+      "startedAt": "2026-08-27T02:52:13.305510Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-27T02:52:13.781770Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000062"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-27T02:51:14.075413Z",
+      "message": null,
+      "name": "ServerStateChangeTask",
+      "startedAt": "2026-08-27T02:51:03.344621Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-27T02:51:14.075413Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000023"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-27T02:48:38.628260Z",
+      "message": null,
+      "name": "ServerStateChangeTask",
+      "startedAt": "2026-08-27T02:48:25.517374Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-27T02:48:38.628260Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000177"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-27T02:43:32.648968Z",
+      "message": null,
+      "name": "ServerStateChangeTask",
+      "startedAt": "2026-08-27T02:43:15.926171Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-27T02:43:32.648968Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000169"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-27T02:24:36.935881Z",
+      "message": null,
+      "name": "ServerStateChangeTask",
+      "startedAt": "2026-08-27T02:24:16.562056Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-27T02:24:36.935881Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000152"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-27T02:22:43.088410Z",
+      "message": null,
+      "name": "ServerStateChangeTask",
+      "startedAt": "2026-08-27T02:22:32.198090Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-27T02:22:43.088410Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000013"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-27T01:32:42.698021Z",
+      "message": null,
+      "name": "ServerStateChangeTask",
+      "startedAt": "2026-08-27T01:32:34.446442Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-27T01:32:42.698021Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000185"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-27T01:32:33.063213Z",
+      "message": null,
+      "name": "ServerAttachIsoTask",
+      "startedAt": "2026-08-27T01:32:32.365774Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-27T01:32:33.063213Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000210"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-27T01:32:26.538467Z",
+      "message": null,
+      "name": "ServerStateChangeTask",
+      "startedAt": "2026-08-27T01:32:21.024763Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-27T01:32:26.538467Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000126"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-27T01:27:09.231271Z",
+      "message": null,
+      "name": "ServerStateChangeTask",
+      "startedAt": "2026-08-27T01:27:01.855724Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-27T01:27:09.231271Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000051"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-27T01:27:00.477732Z",
+      "message": null,
+      "name": "ServerAttachIsoTask",
+      "startedAt": "2026-08-27T01:26:59.769168Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-27T01:27:00.477732Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000035"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-27T01:26:54.031306Z",
+      "message": null,
+      "name": "ServerStateChangeTask",
+      "startedAt": "2026-08-27T01:26:50.493977Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-27T01:26:54.031306Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000192"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-27T00:58:19.677262Z",
+      "message": null,
+      "name": "ServerStateChangeTask",
+      "startedAt": "2026-08-27T00:58:12.063036Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-27T00:58:19.677262Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000132"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-27T00:58:10.682534Z",
+      "message": null,
+      "name": "ServerAttachIsoTask",
+      "startedAt": "2026-08-27T00:58:09.962330Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-27T00:58:10.682534Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000080"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-27T00:58:08.509288Z",
+      "message": null,
+      "name": "ServerStateChangeTask",
+      "startedAt": "2026-08-27T00:58:05.720231Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-27T00:58:08.509288Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000156"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-27T00:52:51.481605Z",
+      "message": null,
+      "name": "ServerStateChangeTask",
+      "startedAt": "2026-08-27T00:52:41.689888Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-27T00:52:51.481605Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000109"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-27T00:44:04.811443Z",
+      "message": null,
+      "name": "ServerStateChangeTask",
+      "startedAt": "2026-08-27T00:43:57.744600Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-27T00:44:04.811443Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000050"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-27T00:43:56.313299Z",
+      "message": null,
+      "name": "ServerAttachIsoTask",
+      "startedAt": "2026-08-27T00:43:55.640688Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-27T00:43:56.313299Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000130"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-27T00:43:54.719864Z",
+      "message": null,
+      "name": "ServerStateChangeTask",
+      "startedAt": "2026-08-27T00:43:51.388593Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-27T00:43:54.719864Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000124"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-27T00:37:31.037521Z",
+      "message": null,
+      "name": "ServerStateChangeTask",
+      "startedAt": "2026-08-27T00:37:21.857209Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-27T00:37:31.037521Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000222"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-27T00:32:16.767738Z",
+      "message": null,
+      "name": "ServerStateChangeTask",
+      "startedAt": "2026-08-27T00:32:01.697940Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-27T00:32:16.767738Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000200"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-27T00:32:01.397187Z",
+      "message": null,
+      "name": "ServerAttachIsoTask",
+      "startedAt": "2026-08-27T00:31:59.605069Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-27T00:32:01.397187Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000070"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-27T00:22:43.131570Z",
+      "message": null,
+      "name": "ServerStateChangeTask",
+      "startedAt": "2026-08-27T00:22:42.484223Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-27T00:22:43.131570Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000077"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-27T00:22:41.606864Z",
+      "message": null,
+      "name": "ServerAttachIsoTask",
+      "startedAt": "2026-08-27T00:22:40.394516Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-27T00:22:41.606864Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000228"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-27T00:22:23.938835Z",
+      "message": null,
+      "name": "ServerStateChangeTask",
+      "startedAt": "2026-08-27T00:21:51.831770Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-27T00:22:23.938835Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000122"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-27T00:21:50.966495Z",
+      "message": null,
+      "name": "ServerAttachIsoTask",
+      "startedAt": "2026-08-27T00:21:49.741322Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-27T00:21:50.966495Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000229"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-27T00:19:07.367194Z",
+      "message": null,
+      "name": "ServerAttachIsoTask",
+      "startedAt": "2026-08-27T00:19:06.170017Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-27T00:19:07.367194Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000198"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-26T20:50:54.423385Z",
+      "message": null,
+      "name": "ServerStateChangeTask",
+      "startedAt": "2026-08-26T20:49:42.966660Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-26T20:50:54.423385Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000232"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-26T20:47:00.962542Z",
+      "message": null,
+      "name": "ServerStateChangeTask",
+      "startedAt": "2026-08-26T20:46:51.576788Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-26T20:47:00.962542Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000172"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-26T20:44:25.450419Z",
+      "message": null,
+      "name": "ServerStateChangeTask",
+      "startedAt": "2026-08-26T20:44:24.788371Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-26T20:44:25.450419Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000010"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-26T20:44:23.901775Z",
+      "message": null,
+      "name": "ServerAttachIsoTask",
+      "startedAt": "2026-08-26T20:44:22.680250Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-26T20:44:23.901775Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000217"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-26T20:44:21.399177Z",
+      "message": null,
+      "name": "ServerStateChangeTask",
+      "startedAt": "2026-08-26T20:44:20.747805Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-26T20:44:21.399177Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000186"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-26T20:44:19.875164Z",
+      "message": null,
+      "name": "ServerAttachIsoTask",
+      "startedAt": "2026-08-26T20:44:18.641782Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-26T20:44:19.875164Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000182"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-26T20:43:40.990533Z",
+      "message": null,
+      "name": "ServerStateChangeTask",
+      "startedAt": "2026-08-26T20:43:40.340975Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-26T20:43:40.990533Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000015"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-26T20:43:40.949518Z",
+      "message": null,
+      "name": "ServerStateChangeTask",
+      "startedAt": "2026-08-26T20:43:40.294144Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-26T20:43:40.949518Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000024"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-26T20:43:39.430053Z",
+      "message": null,
+      "name": "ServerAttachIsoTask",
+      "startedAt": "2026-08-26T20:43:38.235709Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-26T20:43:39.430053Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000068"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-26T20:43:39.391513Z",
+      "message": null,
+      "name": "ServerAttachIsoTask",
+      "startedAt": "2026-08-26T20:43:38.191458Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-26T20:43:39.391513Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000079"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-26T20:43:24.798763Z",
+      "message": null,
+      "name": "ServerStateChangeTask",
+      "startedAt": "2026-08-26T20:43:24.153987Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-26T20:43:24.798763Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000004"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-26T20:43:23.228474Z",
+      "message": null,
+      "name": "ServerAttachIsoTask",
+      "startedAt": "2026-08-26T20:43:22.020907Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-26T20:43:23.228474Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000054"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-26T20:43:45.636731Z",
+      "message": null,
+      "name": "ServerStateChangeTask",
+      "startedAt": "2026-08-26T20:42:33.738702Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-26T20:43:45.636731Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000096"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-26T20:43:01.611739Z",
+      "message": null,
+      "name": "ServerStateChangeTask",
+      "startedAt": "2026-08-26T20:42:33.732889Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-26T20:43:01.611739Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000089"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-26T20:43:42.078896Z",
+      "message": null,
+      "name": "ServerStateChangeTask",
+      "startedAt": "2026-08-26T20:42:33.732432Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-26T20:43:42.078896Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000065"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-26T20:42:44.723810Z",
+      "message": null,
+      "name": "ServerStateChangeTask",
+      "startedAt": "2026-08-26T20:42:33.728310Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-26T20:42:44.723810Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000179"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-26T20:43:01.463624Z",
+      "message": null,
+      "name": "ServerStateChangeTask",
+      "startedAt": "2026-08-26T20:42:31.715214Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-26T20:43:01.463624Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000044"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-26T20:42:32.644755Z",
+      "message": null,
+      "name": "ServerAttachIsoTask",
+      "startedAt": "2026-08-26T20:42:15.477660Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-26T20:42:32.644755Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000221"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-26T20:42:32.126328Z",
+      "message": null,
+      "name": "ServerAttachIsoTask",
+      "startedAt": "2026-08-26T20:42:15.470271Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-26T20:42:32.126328Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000205"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-26T20:42:32.755889Z",
+      "message": null,
+      "name": "ServerAttachIsoTask",
+      "startedAt": "2026-08-26T20:42:15.459798Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-26T20:42:32.755889Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000127"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-26T20:42:32.107946Z",
+      "message": null,
+      "name": "ServerAttachIsoTask",
+      "startedAt": "2026-08-26T20:42:15.455992Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-26T20:42:32.107946Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000104"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-26T20:42:31.548595Z",
+      "message": null,
+      "name": "ServerAttachIsoTask",
+      "startedAt": "2026-08-26T20:42:15.439641Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-26T20:42:31.548595Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000069"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-26T20:29:25.980701Z",
+      "message": null,
+      "name": "ServerStateChangeTask",
+      "startedAt": "2026-08-26T20:28:12.748707Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-26T20:29:25.980701Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000086"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-26T20:22:14.518841Z",
+      "message": null,
+      "name": "ServerStateChangeTask",
+      "startedAt": "2026-08-26T20:22:13.863428Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-26T20:22:14.518841Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000173"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-26T20:22:12.966690Z",
+      "message": null,
+      "name": "ServerAttachIsoTask",
+      "startedAt": "2026-08-26T20:22:11.749735Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-26T20:22:12.966690Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000103"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-26T20:11:12.419101Z",
+      "message": null,
+      "name": "ServerStateChangeTask",
+      "startedAt": "2026-08-26T20:11:11.744800Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-26T20:11:12.419101Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000083"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-26T20:03:30.439737Z",
+      "message": null,
+      "name": "ServerStateChangeTask",
+      "startedAt": "2026-08-26T20:03:07.466601Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-26T20:03:30.439737Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000188"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-26T20:03:05.633474Z",
+      "message": null,
+      "name": "ServerAttachIsoTask",
+      "startedAt": "2026-08-26T20:02:59.297269Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-26T20:03:05.633474Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000216"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-26T19:59:34.026649Z",
+      "message": null,
+      "name": "ServerStateChangeTask",
+      "startedAt": "2026-08-26T19:59:24.723710Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-26T19:59:34.026649Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000160"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-26T19:59:23.824676Z",
+      "message": null,
+      "name": "ServerStateChangeTask",
+      "startedAt": "2026-08-26T19:59:14.519054Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-26T19:59:23.824676Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000128"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-26T19:59:13.505124Z",
+      "message": null,
+      "name": "ServerStateChangeTask",
+      "startedAt": "2026-08-26T19:59:06.338586Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-26T19:59:13.505124Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000052"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-26T19:59:04.966793Z",
+      "message": null,
+      "name": "ServerStateChangeTask",
+      "startedAt": "2026-08-26T19:58:56.143067Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-26T19:59:04.966793Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000055"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-26T19:58:55.802233Z",
+      "message": null,
+      "name": "ServerStateChangeTask",
+      "startedAt": "2026-08-26T19:58:45.947020Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-26T19:58:55.802233Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000110"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-26T19:58:44.669230Z",
+      "message": null,
+      "name": "ServerStateChangeTask",
+      "startedAt": "2026-08-26T19:58:33.730497Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-26T19:58:44.669230Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000119"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-26T19:58:28.116577Z",
+      "message": null,
+      "name": "ServerAttachIsoTask",
+      "startedAt": "2026-08-26T19:58:21.905073Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-26T19:58:28.116577Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000167"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-26T19:58:19.911687Z",
+      "message": null,
+      "name": "ServerAttachIsoTask",
+      "startedAt": "2026-08-26T19:58:13.685809Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-26T19:58:19.911687Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000003"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-26T19:58:13.113622Z",
+      "message": null,
+      "name": "ServerAttachIsoTask",
+      "startedAt": "2026-08-26T19:58:07.489989Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-26T19:58:13.113622Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000094"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-26T19:58:05.466146Z",
+      "message": null,
+      "name": "ServerAttachIsoTask",
+      "startedAt": "2026-08-26T19:57:59.292741Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-26T19:58:05.466146Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000057"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-26T19:57:57.279981Z",
+      "message": null,
+      "name": "ServerAttachIsoTask",
+      "startedAt": "2026-08-26T19:57:51.078909Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-26T19:57:57.279981Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000113"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-26T19:57:49.756663Z",
+      "message": null,
+      "name": "ServerAttachIsoTask",
+      "startedAt": "2026-08-26T19:57:42.858218Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-26T19:57:49.756663Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000027"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-26T19:45:56.739933Z",
+      "message": null,
+      "name": "RouteFailoverIpTask",
+      "startedAt": "2026-08-26T19:45:56.345020Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-26T19:45:56.739933Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000009"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-26T19:45:39.747592Z",
+      "message": null,
+      "name": "ServerStateChangeTask",
+      "startedAt": "2026-08-26T19:45:27.664290Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-26T19:45:39.747592Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000184"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-26T19:45:26.872383Z",
+      "message": null,
+      "name": "ServerStateChangeTask",
+      "startedAt": "2026-08-26T19:44:14.788926Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-26T19:45:26.872383Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000074"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-26T19:44:12.750748Z",
+      "message": null,
+      "name": "ServerStateChangeTask",
+      "startedAt": "2026-08-26T19:42:57.864549Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-26T19:44:12.750748Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000208"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-26T19:42:55.807059Z",
+      "message": null,
+      "name": "ServerStateChangeTask",
+      "startedAt": "2026-08-26T19:41:44.938271Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-26T19:42:55.807059Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000081"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-26T19:41:43.201360Z",
+      "message": null,
+      "name": "ServerStateChangeTask",
+      "startedAt": "2026-08-26T19:41:12.471073Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-26T19:41:43.201360Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000125"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-26T19:41:11.667647Z",
+      "message": null,
+      "name": "ServerStateChangeTask",
+      "startedAt": "2026-08-26T19:40:44.070131Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-26T19:41:11.667647Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000131"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-26T19:40:39.630835Z",
+      "message": null,
+      "name": "ServerAttachIsoTask",
+      "startedAt": "2026-08-26T19:40:33.856065Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-26T19:40:39.630835Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000178"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-26T19:40:31.859168Z",
+      "message": null,
+      "name": "ServerAttachIsoTask",
+      "startedAt": "2026-08-26T19:40:25.616749Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-26T19:40:31.859168Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000202"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-26T19:40:25.019262Z",
+      "message": null,
+      "name": "ServerAttachIsoTask",
+      "startedAt": "2026-08-26T19:40:19.408932Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-26T19:40:25.019262Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000116"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-26T19:40:17.467755Z",
+      "message": null,
+      "name": "ServerAttachIsoTask",
+      "startedAt": "2026-08-26T19:40:11.197044Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-26T19:40:17.467755Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000211"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-26T19:40:09.138949Z",
+      "message": null,
+      "name": "ServerAttachIsoTask",
+      "startedAt": "2026-08-26T19:40:02.950115Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-26T19:40:09.138949Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000039"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-26T19:40:01.039604Z",
+      "message": null,
+      "name": "ServerAttachIsoTask",
+      "startedAt": "2026-08-26T19:39:54.684964Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-26T19:40:01.039604Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000129"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-25T15:07:54.606563Z",
+      "message": null,
+      "name": "ServerStateChangeTask",
+      "startedAt": "2026-08-25T15:06:44.459Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-25T15:07:54.606563Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000139"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-25T15:06:21.670738Z",
+      "message": null,
+      "name": "ServerStateChangeTask",
+      "startedAt": "2026-08-25T15:06:11.779590Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-25T15:06:21.670738Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000091"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-25T14:42:07.706553Z",
+      "message": null,
+      "name": "ServerStateChangeTask",
+      "startedAt": "2026-08-25T14:41:23.030773Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-25T14:42:07.706553Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000195"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-08-25T14:40:55.005394Z",
+      "message": null,
+      "name": "ServerAttachIsoTask",
+      "startedAt": "2026-08-25T14:40:52.722886Z",
+      "state": "FINISHED",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-25T14:40:55.005394Z",
+        "progressInPercent": 100.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000111"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-04-27T20:59:30.828077Z",
+      "message": null,
+      "name": "ServerCpuTopologyTask",
+      "startedAt": "2026-04-27T20:59:30.777530Z",
+      "state": "ERROR",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-04-27T20:59:30.824755Z",
+        "progressInPercent": 0.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000153"
+    },
+    {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": "2026-04-27T20:44:26.597403Z",
+      "message": null,
+      "name": "ServerSnapshotCreateTask",
+      "startedAt": "2026-04-27T20:44:25.938357Z",
+      "state": "ERROR",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-04-27T20:44:32.003357Z",
+        "progressInPercent": 0.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000190"
+    }
+  ]
+}

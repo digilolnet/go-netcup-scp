@@ -1,0 +1,96 @@
+{
+  "method": "GET",
+  "url": "https://www.servercontrolpanel.de/scp-core/api/v1/servers",
+  "status": 200,
+  "contentType": "application/json",
+  "responseBody": [
+    {
+      "id": 111001,
+      "name": "v0000000000000000001",
+      "disabled": false,
+      "hostname": "mail.example.net",
+      "nickname": "mail-box",
+      "template": {
+        "id": 809,
+        "name": "VPS 200 G10s"
+      }
+    },
+    {
+      "id": 111002,
+      "name": "v0000000000000000002",
+      "disabled": false,
+      "hostname": "v0000000000000000002.megasrv.de",
+      "nickname": "pentest-box",
+      "template": {
+        "id": 1159,
+        "name": "RS 1000 G11"
+      }
+    },
+    {
+      "id": 111003,
+      "name": "v0000000000000000003",
+      "disabled": false,
+      "hostname": "v0000000000000000003.hotsrv.de",
+      "nickname": "demo-k8s-cp-01",
+      "template": {
+        "id": 1358,
+        "name": "RS 2000 G12 Pro"
+      }
+    },
+    {
+      "id": 111004,
+      "name": "v0000000000000000004",
+      "disabled": false,
+      "hostname": "v0000000000000000004.ultrasrv.de",
+      "nickname": "demo-k8s-cp-02",
+      "template": {
+        "id": 1358,
+        "name": "RS 2000 G12 Pro"
+      }
+    },
+    {
+      "id": 111005,
+      "name": "v0000000000000000005",
+      "disabled": false,
+      "hostname": "v0000000000000000005.happysrv.de",
+      "nickname": "demo-k8s-cp-03",
+      "template": {
+        "id": 1358,
+        "name": "RS 2000 G12 Pro"
+      }
+    },
+    {
+      "id": 111006,
+      "name": "v0000000000000000006",
+      "disabled": false,
+      "hostname": "v0000000000000000006.quicksrv.de",
+      "nickname": "demo-k8s-wrk-01",
+      "template": {
+        "id": 1358,
+        "name": "RS 2000 G12 Pro"
+      }
+    },
+    {
+      "id": 111007,
+      "name": "v0000000000000000007",
+      "disabled": false,
+      "hostname": "v0000000000000000007.supersrv.de",
+      "nickname": "demo-k8s-wrk-02",
+      "template": {
+        "id": 1358,
+        "name": "RS 2000 G12 Pro"
+      }
+    },
+    {
+      "id": 111008,
+      "name": "v0000000000000000008",
+      "disabled": false,
+      "hostname": "v0000000000000000008.goodsrv.de",
+      "nickname": "demo-k8s-wrk-03",
+      "template": {
+        "id": 1358,
+        "name": "RS 2000 G12 Pro"
+      }
+    }
+  ]
+}

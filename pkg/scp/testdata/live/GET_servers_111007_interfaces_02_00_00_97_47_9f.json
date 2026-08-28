@@ -1,0 +1,52 @@
+{
+  "method": "GET",
+  "url": "https://www.servercontrolpanel.de/scp-core/api/v1/servers/111007/interfaces/02:00:00:97:47:9f",
+  "status": 200,
+  "contentType": "application/json",
+  "responseBody": {
+    "driver": "virtio",
+    "ipv4Addresses": [
+      {
+        "cidr": "198.18.28.137/22",
+        "destinationIp": null,
+        "editable": false,
+        "gateway": "198.18.28.1",
+        "id": 666006,
+        "interfaceMac": "02:00:00:97:47:9f",
+        "ip": "198.18.28.137",
+        "rdns": "demo-k8s-wrk-02.example.com",
+        "type": "IP"
+      }
+    ],
+    "ipv6Addresses": [
+      {
+        "cidr": "fe80::ff:fe97:479f/10",
+        "destinationIp": null,
+        "editable": false,
+        "gateway": null,
+        "id": 0,
+        "interfaceMac": "02:00:00:97:47:9f",
+        "linkLocal": true,
+        "networkPrefix": "fe80::ff:fe97:479f",
+        "rdns": {},
+        "type": "IP"
+      },
+      {
+        "cidr": "2001:db8:c1:5e9e::/64",
+        "destinationIp": null,
+        "editable": false,
+        "gateway": "fe80::1",
+        "id": 666016,
+        "interfaceMac": "02:00:00:97:47:9f",
+        "linkLocal": false,
+        "networkPrefix": "2001:db8:c1:5e9e::",
+        "rdns": {
+          "2001:db8:c1:5e9e:0:0:0:0": "demo-k8s-wrk-02.example.com"
+        },
+        "type": "IP"
+      }
+    ],
+    "mac": "02:00:00:97:47:9f",
+    "speedInMBits": 2500
+  }
+}

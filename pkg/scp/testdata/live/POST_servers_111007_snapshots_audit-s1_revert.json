@@ -1,0 +1,80 @@
+{
+  "method": "POST",
+  "url": "https://www.servercontrolpanel.de/scp-core/api/v1/servers/111007/snapshots/audit-s1/revert",
+  "status": 202,
+  "contentType": "application/json",
+  "responseBody": {
+    "executingUser": {
+      "company": "Example Org",
+      "email": "user@example.com",
+      "firstname": "Max",
+      "id": 555001,
+      "lastname": "Mustermann",
+      "username": "100000"
+    },
+    "finishedAt": null,
+    "message": "Snapshot is being restored.",
+    "name": "ServerSnapshotRevertTask",
+    "startedAt": "2026-08-27T16:47:53.609429209Z",
+    "state": "PENDING",
+    "taskProgress": {
+      "expectedFinishedAt": "2026-08-27T16:47:59.608613418Z",
+      "progressInPercent": 0.0
+    },
+    "uuid": "00000000-0000-4000-8000-000000000084",
+    "responseError": null,
+    "result": {},
+    "serverActionId": null,
+    "steps": [
+      {
+        "finishedAt": null,
+        "name": "ServerSnapshotRevertTaskStepPoweroff",
+        "startedAt": null,
+        "state": "PENDING",
+        "uuid": "00000000-0000-4000-8000-000000000036"
+      },
+      {
+        "finishedAt": null,
+        "name": "ServerSnapshotRevertTaskStepPoweroffWait",
+        "startedAt": null,
+        "state": "PENDING",
+        "uuid": "00000000-0000-4000-8000-000000000067"
+      },
+      {
+        "finishedAt": null,
+        "name": "ServerSnapshotRevertTaskStepRevertSnapshot",
+        "startedAt": null,
+        "state": "PENDING",
+        "uuid": "00000000-0000-4000-8000-000000000166"
+      },
+      {
+        "finishedAt": null,
+        "name": "ServerSnapshotRevertTaskStepRevertSnapshotWait",
+        "startedAt": null,
+        "state": "PENDING",
+        "uuid": "00000000-0000-4000-8000-000000000098"
+      },
+      {
+        "finishedAt": null,
+        "name": "ServerSnapshotRevertTaskStepStart",
+        "startedAt": null,
+        "state": "PENDING",
+        "uuid": "00000000-0000-4000-8000-000000000008"
+      },
+      {
+        "finishedAt": null,
+        "name": "ServerSnapshotRevertErrorTaskStepStartWait",
+        "startedAt": null,
+        "state": "PENDING",
+        "uuid": "00000000-0000-4000-8000-000000000061"
+      },
+      {
+        "finishedAt": null,
+        "name": "ServerSnapshotRevertTaskStepLog",
+        "startedAt": null,
+        "state": "PENDING",
+        "uuid": "00000000-0000-4000-8000-000000000140"
+      }
+    ]
+  }
+}

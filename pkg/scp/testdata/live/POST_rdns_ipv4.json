@@ -1,0 +1,9 @@
+{
+  "method": "POST",
+  "url": "https://www.servercontrolpanel.de/scp-core/api/v1/rdns/ipv4",
+  "status": 200,
+  "requestBody": {
+    "ip": "198.18.28.137",
+    "rdns": "demo-k8s-wrk-02.example.com"
+  }
+}

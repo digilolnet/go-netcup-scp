@@ -1,0 +1,5 @@
+{
+  "method": "DELETE",
+  "url": "https://www.servercontrolpanel.de/scp-core/api/v1/users/555001/firewall-policies/444002",
+  "status": 204
+}

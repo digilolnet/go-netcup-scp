@@ -1,0 +1,68 @@
+{
+  "method": "PUT",
+  "url": "https://www.servercontrolpanel.de/scp-core/api/v1/users/555001/firewall-policies/444002",
+  "status": 202,
+  "contentType": "application/json",
+  "requestBody": {
+    "name": "audit-test-policy",
+    "rules": [
+      {
+        "action": "ACCEPT",
+        "destinationPorts": "22",
+        "direction": "INGRESS",
+        "protocol": "TCP"
+      }
+    ]
+  },
+  "responseBody": {
+    "firewallPolicy": {
+      "description": null,
+      "id": 444002,
+      "name": "audit-test-policy",
+      "rules": [
+        {
+          "action": "ACCEPT",
+          "description": null,
+          "destinationPorts": "22",
+          "destinations": [],
+          "direction": "INGRESS",
+          "protocol": "TCP",
+          "sourcePorts": null,
+          "sources": []
+        }
+      ]
+    },
+    "taskInfo": {
+      "executingUser": {
+        "company": "Example Org",
+        "email": "user@example.com",
+        "firstname": "Max",
+        "id": 555001,
+        "lastname": "Mustermann",
+        "username": "100000"
+      },
+      "finishedAt": null,
+      "message": "Firewall Policy changes are being applied.",
+      "name": "FirewallPolicyUpdateTask",
+      "startedAt": "2026-08-27T15:52:01.283086329Z",
+      "state": "PENDING",
+      "taskProgress": {
+        "expectedFinishedAt": "2026-08-27T15:52:01.282615630Z",
+        "progressInPercent": 0.0
+      },
+      "uuid": "00000000-0000-4000-8000-000000000155",
+      "responseError": null,
+      "result": {},
+      "serverActionId": null,
+      "steps": [
+        {
+          "finishedAt": null,
+          "name": "FirewallPolicyUpdateTaskStepOrchestrate",
+          "startedAt": null,
+          "state": "PENDING",
+          "uuid": "00000000-0000-4000-8000-000000000209"
+        }
+      ]
+    }
+  }
+}

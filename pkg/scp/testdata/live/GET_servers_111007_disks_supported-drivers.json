@@ -1,0 +1,11 @@
+{
+  "method": "GET",
+  "url": "https://www.servercontrolpanel.de/scp-core/api/v1/servers/111007/disks/supported-drivers",
+  "status": 200,
+  "contentType": "application/json",
+  "responseBody": [
+    "VIRTIO",
+    "VIRTIO_SCSI",
+    "IDE"
+  ]
+}

@@ -1,0 +1,129 @@
+{
+  "method": "POST",
+  "url": "https://www.servercontrolpanel.de/scp-core/api/v1/servers/111007/image",
+  "status": 202,
+  "contentType": "application/json",
+  "requestBody": {
+    "hostname": "audit-debian-bios",
+    "imageFlavourId": 119
+  },
+  "responseBody": {
+    "executingUser": {
+      "company": "Example Org",
+      "email": "user@example.com",
+      "firstname": "Max",
+      "id": 555001,
+      "lastname": "Mustermann",
+      "username": "100000"
+    },
+    "finishedAt": null,
+    "message": "Image installation is running.",
+    "name": "ServerImageSetupTask",
+    "startedAt": "2026-08-27T16:45:22.263306786Z",
+    "state": "PENDING",
+    "taskProgress": {
+      "expectedFinishedAt": "2026-08-27T16:47:10.262756226Z",
+      "progressInPercent": 0.0
+    },
+    "uuid": "00000000-0000-4000-8000-000000000214",
+    "responseError": null,
+    "result": {
+      "cloudInitResultBase64Encoded": null,
+      "rootPassword": "REDACTED-PASSWORD"
+    },
+    "serverActionId": null,
+    "steps": [
+      {
+        "finishedAt": null,
+        "name": "ServerImageSetupTaskStepResetBootorder",
+        "startedAt": null,
+        "state": "PENDING",
+        "uuid": "00000000-0000-4000-8000-000000000191"
+      },
+      {
+        "finishedAt": null,
+        "name": "ServerImageSetupTaskStepPoweroff",
+        "startedAt": null,
+        "state": "PENDING",
+        "uuid": "00000000-0000-4000-8000-000000000230"
+      },
+      {
+        "finishedAt": null,
+        "name": "ServerImageSetupTaskStepPoweroffWait",
+        "startedAt": null,
+        "state": "PENDING",
+        "uuid": "00000000-0000-4000-8000-000000000043"
+      },
+      {
+        "finishedAt": null,
+        "name": "ServerImageSetupTaskStepFixNetworkDriver",
+        "startedAt": null,
+        "state": "PENDING",
+        "uuid": "00000000-0000-4000-8000-000000000201"
+      },
+      {
+        "finishedAt": null,
+        "name": "ServerImageSetupTaskStepFixStorageDriver",
+        "startedAt": null,
+        "state": "PENDING",
+        "uuid": "00000000-0000-4000-8000-000000000053"
+      },
+      {
+        "finishedAt": null,
+        "name": "ServerImageSetupTaskStepAppPrepareOrCleanup",
+        "startedAt": null,
+        "state": "PENDING",
+        "uuid": "00000000-0000-4000-8000-000000000199"
+      },
+      {
+        "finishedAt": null,
+        "name": "ServerImageSetupTaskStepSetupImage",
+        "startedAt": null,
+        "state": "PENDING",
+        "uuid": "00000000-0000-4000-8000-000000000042"
+      },
+      {
+        "finishedAt": null,
+        "name": "ServerImageSetupTaskStepSetupImageWait",
+        "startedAt": null,
+        "state": "PENDING",
+        "uuid": "00000000-0000-4000-8000-000000000048"
+      },
+      {
+        "finishedAt": null,
+        "name": "ServerImageSetupTaskStepCloudinit",
+        "startedAt": null,
+        "state": "PENDING",
+        "uuid": "00000000-0000-4000-8000-000000000174"
+      },
+      {
+        "finishedAt": null,
+        "name": "ServerImageSetupTaskStepCloudinitWait",
+        "startedAt": null,
+        "state": "PENDING",
+        "uuid": "00000000-0000-4000-8000-000000000162"
+      },
+      {
+        "finishedAt": null,
+        "name": "ServerImageSetupTaskStepAddDhcpEntries",
+        "startedAt": null,
+        "state": "PENDING",
+        "uuid": "00000000-0000-4000-8000-000000000193"
+      },
+      {
+        "finishedAt": null,
+        "name": "ServerImageSetupTaskStepSendMail",
+        "startedAt": null,
+        "state": "PENDING",
+        "uuid": "00000000-0000-4000-8000-000000000134"
+      },
+      {
+        "finishedAt": null,
+        "name": "ServerImageSetupTaskStepSendMailFinishActionStatus",
+        "startedAt": null,
+        "state": "PENDING",
+        "uuid": "00000000-0000-4000-8000-000000000212"
+      }
+    ]
+  }
+}

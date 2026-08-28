@@ -1,0 +1,15 @@
+{
+  "method": "GET",
+  "url": "https://www.servercontrolpanel.de/scp-core/api/v1/servers/111007/disks",
+  "status": 200,
+  "contentType": "application/json",
+  "responseBody": [
+    {
+      "allocationInMiB": 1560,
+      "capacityInMiB": 1048576,
+      "name": "vda",
+      "path": null,
+      "storageDriver": "VIRTIO"
+    }
+  ]
+}

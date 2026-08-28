@@ -1,0 +1,14 @@
+{
+  "method": "POST",
+  "url": "https://www.servercontrolpanel.de/scp-core/api/v1/servers/111007/interfaces",
+  "status": 400,
+  "contentType": "application/json",
+  "requestBody": {
+    "networkDriver": "VIRTIO",
+    "vlanId": 222001
+  },
+  "responseBody": {
+    "code": "server.vxlan.alreadyexists",
+    "message": "A network interface with bridge name 'vxlan222001' already exists on server."
+  }
+}

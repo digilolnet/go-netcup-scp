@@ -1,0 +1,10 @@
+{
+  "method": "POST",
+  "url": "https://www.servercontrolpanel.de/scp-core/api/v1/users/555001/isos/audit-dummy.iso?multipart=false",
+  "status": 201,
+  "contentType": "application/json",
+  "responseBody": {
+    "presignedUrl": "https://s3.example.com/bucket-0000000000/share/100000/iso/audit-dummy.iso?X-Amz-Algorithm=AWS4-HMAC-SHA256\u0026X-Amz-Date=20260827T155131Z\u0026X-Amz-SignedHeaders=host\u0026X-Amz-Credential=REDACTED\u0026X-Amz-Expires=86400\u0026X-Amz-Signature=REDACTED",
+    "uploadId": null
+  }
+}

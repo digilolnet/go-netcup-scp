@@ -13,9 +13,10 @@ go.work.sum
 # Dependency mirror
 vendor/
 
-# Authentication tokens (keep openapi.json)
+# Authentication tokens (keep openapi.json and recorded test fixtures)
 *.json
 !openapi.json
+!pkg/scp/testdata/live/*.json
 
 # IDE
 .idea/
@@ -27,3 +28,4 @@ vendor/
 # OS
 .DS_Store
 Thumbs.db
+pkg/scp/testdata/banned-identifiers.txt

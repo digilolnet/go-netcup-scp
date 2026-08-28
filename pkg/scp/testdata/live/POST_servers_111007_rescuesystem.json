@@ -1,0 +1,94 @@
+{
+  "method": "POST",
+  "url": "https://www.servercontrolpanel.de/scp-core/api/v1/servers/111007/rescuesystem",
+  "status": 202,
+  "contentType": "application/json",
+  "responseBody": {
+    "executingUser": {
+      "company": "Example Org",
+      "email": "user@example.com",
+      "firstname": "Max",
+      "id": 555001,
+      "lastname": "Mustermann",
+      "username": "100000"
+    },
+    "finishedAt": null,
+    "message": "Rescue system activation is running.",
+    "name": "ServerActivateRescueSystemTask",
+    "startedAt": "2026-08-27T15:58:06.044953239Z",
+    "state": "PENDING",
+    "taskProgress": {
+      "expectedFinishedAt": "2026-08-27T15:58:21.044261445Z",
+      "progressInPercent": 0.0
+    },
+    "uuid": "00000000-0000-4000-8000-000000000157",
+    "responseError": null,
+    "result": {},
+    "serverActionId": null,
+    "steps": [
+      {
+        "finishedAt": null,
+        "name": "ServerActivateRescueSystemTaskStepFirewall",
+        "startedAt": null,
+        "state": "PENDING",
+        "uuid": "00000000-0000-4000-8000-000000000095"
+      },
+      {
+        "finishedAt": null,
+        "name": "ServerActivateRescueSystemTaskStepBootorder",
+        "startedAt": null,
+        "state": "PENDING",
+        "uuid": "00000000-0000-4000-8000-000000000120"
+      },
+      {
+        "finishedAt": null,
+        "name": "ServerActivateRescueSystemTaskStepAttachIso",
+        "startedAt": null,
+        "state": "PENDING",
+        "uuid": "00000000-0000-4000-8000-000000000037"
+      },
+      {
+        "finishedAt": null,
+        "name": "ServerActivateRescueSystemTaskStepAttachIsoWait",
+        "startedAt": null,
+        "state": "PENDING",
+        "uuid": "00000000-0000-4000-8000-000000000207"
+      },
+      {
+        "finishedAt": null,
+        "name": "ServerActivateRescueSystemTaskStepCloudinit",
+        "startedAt": null,
+        "state": "PENDING",
+        "uuid": "00000000-0000-4000-8000-000000000148"
+      },
+      {
+        "finishedAt": null,
+        "name": "ServerActivateRescueSystemTaskStepCloudinitWait",
+        "startedAt": null,
+        "state": "PENDING",
+        "uuid": "00000000-0000-4000-8000-000000000165"
+      },
+      {
+        "finishedAt": null,
+        "name": "ServerActivateRescueSystemTaskStepStart",
+        "startedAt": null,
+        "state": "PENDING",
+        "uuid": "00000000-0000-4000-8000-000000000149"
+      },
+      {
+        "finishedAt": null,
+        "name": "ServerActivateRescueSystemTaskStepStartWait",
+        "startedAt": null,
+        "state": "PENDING",
+        "uuid": "00000000-0000-4000-8000-000000000136"
+      },
+      {
+        "finishedAt": null,
+        "name": "ServerActivateRescueSystemTaskStepLog",
+        "startedAt": null,
+        "state": "PENDING",
+        "uuid": "00000000-0000-4000-8000-000000000059"
+      }
+    ]
+  }
+}

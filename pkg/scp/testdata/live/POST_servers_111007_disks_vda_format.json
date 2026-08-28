@@ -1,0 +1,52 @@
+{
+  "method": "POST",
+  "url": "https://www.servercontrolpanel.de/scp-core/api/v1/servers/111007/disks/vda:format",
+  "status": 202,
+  "contentType": "application/json",
+  "responseBody": {
+    "executingUser": {
+      "company": "Example Org",
+      "email": "user@example.com",
+      "firstname": "Max",
+      "id": 555001,
+      "lastname": "Mustermann",
+      "username": "100000"
+    },
+    "finishedAt": null,
+    "message": "Disk format is running.",
+    "name": "DiskFormatTask",
+    "startedAt": "2026-08-27T17:21:33.944345353Z",
+    "state": "PENDING",
+    "taskProgress": {
+      "expectedFinishedAt": "2026-08-27T17:21:33.943800310Z",
+      "progressInPercent": 0.0
+    },
+    "uuid": "00000000-0000-4000-8000-000000000101",
+    "responseError": null,
+    "result": {},
+    "serverActionId": null,
+    "steps": [
+      {
+        "finishedAt": null,
+        "name": "DiskFormatTaskStepFormat",
+        "startedAt": null,
+        "state": "PENDING",
+        "uuid": "00000000-0000-4000-8000-000000000005"
+      },
+      {
+        "finishedAt": null,
+        "name": "DiskFormatTaskStepFixDefaultDiskSize",
+        "startedAt": null,
+        "state": "PENDING",
+        "uuid": "00000000-0000-4000-8000-000000000087"
+      },
+      {
+        "finishedAt": null,
+        "name": "DiskFormatTaskStepLog",
+        "startedAt": null,
+        "state": "PENDING",
+        "uuid": "00000000-0000-4000-8000-000000000046"
+      }
+    ]
+  }
+}

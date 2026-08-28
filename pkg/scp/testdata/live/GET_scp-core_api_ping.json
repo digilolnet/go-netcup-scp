@@ -1,0 +1,7 @@
+{
+  "method": "GET",
+  "url": "https://www.servercontrolpanel.de/scp-core/api/ping",
+  "status": 200,
+  "contentType": "text/plain",
+  "responseBody": "OK"
+}

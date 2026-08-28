@@ -1,0 +1,87 @@
+{
+  "method": "DELETE",
+  "url": "https://www.servercontrolpanel.de/scp-core/api/v1/servers/111007/rescuesystem",
+  "status": 202,
+  "contentType": "application/json",
+  "responseBody": {
+    "executingUser": {
+      "company": "Example Org",
+      "email": "user@example.com",
+      "firstname": "Max",
+      "id": 555001,
+      "lastname": "Mustermann",
+      "username": "100000"
+    },
+    "finishedAt": null,
+    "message": "Rescue system deactivation is running.",
+    "name": "ServerDeactivateRescueSystemTask",
+    "startedAt": "2026-08-27T15:58:30.464782707Z",
+    "state": "PENDING",
+    "taskProgress": {
+      "expectedFinishedAt": "2026-08-27T15:58:34.464305747Z",
+      "progressInPercent": 0.0
+    },
+    "uuid": "00000000-0000-4000-8000-000000000085",
+    "responseError": null,
+    "result": {},
+    "serverActionId": null,
+    "steps": [
+      {
+        "finishedAt": null,
+        "name": "ServerDeactivateRescueSystemTaskStepAcpiShutdown",
+        "startedAt": null,
+        "state": "PENDING",
+        "uuid": "00000000-0000-4000-8000-000000000108"
+      },
+      {
+        "finishedAt": null,
+        "name": "ServerDeactivateRescueSystemTaskStepAcpiShutdownWait",
+        "startedAt": null,
+        "state": "PENDING",
+        "uuid": "00000000-0000-4000-8000-000000000175"
+      },
+      {
+        "finishedAt": null,
+        "name": "ServerDeactivateRescueSystemTaskStepFirewall",
+        "startedAt": null,
+        "state": "PENDING",
+        "uuid": "00000000-0000-4000-8000-000000000181"
+      },
+      {
+        "finishedAt": null,
+        "name": "ServerDeactivateRescueSystemTaskStepDetachIso",
+        "startedAt": null,
+        "state": "PENDING",
+        "uuid": "00000000-0000-4000-8000-000000000115"
+      },
+      {
+        "finishedAt": null,
+        "name": "ServerDeactivateRescueSystemTaskStepResetPassword",
+        "startedAt": null,
+        "state": "PENDING",
+        "uuid": "00000000-0000-4000-8000-000000000011"
+      },
+      {
+        "finishedAt": null,
+        "name": "ServerDeactivateRescueSystemTaskStepResetBootorder",
+        "startedAt": null,
+        "state": "PENDING",
+        "uuid": "00000000-0000-4000-8000-000000000058"
+      },
+      {
+        "finishedAt": null,
+        "name": "ServerDeactivateRescueSystemTaskStepRemoveCloudinitDisk",
+        "startedAt": null,
+        "state": "PENDING",
+        "uuid": "00000000-0000-4000-8000-000000000133"
+      },
+      {
+        "finishedAt": null,
+        "name": "ServerDeactivateRescueSystemTaskStepLog",
+        "startedAt": null,
+        "state": "PENDING",
+        "uuid": "00000000-0000-4000-8000-000000000017"
+      }
+    ]
+  }
+}

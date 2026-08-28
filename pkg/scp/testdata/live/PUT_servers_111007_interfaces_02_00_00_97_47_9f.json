@@ -1,0 +1,8 @@
+{
+  "method": "PUT",
+  "url": "https://www.servercontrolpanel.de/scp-core/api/v1/servers/111007/interfaces/02:00:00:97:47:9f",
+  "status": 204,
+  "requestBody": {
+    "driver": "VIRTIO"
+  }
+}

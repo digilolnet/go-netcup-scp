@@ -1,0 +1,66 @@
+{
+  "method": "POST",
+  "url": "https://www.servercontrolpanel.de/scp-core/api/v1/servers/111007/storageoptimization",
+  "status": 202,
+  "contentType": "application/json",
+  "responseBody": {
+    "executingUser": {
+      "company": "Example Org",
+      "email": "user@example.com",
+      "firstname": "Max",
+      "id": 555001,
+      "lastname": "Mustermann",
+      "username": "100000"
+    },
+    "finishedAt": null,
+    "message": "Storage optimization is running.",
+    "name": "ServerStorageOptimizationTask",
+    "startedAt": "2026-08-27T15:57:52.500837320Z",
+    "state": "PENDING",
+    "taskProgress": {
+      "expectedFinishedAt": "2026-08-27T15:57:59.500376805Z",
+      "progressInPercent": 0.0
+    },
+    "uuid": "00000000-0000-4000-8000-000000000146",
+    "responseError": null,
+    "result": {},
+    "serverActionId": null,
+    "steps": [
+      {
+        "finishedAt": null,
+        "name": "ServerStorageOptimizationTaskStepPoweroff",
+        "startedAt": null,
+        "state": "PENDING",
+        "uuid": "00000000-0000-4000-8000-000000000019"
+      },
+      {
+        "finishedAt": null,
+        "name": "ServerStorageOptimizationTaskStepPoweroffWait",
+        "startedAt": null,
+        "state": "PENDING",
+        "uuid": "00000000-0000-4000-8000-000000000002"
+      },
+      {
+        "finishedAt": null,
+        "name": "ServerStorageOptimizationTaskStepOptimizeStorage",
+        "startedAt": null,
+        "state": "PENDING",
+        "uuid": "00000000-0000-4000-8000-000000000060"
+      },
+      {
+        "finishedAt": null,
+        "name": "ServerStorageOptimizationTaskStepOptimizeStorageWait",
+        "startedAt": null,
+        "state": "PENDING",
+        "uuid": "00000000-0000-4000-8000-000000000066"
+      },
+      {
+        "finishedAt": null,
+        "name": "ServerStorageOptimizationTaskStepLogDone",
+        "startedAt": null,
+        "state": "PENDING",
+        "uuid": "00000000-0000-4000-8000-000000000197"
+      }
+    ]
+  }
+}
