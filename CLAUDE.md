@@ -58,7 +58,14 @@ The CLI stores tokens as JSON files and extracts the user ID from the JWT `id` c
 
 ## Tests
 
-Mock with `httptest.Server`. See `pkg/scp/servers_test.go`.
+Two layers:
+
+- `pkg/scp/livefixtures_test.go` + `pkg/scp/testdata/live/` — recorded real API
+  responses (sanitized) replayed through the wrappers. Prefer extending this
+  when touching wrappers; capture new fixtures by running the CLI with
+  `NETCUP_SCP_TRACE_DIR=<dir>` and sanitizing before committing.
+- Hand-written `httptest.Server` tests for error paths and transport logic.
+  See `pkg/scp/servers_test.go`, `client_test.go`.
 
 ## Updating the API
 

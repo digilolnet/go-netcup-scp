@@ -71,7 +71,7 @@ defer client.Close()
 | `disks.go`             | List, get, format, set storage driver, supported drivers                                                 |
 | `network.go`           | List/get/create/delete interfaces, interface driver, rDNS (IPv4/IPv6)                                    |
 | `snapshots.go`         | Create, list, get, revert, delete, export, dry-run                                                       |
-| `metrics.go`           | CPU, disk I/O, network throughput, network packets                                                       |
+| `metrics.go`           | Typed time series (`[]MetricPoint`): CPU (percent of one core), disk I/O, network throughput/packets     |
 | `firewall.go`          | Per-interface firewall: get, update, activate, reapply, clear, restore copied policies                   |
 | `firewall_policies.go` | List, get, create, update, delete policies; add rules                                                    |
 | `failover.go`          | List, route, unroute IPv4/IPv6 failover addresses                                                        |
@@ -229,6 +229,9 @@ vlans
 
 metrics
   cpu/disk/network/network-packet <server-id>   ASCII time-series charts
+    --hours N     window (default 6)
+    --series ...  filter series by case-insensitive globs (tab-completes)
+    --total       sum the series into one line
 
 users
   get/update, logs
