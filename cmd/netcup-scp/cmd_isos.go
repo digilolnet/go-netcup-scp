@@ -81,7 +81,7 @@ func newIsosListAvailableCmd() *cobra.Command {
 
 func newIsosGetAttachedCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:               "get <server-id>",
+		Use:               "attached <server-id>",
 		Short:             "Get the currently attached ISO",
 		Args:              cobra.ExactArgs(1),
 		ValidArgsFunction: makeCompleter(serverIDCompletions),
@@ -230,7 +230,7 @@ func newUserIsosListCmd() *cobra.Command {
 
 func newUserIsosGetCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:               "get <key>",
+		Use:               "download-url <key>",
 		Short:             "Get user ISO download info",
 		Args:              cobra.ExactArgs(1),
 		ValidArgsFunction: makeCompleter(userISOKeyCompletions),

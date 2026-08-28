@@ -42,6 +42,7 @@ func newServersCmd() *cobra.Command {
 		newServersCPUTopologyCmd(),
 		newServersGuestAgentCmd(),
 		newServersVNCCmd(),
+		newServersRescueCmd(),
 		newServersImageFlavoursCmd(),
 		newServersInstallImageCmd(),
 		newServersInstallUserImageCmd(),
@@ -123,7 +124,7 @@ func newServersListCmd() *cobra.Command {
 
 func newServersGetCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:               "get <id>",
+		Use:               "get <server-id>",
 		Short:             "Get server details",
 		Args:              cobra.ExactArgs(1),
 		ValidArgsFunction: makeCompleter(serverIDCompletions),
@@ -272,7 +273,7 @@ func newServersGetCmd() *cobra.Command {
 func newServersStartCmd() *cobra.Command {
 	var wait bool
 	cmd := &cobra.Command{
-		Use:               "start <id>",
+		Use:               "start <server-id>",
 		Short:             "Power on a server",
 		Args:              cobra.ExactArgs(1),
 		ValidArgsFunction: makeCompleter(serverIDCompletions),
@@ -301,7 +302,7 @@ func newServersStartCmd() *cobra.Command {
 func newServersStopCmd() *cobra.Command {
 	var powerOff, wait bool
 	cmd := &cobra.Command{
-		Use:               "stop <id>",
+		Use:               "stop <server-id>",
 		Short:             "Shut down a server",
 		Args:              cobra.ExactArgs(1),
 		ValidArgsFunction: makeCompleter(serverIDCompletions),
@@ -331,7 +332,7 @@ func newServersStopCmd() *cobra.Command {
 func newServersRestartCmd() *cobra.Command {
 	var reset, wait bool
 	cmd := &cobra.Command{
-		Use:               "restart <id>",
+		Use:               "restart <server-id>",
 		Short:             "Reboot a server",
 		Args:              cobra.ExactArgs(1),
 		ValidArgsFunction: makeCompleter(serverIDCompletions),
@@ -361,7 +362,7 @@ func newServersRestartCmd() *cobra.Command {
 func newServersAutostartCmd() *cobra.Command {
 	var wait bool
 	cmd := &cobra.Command{
-		Use:               "autostart <id> <on|off>",
+		Use:               "autostart <server-id> <on|off>",
 		Short:             "Configure autostart",
 		Args:              cobra.ExactArgs(2),
 		ValidArgsFunction: makeCompleter(serverIDCompletions, static("on", "off")),
@@ -394,7 +395,7 @@ func newServersAutostartCmd() *cobra.Command {
 func newServersUEFICmd() *cobra.Command {
 	var wait bool
 	cmd := &cobra.Command{
-		Use:               "uefi <id> <on|off>",
+		Use:               "uefi <server-id> <on|off>",
 		Short:             "Configure UEFI boot",
 		Args:              cobra.ExactArgs(2),
 		ValidArgsFunction: makeCompleter(serverIDCompletions, static("on", "off")),
@@ -426,7 +427,7 @@ func newServersUEFICmd() *cobra.Command {
 
 func newServersNicknameCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:               "nickname <id> <nickname>",
+		Use:               "nickname <server-id> <nickname>",
 		Short:             "Set server nickname",
 		Args:              cobra.ExactArgs(2),
 		ValidArgsFunction: makeCompleter(serverIDCompletions),
@@ -454,7 +455,7 @@ func newServersNicknameCmd() *cobra.Command {
 func newServersLogsCmd() *cobra.Command {
 	var limit, offset int
 	cmd := &cobra.Command{
-		Use:               "logs <id>",
+		Use:               "logs <server-id>",
 		Short:             "Get server event log",
 		Args:              cobra.ExactArgs(1),
 		ValidArgsFunction: makeCompleter(serverIDCompletions),
@@ -497,7 +498,7 @@ func newServersLogsCmd() *cobra.Command {
 func newServersCPUTopologyCmd() *cobra.Command {
 	var wait bool
 	cmd := &cobra.Command{
-		Use:               "cpu-topology <id> <sockets> <cores>",
+		Use:               "cpu-topology <server-id> <sockets> <cores>",
 		Short:             "Set CPU topology",
 		Args:              cobra.ExactArgs(3),
 		ValidArgsFunction: makeCompleter(serverIDCompletions),
@@ -533,7 +534,7 @@ func newServersCPUTopologyCmd() *cobra.Command {
 
 func newServersGuestAgentCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:               "guest-agent <id>",
+		Use:               "guest-agent <server-id>",
 		Short:             "Get guest agent info",
 		Args:              cobra.ExactArgs(1),
 		ValidArgsFunction: makeCompleter(serverIDCompletions),
@@ -604,7 +605,7 @@ func newServersGuestAgentCmd() *cobra.Command {
 
 func newServersImageFlavoursCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:               "image-flavours <id>",
+		Use:               "image-flavours <server-id>",
 		Short:             "List available OS image flavours",
 		Args:              cobra.ExactArgs(1),
 		ValidArgsFunction: makeCompleter(serverIDCompletions),
@@ -786,7 +787,7 @@ func newServersOptimizeStorageCmd() *cobra.Command {
 	var disksFlag string
 	var startAfter, wait bool
 	cmd := &cobra.Command{
-		Use:               "optimize-storage <id>",
+		Use:               "optimize-storage <server-id>",
 		Short:             "Optimize disk storage",
 		Args:              cobra.ExactArgs(1),
 		ValidArgsFunction: makeCompleter(serverIDCompletions),

@@ -15,60 +15,26 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/spf13/cobra"
+
+	"github.com/digilolnet/go-netcup-scp/pkg/scp"
 )
 
-func newRescueCmd() *cobra.Command {
-	cmd := &cobra.Command{
-		Use:   "rescue",
-		Short: "Manage rescue system",
-	}
-	cmd.AddCommand(
-		newRescueGetCmd(),
-		newRescueActivateCmd(),
-		newRescueDeactivateCmd(),
-	)
-	return cmd
-}
-
-func newRescueGetCmd() *cobra.Command {
-	return &cobra.Command{
-		Use:               "get <server-id>",
-		Short:             "Get rescue system status",
-		Args:              cobra.ExactArgs(1),
-		ValidArgsFunction: makeCompleter(serverIDCompletions),
-		RunE: func(cmd *cobra.Command, args []string) error {
-			cc, cleanup, err := makeCmdContext(false)
-			if err != nil {
-				return err
-			}
-			defer cleanup()
-
-			id, err := parseID(args[0], "server-id")
-			if err != nil {
-				return err
-			}
-			status, err := cc.client.GetRescueSystem(cc.ctx, id)
-			if err != nil {
-				return err
-			}
-			return printResult(cc, status, func() {
-				printKV(
-					"Active", deref(status.Active),
-					"Password", derefStr(status.Password),
-				)
-			})
-		},
-	}
-}
-
-func newRescueActivateCmd() *cobra.Command {
+// newServersRescueCmd toggles the rescue system, following the same
+// `<property> <server-id> <on|off>` idiom as autostart and uefi. Whether
+// rescue is currently active is part of `servers get`.
+func newServersRescueCmd() *cobra.Command {
 	var wait bool
 	cmd := &cobra.Command{
-		Use:               "activate <server-id>",
-		Short:             "Boot server into rescue mode",
-		Args:              cobra.ExactArgs(1),
-		ValidArgsFunction: makeCompleter(serverIDCompletions),
+		Use:   "rescue <server-id> <on|off>",
+		Short: "Enable or disable the rescue system",
+		Long: "Enable or disable the rescue system. The server must be powered off;\n" +
+			"enabling boots the rescue environment on the next start. With --wait, the\n" +
+			"one-time rescue password is printed once activation completes.",
+		Args:              cobra.ExactArgs(2),
+		ValidArgsFunction: makeCompleter(serverIDCompletions, static("on", "off")),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			cc, cleanup, err := makeCmdContext(false)
 			if err != nil {
@@ -80,40 +46,31 @@ func newRescueActivateCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			task, err := cc.client.ActivateRescueSystem(cc.ctx, id)
+			enabled, err := parseBool(args[1])
 			if err != nil {
 				return err
 			}
-			return printTaskAndWait(cc, task, wait)
-		},
-	}
-	cmd.Flags().BoolVar(&wait, "wait", false, "wait for task to complete")
-	return cmd
-}
 
-func newRescueDeactivateCmd() *cobra.Command {
-	var wait bool
-	cmd := &cobra.Command{
-		Use:               "deactivate <server-id>",
-		Short:             "Exit rescue mode and boot normally",
-		Args:              cobra.ExactArgs(1),
-		ValidArgsFunction: makeCompleter(serverIDCompletions),
-		RunE: func(cmd *cobra.Command, args []string) error {
-			cc, cleanup, err := makeCmdContext(false)
+			var task *scp.TaskInfo
+			if enabled {
+				task, err = cc.client.ActivateRescueSystem(cc.ctx, id)
+			} else {
+				task, err = cc.client.DeactivateRescueSystem(cc.ctx, id)
+			}
 			if err != nil {
 				return err
 			}
-			defer cleanup()
-
-			id, err := parseID(args[0], "server-id")
-			if err != nil {
+			if err := printTaskAndWait(cc, task, wait); err != nil {
 				return err
 			}
-			task, err := cc.client.DeactivateRescueSystem(cc.ctx, id)
-			if err != nil {
-				return err
+			if enabled && wait && !cc.jsonOut {
+				status, err := cc.client.GetRescueSystem(cc.ctx, id)
+				if err != nil {
+					return fmt.Errorf("rescue activated, but fetching the password failed: %w", err)
+				}
+				printKV("Rescue Password", derefStr(status.Password))
 			}
-			return printTaskAndWait(cc, task, wait)
+			return nil
 		},
 	}
 	cmd.Flags().BoolVar(&wait, "wait", false, "wait for task to complete")

@@ -25,7 +25,7 @@ import (
 
 func newImagesCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "images",
+		Use:   "user-images",
 		Short: "Manage user-uploaded disk images",
 	}
 	cmd.AddCommand(
@@ -66,7 +66,7 @@ func newImagesListCmd() *cobra.Command {
 
 func newImagesGetCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:               "get <key>",
+		Use:               "download-url <key>",
 		Short:             "Get image download info",
 		Args:              cobra.ExactArgs(1),
 		ValidArgsFunction: makeCompleter(imageKeyCompletions),

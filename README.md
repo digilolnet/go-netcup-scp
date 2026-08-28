@@ -78,8 +78,8 @@ defer client.Close()
 | `users.go`             | Get/update user, logs                                                                                                                  |
 | `ssh_keys.go`          | List, create, delete SSH keys                                                                                                          |
 | `isos.go`              | List user ISOs                                                                                                                         |
-| `images.go`            | List, get, delete, upload user images                                                                                                  |
-| `rescue.go`            | Enable/disable rescue system                                                                                                           |
+| `images.go`            | List, download-url, delete, upload user images                                                                                                  |
+| `rescue.go`            | `servers rescue <on|off>` toggle                                                                                                           |
 | `tasks.go`             | List, get, cancel async tasks                                                                                                          |
 | `upload.go`            | Upload files                                                                                                                           |
 
@@ -150,62 +150,75 @@ netcup-scp context list
 
 ```
 servers
-  list                          list servers
-  get <id>                      get server details (live info included)
-  start/stop/restart <id>       power management
-  autostart <id> <on|off>       configure autostart
-  uefi <id> <on|off>            configure UEFI boot
-  nickname <id> <name>          set nickname
-  cpu-topology <id> <s> <c>     set CPU sockets and cores
-  logs <id>                     event log
-  guest-agent <id>              guest agent info and network interfaces
-  image-flavours <id>           list installable OS images
-  install-image <id> <flavour>  install OS image
-  install-user-image <id> <img> install user-uploaded image
-  optimize-storage <id>         compact disk allocation
-  qemu-status                   QEMU version status across all servers
-  gpu-driver <server-id>        get GPU driver download URL
+  list                            list servers (--sort, filters)
+  get <server-id>                 server details (live info included)
+  start/stop/restart <server-id>  power management (--wait)
+  autostart <server-id> <on|off>  configure autostart
+  uefi <server-id> <on|off>       configure UEFI boot
+  rescue <server-id> <on|off>     enable/disable the rescue system
+  nickname <server-id> <name>     set nickname
+  cpu-topology <server-id> <sockets> <cores>
+  logs <server-id>                event log
+  guest-agent <server-id>         guest agent info
+  image-flavours <server-id>      list installable OS images
+  install-image <server-id> <flavour-id>       install official OS image
+  install-user-image <server-id> <image-name>  install user-uploaded image
+  optimize-storage <server-id>    compact disk allocation
+  qemu-status                     QEMU version status across all servers
+  gpu-driver <server-id>          GPU driver download URL
+  vnc <server-id>                 bridge the VNC console (native port + noVNC)
 
 disks
-  list/get <server-id>          list or inspect disks
-  format <server-id> <name>     format disk (destructive)
-  set-driver <server-id> <drv>  change storage driver
-  supported-drivers <server-id> list supported drivers
+  list/get <server-id> [name]     list or inspect disks
+  format <server-id> <name>       format disk (destructive)
+  set-driver <server-id> <driver> change storage driver
+  supported-drivers <server-id>
 
-network
-  list/get <server-id>          list or inspect interfaces
-  create/delete <server-id>     add or remove an interface
-  set-driver <server-id> <mac>  change network driver
-  rdns-v4/v6 get/set/delete     manage reverse DNS
+snapshots                         (BIOS-mode servers only; UEFI is refused by the API)
+  list/get/create/revert/delete/export <server-id> [name]
+  dry-run <server-id>             check whether a snapshot is possible
 
-snapshots
-  list/get/create/restore/delete <server-id>
+interfaces
+  list/get <server-id> [mac]      list or inspect NICs
+  create-vlan <server-id> <vlan-id>
+  delete <server-id> <mac>        (primary NICs are refused)
+  update-driver <server-id> <mac> <driver>
 
-metrics
-  cpu/disk/network/network-packet <server-id>
-                                time-series charts (ASCII, last 6h by default)
+rdns-v4 / rdns-v6
+  get/set/delete <ip>             manage reverse DNS
 
 firewall
-  policies list/get/create/update/delete
-  rules list/get/create/update/delete/reorder
+  get/update/reapply/clear/restore-copied-policies <server-id> <mac>
+  active <server-id> <mac> <on|off>
 
-failover
-  v4/v6 list/route/unroute
+firewall-policies
+  list/get/create/update/delete/add-rule
+
+failover-v4 / failover-v6
+  list / route <failover-id> <server-id> / unroute <failover-id>
+
+isos
+  list/attached <server-id>       available and currently attached ISO
+  attach/detach <server-id>       (--iso-id, --user-iso, --boot-cdrom)
+
+user-isos / user-images
+  list/upload/delete/download-url <key>
+  upload-url <file>               presigned URL for out-of-band upload (isos only)
 
 vlans
-  list/get/update
+  list / get <vlan-id> / update <vlan-id> <name>
+
+metrics
+  cpu/disk/network/network-packet <server-id>   ASCII time-series charts
 
 users
-  get/update                    view or modify your account
-  logs                          account activity log
-  ssh-keys list/get/create/delete
-  isos list
-  images list/get/upload/delete
-
+  get/update, logs
+ssh-keys
+  list/create/delete
 tasks
-  list/get/cancel               manage async tasks
-
-upload <file>                   upload a file
+  list/get/cancel <uuid>
+system
+  ping, maintenance
 ```
 
 All commands support `--json` / `-j` for raw JSON output and shell completion (`bash`, `zsh`, `fish`, `powershell`).

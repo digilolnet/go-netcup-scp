@@ -97,7 +97,6 @@ func newRootCmd() *cobra.Command {
 		newFailoverV4Cmd(),
 		newFailoverV6Cmd(),
 		newImagesCmd(),
-		newRescueCmd(),
 		newSystemCmd(),
 		newVLansCmd(),
 		newIsosCmd(),

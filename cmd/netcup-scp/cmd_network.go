@@ -217,7 +217,8 @@ func newInterfacesDeleteCmd() *cobra.Command {
 }
 
 func newInterfacesUpdateDriverCmd() *cobra.Command {
-	return &cobra.Command{
+	var wait bool
+	cmd := &cobra.Command{
 		Use:   "update-driver <server-id> <mac> <driver>",
 		Short: "Change interface driver",
 		Args:  cobra.ExactArgs(3),
@@ -247,12 +248,14 @@ func newInterfacesUpdateDriverCmd() *cobra.Command {
 				return err
 			}
 			if task != nil {
-				return printTaskAndWait(cc, task, false)
+				return printTaskAndWait(cc, task, wait)
 			}
 			printOK(cc)
 			return nil
 		},
 	}
+	cmd.Flags().BoolVar(&wait, "wait", false, "wait for task to complete")
+	return cmd
 }
 
 func newInterfacesCreateVLANCmd() *cobra.Command {
