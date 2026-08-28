@@ -15,6 +15,7 @@
 package main
 
 import (
+	"net/http"
 	"strings"
 	"testing"
 )
@@ -79,6 +80,56 @@ func TestResolveServerArgIntegerPassthrough(t *testing.T) {
 	id, err := resolveServerArg(nil, "111007")
 	if err != nil || id != 111007 {
 		t.Fatalf("resolveServerArg(111007) = %d, %v", id, err)
+	}
+}
+
+func TestResolveServerArgLiveAndCached(t *testing.T) {
+	var calls int
+	mux := http.NewServeMux()
+	mux.HandleFunc("/api/v1/servers", func(w http.ResponseWriter, _ *http.Request) {
+		calls++
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`[
+			{"id":1,"name":"v9001","nickname":"web-prod","hostname":"web.example.com"},
+			{"id":2,"name":"v9002","nickname":"web-staging","hostname":"staging.example.com"}
+		]`))
+	})
+	cc := newTestContext(t, mux)
+
+	// Cache empty: resolution fetches live and populates the cache.
+	id, err := resolveServerArg(cc, "web-prod")
+	if err != nil || id != 1 {
+		t.Fatalf("live resolve = %d, %v; want 1", id, err)
+	}
+	if calls != 1 {
+		t.Fatalf("live resolve made %d API calls, want 1", calls)
+	}
+
+	// Second resolution must be served from the shared cache.
+	id, err = resolveServerArg(cc, "web-staging")
+	if err != nil || id != 2 {
+		t.Fatalf("cached resolve = %d, %v; want 2", id, err)
+	}
+	if calls != 1 {
+		t.Fatalf("cached resolve made an API call (total %d), want cache hit", calls)
+	}
+
+	// A name missing from the (possibly stale) cache retries live once.
+	_, err = resolveServerArg(cc, "nosuch")
+	if err == nil || !strings.Contains(err.Error(), "no server named") {
+		t.Fatalf("unknown name: got %v", err)
+	}
+	if calls != 2 {
+		t.Fatalf("unknown name made %d total API calls, want 2 (one stale-cache retry)", calls)
+	}
+
+	// Ambiguous prefix: error names every match.
+	_, err = resolveServerArg(cc, "web")
+	if err == nil ||
+		!strings.Contains(err.Error(), "ambiguous") ||
+		!strings.Contains(err.Error(), "web-prod") ||
+		!strings.Contains(err.Error(), "web-staging") {
+		t.Fatalf("ambiguous prefix: got %v", err)
 	}
 }
 

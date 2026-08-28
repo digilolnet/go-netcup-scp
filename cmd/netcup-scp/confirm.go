@@ -17,6 +17,7 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"io"
 	"os"
 	"strconv"
 	"strings"
@@ -24,14 +25,17 @@ import (
 	"golang.org/x/term"
 )
 
-// stdinIsTTY reports whether stdin is an interactive terminal.
-func stdinIsTTY() bool {
-	return term.IsTerminal(int(os.Stdin.Fd()))
-}
+// confirmInput is where confirmation answers are read from, and
+// confirmInteractive reports whether prompting is possible at all.
+// Variables so tests can drive the prompts without a real terminal.
+var (
+	confirmInput       io.Reader = os.Stdin
+	confirmInteractive           = func() bool { return term.IsTerminal(int(os.Stdin.Fd())) }
+)
 
-// readLine reads one line of user input from stdin.
+// readLine reads one line of user input.
 func readLine() (string, error) {
-	line, err := bufio.NewReader(os.Stdin).ReadString('\n')
+	line, err := bufio.NewReader(confirmInput).ReadString('\n')
 	if err != nil {
 		return "", fmt.Errorf("read confirmation: %w", err)
 	}
@@ -45,7 +49,7 @@ func confirm(action string) error {
 	if rootFlags.force {
 		return nil
 	}
-	if !stdinIsTTY() {
+	if !confirmInteractive() {
 		return fmt.Errorf("%q requires confirmation; re-run with --force", action)
 	}
 	fmt.Fprintf(os.Stderr, "Are you sure you want to %s? (y/N) ", action)
@@ -67,7 +71,7 @@ func confirmRetype(cc *cmdContext, serverID int32, action string) error {
 	if rootFlags.force {
 		return nil
 	}
-	if !stdinIsTTY() {
+	if !confirmInteractive() {
 		return fmt.Errorf("%q requires confirmation; re-run with --force", action)
 	}
 	label := serverLabelByID(cc, serverID)

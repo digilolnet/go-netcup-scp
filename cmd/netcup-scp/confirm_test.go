@@ -44,6 +44,61 @@ func TestConfirmNonInteractiveRefuses(t *testing.T) {
 	}
 }
 
+// withPromptInput fakes an interactive terminal whose user types input.
+func withPromptInput(t *testing.T, input string) {
+	t.Helper()
+	oldIn, oldInteractive := confirmInput, confirmInteractive
+	confirmInput = strings.NewReader(input)
+	confirmInteractive = func() bool { return true }
+	t.Cleanup(func() { confirmInput, confirmInteractive = oldIn, oldInteractive })
+}
+
+func TestConfirmAnswers(t *testing.T) {
+	tests := []struct {
+		answer string
+		ok     bool
+	}{
+		{"y\n", true},
+		{"yes\n", true},
+		{"Y\n", true},
+		{"n\n", false},
+		{"\n", false},
+		{"nah\n", false},
+	}
+	for _, tc := range tests {
+		t.Run(strings.TrimSpace(tc.answer), func(t *testing.T) {
+			withPromptInput(t, tc.answer)
+			err := confirm("delete everything")
+			if tc.ok && err != nil {
+				t.Errorf("answer %q: got %v, want accepted", tc.answer, err)
+			}
+			if !tc.ok && err == nil {
+				t.Errorf("answer %q: accepted, want abort", tc.answer)
+			}
+		})
+	}
+}
+
+func TestConfirmRetypeAnswers(t *testing.T) {
+	// Seed the completion cache so serverLabelByID resolves offline.
+	t.Setenv("XDG_CACHE_HOME", t.TempDir())
+	cc := &cmdContext{tokenFile: "retype-test-token"}
+	newCompletionCache(cc.tokenFile).set("servers", []string{
+		encodeServerRef(serverRef{ID: 7, Name: "v9007", Nickname: "web-prod"}),
+	})
+
+	withPromptInput(t, "web-prod\n")
+	if err := confirmRetype(cc, 7, "format the disk"); err != nil {
+		t.Errorf("correct retype: %v", err)
+	}
+
+	withPromptInput(t, "web-prod-oops\n")
+	err := confirmRetype(cc, 7, "format the disk")
+	if err == nil || !strings.Contains(err.Error(), "does not match") {
+		t.Errorf("wrong retype: got %v, want mismatch abort", err)
+	}
+}
+
 func TestFindServerLabel(t *testing.T) {
 	if label, ok := findServerLabel(testServers, 1); !ok || label != "web-prod" {
 		t.Errorf("id 1: got %q, %v; want nickname web-prod", label, ok)

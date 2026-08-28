@@ -70,8 +70,12 @@ func readJSONStdin(v any) error {
 	return nil
 }
 
-// taskPollInterval is how often --wait polls the task state.
-const taskPollInterval = 2 * time.Second
+// taskPollInterval is how often --wait polls the task state; spinnerTick is
+// the spinner redraw rate. Variables so tests can shrink them.
+var (
+	taskPollInterval = 2 * time.Second
+	spinnerTick      = 100 * time.Millisecond
+)
 
 // defaultWaitTimeout bounds --wait polling; generous because OS installs and
 // snapshot exports legitimately take many minutes.
@@ -128,7 +132,7 @@ func waitTask(cc *cmdContext, uuid string) error {
 		// Animate the spinner while the next poll interval elapses.
 		for end := time.Now().Add(taskPollInterval); time.Now().Before(end); {
 			render()
-			time.Sleep(100 * time.Millisecond)
+			time.Sleep(spinnerTick)
 		}
 
 		task, err := cc.client.GetTask(cc.ctx, uuid)
