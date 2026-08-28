@@ -101,6 +101,9 @@ func newMetricsSubCmd(spec metricSpec) *cobra.Command {
 			if err != nil {
 				return err
 			}
+			if hours < 1 {
+				return fmt.Errorf("--hours must be at least 1, got %d", hours)
+			}
 			points, err := spec.fetch(cc, id, &scp.MetricsOptions{Hours: &hours})
 			if err != nil {
 				return err
@@ -127,6 +130,25 @@ func newMetricsSubCmd(spec metricSpec) *cobra.Command {
 		`only these series; case-insensitive globs (e.g. "CPU0", "*:9f IN", "vda *")`,
 	)
 	cmd.Flags().BoolVar(&total, "total", false, "sum the (remaining) series into one TOTAL series")
+	registerFlagCompleter(cmd, "series", func(
+		cc *cmdContext, args []string, _ string,
+	) ([]string, cobra.ShellCompDirective) {
+		if len(args) == 0 {
+			return nil, cobra.ShellCompDirectiveNoFileComp
+		}
+		id, err := parseID(args[0], "server-id")
+		if err != nil {
+			return nil, cobra.ShellCompDirectiveNoFileComp
+		}
+		return cc.completionWithCache(serverKey("metrics-"+spec.use+"-", id), func() ([]string, error) {
+			one := int32(1)
+			points, err := spec.fetch(cc, id, &scp.MetricsOptions{Hours: &one})
+			if err != nil {
+				return nil, err
+			}
+			return scp.Series(points), nil
+		})
+	})
 	return cmd
 }
 
