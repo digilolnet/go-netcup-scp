@@ -40,7 +40,7 @@ func testServer(t *testing.T, mux *http.ServeMux) (*httptest.Server, *Manager) {
 	)
 	// Point the manager at the test server by overriding authURL for tests.
 	// We do this by patching the httpClient transport to rewrite requests.
-	mgr.httpClient.Transport = rewriteTransport{base: http.DefaultTransport, from: authURL, to: srv.URL}
+	mgr.httpClient.Transport = rewriteTransport{base: http.DefaultTransport, from: DefaultAuthURL, to: srv.URL}
 	return srv, mgr
 }
 
@@ -189,6 +189,26 @@ func TestInitiateDeviceAuth_Success(t *testing.T) {
 	}
 	if resp.UserCode != "USER-CODE" {
 		t.Errorf("UserCode = %q, want %q", resp.UserCode, "USER-CODE")
+	}
+}
+
+func TestWithAuthURL_RedirectsRequests(t *testing.T) {
+	mux := http.NewServeMux()
+	mux.HandleFunc("/auth/device", func(w http.ResponseWriter, r *http.Request) {
+		writeJSON(w, DeviceAuthResponse{DeviceCode: "dev-code-456"})
+	})
+	srv := httptest.NewServer(mux)
+	t.Cleanup(srv.Close)
+
+	// No transport rewriting: the option alone must point requests at srv.
+	// The trailing slash must be tolerated.
+	mgr := NewManager(WithAutoRefresh(false), WithAuthURL(srv.URL+"/"))
+	resp, err := mgr.InitiateDeviceAuth(context.Background())
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if resp.DeviceCode != "dev-code-456" {
+		t.Errorf("DeviceCode = %q, want %q", resp.DeviceCode, "dev-code-456")
 	}
 }
 
@@ -428,7 +448,7 @@ func TestWithTokenRefreshCallback(t *testing.T) {
 	})
 	srv := httptest.NewServer(mux)
 	t.Cleanup(srv.Close)
-	mgr.httpClient.Transport = rewriteTransport{base: http.DefaultTransport, from: authURL, to: srv.URL}
+	mgr.httpClient.Transport = rewriteTransport{base: http.DefaultTransport, from: DefaultAuthURL, to: srv.URL}
 
 	if _, err := mgr.RefreshToken(context.Background(), "ref"); err != nil {
 		t.Fatalf("unexpected error: %v", err)

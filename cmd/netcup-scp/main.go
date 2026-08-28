@@ -167,12 +167,16 @@ func resolveTokenFile() error {
 func makeCmdContext(noAuth bool) (*cmdContext, func(), error) {
 	ctx := context.Background()
 
-	authMgr := auth.NewManager(
+	authOpts := []auth.Option{
 		auth.WithAutoRefresh(true),
 		auth.WithTokenRefreshCallback(func(tok *auth.TokenResponse) {
 			_ = saveToken(rootFlags.tokenFile, tok)
 		}),
-	)
+	}
+	if u := os.Getenv("NETCUP_SCP_AUTH_URL"); u != "" {
+		authOpts = append(authOpts, auth.WithAuthURL(u))
+	}
+	authMgr := auth.NewManager(authOpts...)
 
 	cc := &cmdContext{
 		ctx:       ctx,
@@ -204,6 +208,9 @@ func makeCmdContext(noAuth bool) (*cmdContext, func(), error) {
 		cc.userID = userID
 
 		var clientOpts []scp.ClientOption
+		if u := os.Getenv("NETCUP_SCP_API_URL"); u != "" {
+			clientOpts = append(clientOpts, scp.WithBaseURL(u))
+		}
 		if dir := os.Getenv("NETCUP_SCP_TRACE_DIR"); dir != "" {
 			clientOpts = append(clientOpts, scp.WithTraceDir(dir))
 		}

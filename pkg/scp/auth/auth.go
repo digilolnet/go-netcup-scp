@@ -30,8 +30,9 @@ import (
 )
 
 const (
-	authURL  = "https://www.servercontrolpanel.de/realms/scp/protocol/openid-connect"
-	clientID = "scp"
+	// DefaultAuthURL is the production netcup SCP OpenID Connect endpoint base.
+	DefaultAuthURL = "https://www.servercontrolpanel.de/realms/scp/protocol/openid-connect"
+	clientID       = "scp"
 )
 
 // slowDownIncrement is how much each slow_down response grows the polling
@@ -70,6 +71,7 @@ type TokenResponse struct {
 
 type Manager struct {
 	httpClient   *http.Client
+	authURL      string
 	token        *TokenResponse
 	tokenExpiry  time.Time
 	mu           sync.RWMutex
@@ -105,9 +107,18 @@ func WithAutoRefresh(enable bool) Option {
 	}
 }
 
+// WithAuthURL overrides the OpenID Connect endpoint base (default
+// DefaultAuthURL) — for a staging realm, a mock, or a local proxy.
+func WithAuthURL(url string) Option {
+	return func(am *Manager) {
+		am.authURL = strings.TrimSuffix(url, "/")
+	}
+}
+
 func NewManager(opts ...Option) *Manager {
 	am := &Manager{
 		httpClient:  &http.Client{Timeout: 30 * time.Second},
+		authURL:     DefaultAuthURL,
 		autoRefresh: true,
 	}
 
@@ -124,7 +135,7 @@ func (am *Manager) InitiateDeviceAuth(ctx context.Context) (*DeviceAuthResponse,
 		"scope":     {"offline_access openid"},
 	}
 
-	req, err := http.NewRequestWithContext(ctx, http.MethodPost, authURL+"/auth/device", strings.NewReader(data.Encode()))
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, am.authURL+"/auth/device", strings.NewReader(data.Encode()))
 	if err != nil {
 		return nil, fmt.Errorf("failed to create request: %w", err)
 	}
@@ -193,7 +204,7 @@ func (am *Manager) requestToken(ctx context.Context, deviceCode string) (*TokenR
 		"client_id":   {clientID},
 	}
 
-	req, err := http.NewRequestWithContext(ctx, http.MethodPost, authURL+"/token", strings.NewReader(data.Encode()))
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, am.authURL+"/token", strings.NewReader(data.Encode()))
 	if err != nil {
 		return nil, fmt.Errorf("failed to create request: %w", err)
 	}
@@ -247,7 +258,7 @@ func (am *Manager) refresh(ctx context.Context, refreshToken string) (*TokenResp
 		"grant_type":    {"refresh_token"},
 	}
 
-	req, err := http.NewRequestWithContext(ctx, http.MethodPost, authURL+"/token", strings.NewReader(data.Encode()))
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, am.authURL+"/token", strings.NewReader(data.Encode()))
 	if err != nil {
 		return nil, fmt.Errorf("failed to create request: %w", err)
 	}
@@ -311,7 +322,7 @@ func (am *Manager) RevokeToken(ctx context.Context, refreshToken string) error {
 		"token_type_hint": {"refresh_token"},
 	}
 
-	req, err := http.NewRequestWithContext(ctx, http.MethodPost, authURL+"/revoke", strings.NewReader(data.Encode()))
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, am.authURL+"/revoke", strings.NewReader(data.Encode()))
 	if err != nil {
 		return fmt.Errorf("failed to create request: %w", err)
 	}

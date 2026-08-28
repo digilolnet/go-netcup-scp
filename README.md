@@ -270,7 +270,11 @@ runs abort without it.
 
 Environment variables: `NETCUP_SCP_JSON=1` (default to JSON output),
 `NETCUP_SCP_CONTEXT` (select a named account context),
-`NETCUP_SCP_TRACE_DIR` (record every API exchange to files for debugging).
+`NETCUP_SCP_TRACE_DIR` (record every API exchange to files for debugging),
+`NETCUP_SCP_API_URL` (override the API base URL, default
+`https://www.servercontrolpanel.de/scp-core`), `NETCUP_SCP_AUTH_URL` (override
+the OpenID Connect endpoint base — the library equivalents are
+`scp.WithBaseURL` and `auth.WithAuthURL`).
 
 ---
 
