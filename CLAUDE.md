@@ -50,7 +50,7 @@ need `internal/generated`.
 
 `pkg/scp/auth/auth.go` implements OAuth2 device flow. `auth.Manager` handles token storage, auto-refresh (30s before expiry), and injects Bearer tokens into every request. See `Authentication.md`.
 
-The CLI stores tokens as JSON files and extracts the user ID from the JWT `id` claim directly, falling back to the documented `/userinfo` endpoint if the claim is missing.
+The CLI stores tokens as JSON files and extracts the user ID from the JWT `id` claim directly — no `/userinfo` call needed.
 
 ## CLI conventions
 

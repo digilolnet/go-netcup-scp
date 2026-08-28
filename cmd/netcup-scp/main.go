@@ -200,21 +200,10 @@ func makeCmdContext(noAuth bool) (*cmdContext, func(), error) {
 		}
 		authMgr.LoadToken(tok)
 
-		// Fast path: the access token carries the SCP user id as a claim.
-		// Fall back to the documented /userinfo endpoint if it ever stops.
 		userID, err := jwtUserID(tok.AccessToken)
 		if err != nil {
-			info, uerr := authMgr.UserInfo(ctx)
-			if uerr != nil {
-				cleanup()
-				return nil, nil, fmt.Errorf("resolve user ID (token claim: %v; userinfo: %w)", err, uerr)
-			}
-			id, perr := strconv.ParseInt(info.ID, 10, 32)
-			if perr != nil {
-				cleanup()
-				return nil, nil, fmt.Errorf("resolve user ID: userinfo returned non-numeric id %q", info.ID)
-			}
-			userID = int32(id)
+			cleanup()
+			return nil, nil, fmt.Errorf("resolve user ID from token: %w", err)
 		}
 		cc.userID = userID
 
