@@ -9,6 +9,7 @@ require (
 	github.com/jedib0t/go-pretty/v6 v6.8.3
 	github.com/oapi-codegen/runtime v1.7.0
 	github.com/spf13/cobra v1.10.2
+	golang.org/x/term v0.45.0
 )
 
 require (

@@ -252,6 +252,13 @@ unique prefix of one of those (`netcup-scp servers restart web-prod`). The
 resolver shares the completion cache; ambiguous and unknown names fail with a
 clear error.
 
+Destructive operations (OS installs, `disks format`/`set-driver`, snapshot
+delete/revert, interface, SSH-key, policy, ISO, and image deletes, `firewall
+clear`) prompt for confirmation on a terminal; the catastrophic two —
+`disks format` and `servers install-image` — require retyping the server's
+nickname. The global `--force` / `-y` flag skips all prompts; non-interactive
+runs abort without it.
+
 Environment variables: `NETCUP_SCP_JSON=1` (default to JSON output),
 `NETCUP_SCP_CONTEXT` (select a named account context),
 `NETCUP_SCP_TRACE_DIR` (record every API exchange to files for debugging).

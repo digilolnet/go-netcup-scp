@@ -281,6 +281,9 @@ func newUserIsosDeleteCmd() *cobra.Command {
 			}
 			defer cleanup()
 
+			if err := confirm(fmt.Sprintf("delete user ISO %q", args[0])); err != nil {
+				return err
+			}
 			if err := cc.client.DeleteUserISO(cc.ctx, cc.userID, args[0]); err != nil {
 				return err
 			}

@@ -165,6 +165,10 @@ func newSnapshotsDeleteCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
+			action := fmt.Sprintf("delete snapshot %q of server %s", args[1], serverLabelByID(cc, id))
+			if err := confirm(action); err != nil {
+				return err
+			}
 			task, err := cc.client.DeleteSnapshot(cc.ctx, id, args[1])
 			if err != nil {
 				return err
@@ -192,6 +196,14 @@ func newSnapshotsRevertCmd() *cobra.Command {
 
 			id, err := resolveServerArg(cc, args[0])
 			if err != nil {
+				return err
+			}
+			action := fmt.Sprintf(
+				"revert server %s to snapshot %q, discarding its current disk state",
+				serverLabelByID(cc, id),
+				args[1],
+			)
+			if err := confirm(action); err != nil {
 				return err
 			}
 			task, err := cc.client.RevertSnapshot(cc.ctx, id, args[1])

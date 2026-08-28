@@ -720,6 +720,9 @@ func newServersInstallImageCmd() *cobra.Command {
 				}
 				setup.SshKeyIds = &ids
 			}
+			if err := confirmRetype(cc, id, "install a fresh OS image, erasing all data on the server"); err != nil {
+				return err
+			}
 			task, err := cc.client.InstallImage(cc.ctx, id, setup)
 			if err != nil {
 				return err
@@ -774,6 +777,14 @@ func newServersInstallUserImageCmd() *cobra.Command {
 			}
 			if cmd.Flags().Changed("email-notify") {
 				setup.EmailNotification = &emailNotify
+			}
+			action := fmt.Sprintf(
+				"install user image %q on server %s, overwriting its disk",
+				args[1],
+				serverLabelByID(cc, id),
+			)
+			if err := confirm(action); err != nil {
+				return err
 			}
 			task, err := cc.client.InstallUserImage(cc.ctx, id, setup)
 			if err != nil {

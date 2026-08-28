@@ -132,6 +132,10 @@ func newDisksFormatCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
+			action := fmt.Sprintf("format disk %q, erasing all data on it", args[1])
+			if err := confirmRetype(cc, id, action); err != nil {
+				return err
+			}
 			task, err := cc.client.FormatDisk(cc.ctx, id, args[1])
 			if err != nil {
 				return err
@@ -159,6 +163,10 @@ func newDisksSetDriverCmd() *cobra.Command {
 
 			id, err := resolveServerArg(cc, args[0])
 			if err != nil {
+				return err
+			}
+			action := fmt.Sprintf("change the disk driver of server %s to %s", serverLabelByID(cc, id), args[1])
+			if err := confirm(action); err != nil {
 				return err
 			}
 			task, err := cc.client.SetDiskDriver(cc.ctx, id, scp.StorageDriver(args[1]))

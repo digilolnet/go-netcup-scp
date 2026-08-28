@@ -207,6 +207,10 @@ func newInterfacesDeleteCmd() *cobra.Command {
 				)
 			}
 
+			action := fmt.Sprintf("delete interface %s of server %s", args[1], serverLabelByID(cc, id))
+			if err := confirm(action); err != nil {
+				return err
+			}
 			task, err := cc.client.DeleteInterface(cc.ctx, id, args[1])
 			if err != nil {
 				return err

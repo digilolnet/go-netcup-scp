@@ -44,6 +44,7 @@ var rootFlags struct {
 	jsonOut     bool
 	contextName string
 	configFile  string
+	force       bool
 }
 
 func main() {
@@ -81,6 +82,7 @@ func newRootCmd() *cobra.Command {
 		false,
 		"output in JSON format (also: NETCUP_SCP_JSON=1)",
 	)
+	cmd.PersistentFlags().BoolVarP(&rootFlags.force, "force", "y", false, "skip confirmation prompts")
 	cmd.PersistentFlags().StringVar(&rootFlags.contextName, "context", "", "named context to use for this invocation")
 	cmd.PersistentFlags().StringVar(&rootFlags.configFile, "config", defaultConfigFilePath(), "path to config file")
 

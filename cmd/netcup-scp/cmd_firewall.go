@@ -210,6 +210,10 @@ func newFirewallClearCmd() *cobra.Command {
 			}
 			mac := args[1]
 
+			action := fmt.Sprintf("remove all firewall policies from %s on server %s", mac, serverLabelByID(cc, serverID))
+			if err := confirm(action); err != nil {
+				return err
+			}
 			tasks, err := cc.client.ClearFirewall(cc.ctx, serverID, mac, keepCopied)
 			if err != nil {
 				return err
@@ -547,6 +551,9 @@ func newFWPoliciesDeleteCmd() *cobra.Command {
 
 			policyID, err := parseID(args[0], "policy-id")
 			if err != nil {
+				return err
+			}
+			if err := confirm(fmt.Sprintf("delete firewall policy %d", policyID)); err != nil {
 				return err
 			}
 			if err := cc.client.DeleteFirewallPolicy(cc.ctx, cc.userID, policyID); err != nil {

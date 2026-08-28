@@ -15,6 +15,8 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/jedib0t/go-pretty/v6/table"
 	"github.com/spf13/cobra"
 
@@ -259,6 +261,9 @@ func newSSHKeysDeleteCmd() *cobra.Command {
 
 			keyID, err := parseID(args[0], "key-id")
 			if err != nil {
+				return err
+			}
+			if err := confirm(fmt.Sprintf("delete SSH key %d", keyID)); err != nil {
 				return err
 			}
 			if err := cc.client.DeleteSSHKey(cc.ctx, cc.userID, keyID); err != nil {

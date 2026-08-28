@@ -111,6 +111,9 @@ func newImagesDeleteCmd() *cobra.Command {
 			}
 			defer cleanup()
 
+			if err := confirm(fmt.Sprintf("delete user image %q", args[0])); err != nil {
+				return err
+			}
 			if err := cc.client.DeleteUserImage(cc.ctx, cc.userID, args[0]); err != nil {
 				return err
 			}
