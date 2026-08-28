@@ -23,6 +23,9 @@ import (
 	"strings"
 	"time"
 
+	"github.com/spf13/cobra"
+	"golang.org/x/term"
+
 	"github.com/digilolnet/go-netcup-scp/pkg/scp"
 )
 
@@ -67,31 +70,94 @@ func readJSONStdin(v any) error {
 	return nil
 }
 
-// waitTask polls a task by UUID until it reaches a terminal state, printing progress to stderr.
+// taskPollInterval is how often --wait polls the task state.
+const taskPollInterval = 2 * time.Second
+
+// defaultWaitTimeout bounds --wait polling; generous because OS installs and
+// snapshot exports legitimately take many minutes.
+const defaultWaitTimeout = 30 * time.Minute
+
+// registerWaitFlags adds the --wait/--timeout pair to a command that returns
+// an async task.
+func registerWaitFlags(cmd *cobra.Command, wait *bool) {
+	cmd.Flags().BoolVar(wait, "wait", false, "wait for task to complete")
+	cmd.Flags().DurationVar(
+		&rootFlags.waitTimeout,
+		"timeout",
+		defaultWaitTimeout,
+		"give up waiting after this long (with --wait; 0 = no limit)",
+	)
+}
+
+// waitTask polls a task by UUID until it reaches a terminal state or
+// --timeout elapses. On a terminal it shows a spinner with progress and
+// elapsed time on stderr (stdout stays clean); otherwise it prints a single
+// line and stays quiet until done.
 func waitTask(cc *cmdContext, uuid string) error {
-	fmt.Fprintf(os.Stderr, "Waiting for task %s", uuid)
+	start := time.Now()
+	interactive := !cc.jsonOut && term.IsTerminal(int(os.Stderr.Fd()))
+	if !interactive {
+		fmt.Fprintf(os.Stderr, "Waiting for task %s\n", uuid)
+	}
+
+	frames := []rune("⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏")
+	frame := 0
+	progress := ""
+	render := func() {
+		if !interactive {
+			return
+		}
+		elapsed := time.Since(start).Round(time.Second)
+		fmt.Fprintf(
+			os.Stderr,
+			"\r\033[K%c Waiting for task %s  %s%s",
+			frames[frame%len(frames)],
+			uuid,
+			progress,
+			elapsed,
+		)
+		frame++
+	}
+	clearLine := func() {
+		if interactive {
+			fmt.Fprint(os.Stderr, "\r\033[K")
+		}
+	}
+
 	for {
-		time.Sleep(2 * time.Second)
+		// Animate the spinner while the next poll interval elapses.
+		for end := time.Now().Add(taskPollInterval); time.Now().Before(end); {
+			render()
+			time.Sleep(100 * time.Millisecond)
+		}
+
 		task, err := cc.client.GetTask(cc.ctx, uuid)
 		if err != nil {
-			fmt.Fprintln(os.Stderr)
+			clearLine()
 			return err
 		}
 		switch derefStr((*string)(task.State)) {
 		case string(scp.TaskStateFINISHED):
-			fmt.Fprintln(os.Stderr, " done")
+			clearLine()
+			fmt.Fprintf(os.Stderr, "Task %s finished after %s\n", uuid, time.Since(start).Round(time.Second))
 			return nil
 		case string(scp.TaskStateERROR):
-			fmt.Fprintln(os.Stderr, " failed")
+			clearLine()
 			return fmt.Errorf("task failed: %s", derefStr(task.Message))
 		case string(scp.TaskStateCANCELED):
-			fmt.Fprintln(os.Stderr, " canceled")
+			clearLine()
 			return fmt.Errorf("task canceled")
 		default:
+			if t := rootFlags.waitTimeout; t > 0 && time.Since(start) > t {
+				clearLine()
+				return fmt.Errorf(
+					"timed out after %s waiting for task %s (the task keeps running; check 'tasks get %s')",
+					t, uuid, uuid,
+				)
+			}
+			progress = ""
 			if p := task.TaskProgress; p != nil && p.ProgressInPercent != nil { //nolint:staticcheck
-				fmt.Fprintf(os.Stderr, "\rWaiting for task %s  %.0f%%", uuid, *p.ProgressInPercent)
-			} else {
-				fmt.Fprint(os.Stderr, ".")
+				progress = fmt.Sprintf("%.0f%%  ", *p.ProgressInPercent)
 			}
 		}
 	}

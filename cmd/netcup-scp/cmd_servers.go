@@ -301,7 +301,7 @@ func newServersStartCmd() *cobra.Command {
 			return printTaskAndWait(cc, task, wait)
 		},
 	}
-	cmd.Flags().BoolVar(&wait, "wait", false, "wait for task to complete")
+	registerWaitFlags(cmd, &wait)
 	return cmd
 }
 
@@ -331,7 +331,7 @@ func newServersStopCmd() *cobra.Command {
 		},
 	}
 	cmd.Flags().BoolVar(&powerOff, "power-off", false, "hard power off instead of graceful shutdown")
-	cmd.Flags().BoolVar(&wait, "wait", false, "wait for task to complete")
+	registerWaitFlags(cmd, &wait)
 	return cmd
 }
 
@@ -361,7 +361,7 @@ func newServersRestartCmd() *cobra.Command {
 		},
 	}
 	cmd.Flags().BoolVar(&reset, "reset", false, "hard reset instead of power cycle")
-	cmd.Flags().BoolVar(&wait, "wait", false, "wait for task to complete")
+	registerWaitFlags(cmd, &wait)
 	return cmd
 }
 
@@ -394,7 +394,7 @@ func newServersAutostartCmd() *cobra.Command {
 			return printTaskAndWait(cc, task, wait)
 		},
 	}
-	cmd.Flags().BoolVar(&wait, "wait", false, "wait for task to complete")
+	registerWaitFlags(cmd, &wait)
 	return cmd
 }
 
@@ -427,7 +427,7 @@ func newServersUEFICmd() *cobra.Command {
 			return printTaskAndWait(cc, task, wait)
 		},
 	}
-	cmd.Flags().BoolVar(&wait, "wait", false, "wait for task to complete")
+	registerWaitFlags(cmd, &wait)
 	return cmd
 }
 
@@ -534,7 +534,7 @@ func newServersCPUTopologyCmd() *cobra.Command {
 			return printTaskAndWait(cc, task, wait)
 		},
 	}
-	cmd.Flags().BoolVar(&wait, "wait", false, "wait for task to complete")
+	registerWaitFlags(cmd, &wait)
 	return cmd
 }
 
@@ -741,7 +741,7 @@ func newServersInstallImageCmd() *cobra.Command {
 	cmd.Flags().StringVar(&additionalPass, "additional-pass", "", "password for additional user")
 	cmd.Flags().StringVar(&customScript, "custom-script", "", "custom post-install script")
 	cmd.Flags().IntSliceVar(&sshKeyIDs, "ssh-key-ids", nil, "SSH key IDs to install (comma-separated)")
-	cmd.Flags().BoolVar(&wait, "wait", false, "wait for task to complete")
+	registerWaitFlags(cmd, &wait)
 
 	registerFlagCompleter(cmd, "disk", diskNameCompletions)
 	registerFlagCompleter(cmd, "ssh-key-ids", sshKeyIDCompletions)
@@ -795,7 +795,7 @@ func newServersInstallUserImageCmd() *cobra.Command {
 	}
 	cmd.Flags().StringVar(&diskName, "disk", "", "disk name to install to")
 	cmd.Flags().BoolVar(&emailNotify, "email-notify", false, "send email notification on completion")
-	cmd.Flags().BoolVar(&wait, "wait", false, "wait for task to complete")
+	registerWaitFlags(cmd, &wait)
 	registerFlagCompleter(cmd, "disk", diskNameCompletions)
 	return cmd
 }
@@ -836,7 +836,7 @@ func newServersOptimizeStorageCmd() *cobra.Command {
 	}
 	cmd.Flags().StringVar(&disksFlag, "disks", "", "comma-separated disk names to optimize (empty = all)")
 	cmd.Flags().BoolVar(&startAfter, "start-after", false, "start server after optimization")
-	cmd.Flags().BoolVar(&wait, "wait", false, "wait for task to complete")
+	registerWaitFlags(cmd, &wait)
 	return cmd
 }
 

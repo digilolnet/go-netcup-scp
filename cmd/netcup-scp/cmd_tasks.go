@@ -165,6 +165,6 @@ func newTasksCancelCmd() *cobra.Command {
 			return printTaskAndWait(cc, task, wait)
 		},
 	}
-	cmd.Flags().BoolVar(&wait, "wait", false, "wait for task to reach terminal state")
+	registerWaitFlags(cmd, &wait)
 	return cmd
 }

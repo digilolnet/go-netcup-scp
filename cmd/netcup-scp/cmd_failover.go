@@ -124,7 +124,7 @@ func newFailoverV4RouteCmd() *cobra.Command {
 			return printTaskAndWait(cc, task, wait)
 		},
 	}
-	cmd.Flags().BoolVar(&wait, "wait", false, "wait for task to complete")
+	registerWaitFlags(cmd, &wait)
 	return cmd
 }
 
@@ -153,7 +153,7 @@ func newFailoverV4UnrouteCmd() *cobra.Command {
 			return printTaskAndWait(cc, task, wait)
 		},
 	}
-	cmd.Flags().BoolVar(&wait, "wait", false, "wait for task to complete")
+	registerWaitFlags(cmd, &wait)
 	return cmd
 }
 
@@ -254,7 +254,7 @@ func newFailoverV6UnrouteCmd() *cobra.Command {
 			return printTaskAndWait(cc, task, wait)
 		},
 	}
-	cmd.Flags().BoolVar(&wait, "wait", false, "wait for task to complete")
+	registerWaitFlags(cmd, &wait)
 	return cmd
 }
 
@@ -287,6 +287,6 @@ func newFailoverV6RouteCmd() *cobra.Command {
 			return printTaskAndWait(cc, task, wait)
 		},
 	}
-	cmd.Flags().BoolVar(&wait, "wait", false, "wait for task to complete")
+	registerWaitFlags(cmd, &wait)
 	return cmd
 }

@@ -73,6 +73,6 @@ func newServersRescueCmd() *cobra.Command {
 			return nil
 		},
 	}
-	cmd.Flags().BoolVar(&wait, "wait", false, "wait for task to complete")
+	registerWaitFlags(cmd, &wait)
 	return cmd
 }

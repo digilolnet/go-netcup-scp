@@ -252,6 +252,10 @@ unique prefix of one of those (`netcup-scp servers restart web-prod`). The
 resolver shares the completion cache; ambiguous and unknown names fail with a
 clear error.
 
+Commands that return an async task take `--wait`, plus `--timeout` (default
+30m, `0` = no limit). While waiting, a spinner with task progress and elapsed
+time is drawn on stderr — stdout stays clean for piping and `-j`.
+
 Destructive operations (OS installs, `disks format`/`set-driver`, snapshot
 delete/revert, interface, SSH-key, policy, ISO, and image deletes, `firewall
 clear`) prompt for confirmation on a terminal; the catastrophic two —

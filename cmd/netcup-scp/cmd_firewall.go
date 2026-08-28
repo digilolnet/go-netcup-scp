@@ -128,7 +128,7 @@ func newFirewallUpdateCmd() *cobra.Command {
 			return printTaskAndWait(cc, task, wait)
 		},
 	}
-	cmd.Flags().BoolVar(&wait, "wait", false, "wait for task to complete")
+	registerWaitFlags(cmd, &wait)
 	return cmd
 }
 
@@ -157,7 +157,7 @@ func newFirewallReapplyCmd() *cobra.Command {
 			return printTaskAndWait(cc, task, wait)
 		},
 	}
-	cmd.Flags().BoolVar(&wait, "wait", false, "wait for task to complete")
+	registerWaitFlags(cmd, &wait)
 	return cmd
 }
 
@@ -186,7 +186,7 @@ func newFirewallRestoreCopiedCmd() *cobra.Command {
 			return printTaskAndWait(cc, task, wait)
 		},
 	}
-	cmd.Flags().BoolVar(&wait, "wait", false, "wait for task to complete")
+	registerWaitFlags(cmd, &wait)
 	return cmd
 }
 
@@ -227,7 +227,7 @@ func newFirewallClearCmd() *cobra.Command {
 		},
 	}
 	cmd.Flags().BoolVar(&keepCopied, "keep-copied", false, "restore netcup copied policies after clearing")
-	cmd.Flags().BoolVar(&wait, "wait", false, "wait for task(s) to complete")
+	registerWaitFlags(cmd, &wait)
 	return cmd
 }
 
@@ -262,7 +262,7 @@ func newFirewallActiveCmd() *cobra.Command {
 			return printTaskAndWait(cc, task, wait)
 		},
 	}
-	cmd.Flags().BoolVar(&wait, "wait", false, "wait for task to complete")
+	registerWaitFlags(cmd, &wait)
 	return cmd
 }
 
@@ -485,7 +485,7 @@ func newFWPoliciesAddRuleCmd() *cobra.Command {
 	cmd.Flags().StringVar(&dstPorts, "dst-ports", "", "destination ports (e.g. 443 or 8080-8090)")
 	cmd.Flags().StringVar(&sources, "sources", "", "comma-separated source IPs/CIDRs (empty = any)")
 	cmd.Flags().StringVar(&destinations, "destinations", "", "comma-separated destination IPs/CIDRs (empty = any)")
-	cmd.Flags().BoolVar(&wait, "wait", false, "wait for task to complete")
+	registerWaitFlags(cmd, &wait)
 	return cmd
 }
 
@@ -532,7 +532,7 @@ func newFWPoliciesUpdateCmd() *cobra.Command {
 			return nil
 		},
 	}
-	cmd.Flags().BoolVar(&wait, "wait", false, "wait for task to complete")
+	registerWaitFlags(cmd, &wait)
 	return cmd
 }
 

@@ -160,7 +160,7 @@ func newIsosAttachCmd() *cobra.Command {
 	cmd.Flags().IntVar(&isoID, "iso-id", 0, "ID of a standard ISO image")
 	cmd.Flags().StringVar(&userIso, "user-iso", "", "name of a user-uploaded ISO")
 	cmd.Flags().BoolVar(&bootCdrom, "boot-cdrom", false, "change boot device to CDROM after attaching")
-	cmd.Flags().BoolVar(&wait, "wait", false, "wait for task to complete")
+	registerWaitFlags(cmd, &wait)
 	return cmd
 }
 

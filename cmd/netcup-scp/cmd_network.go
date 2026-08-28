@@ -222,7 +222,7 @@ func newInterfacesDeleteCmd() *cobra.Command {
 			return printTaskAndWait(cc, task, wait)
 		},
 	}
-	cmd.Flags().BoolVar(&wait, "wait", false, "wait for task to complete")
+	registerWaitFlags(cmd, &wait)
 	return cmd
 }
 
@@ -264,7 +264,7 @@ func newInterfacesUpdateDriverCmd() *cobra.Command {
 			return nil
 		},
 	}
-	cmd.Flags().BoolVar(&wait, "wait", false, "wait for task to complete")
+	registerWaitFlags(cmd, &wait)
 	return cmd
 }
 
@@ -303,7 +303,7 @@ func newInterfacesCreateVLANCmd() *cobra.Command {
 		},
 	}
 	cmd.Flags().StringVar(&driver, "driver", string(scp.NetworkDriverVIRTIO), "network driver")
-	cmd.Flags().BoolVar(&wait, "wait", false, "wait for task to complete")
+	registerWaitFlags(cmd, &wait)
 	registerFlagCompleter(cmd, "driver", func(_ *cmdContext, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
 		return networkDriverCompletions(), cobra.ShellCompDirectiveNoFileComp
 	})

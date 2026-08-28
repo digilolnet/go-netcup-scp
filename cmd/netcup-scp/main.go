@@ -21,6 +21,7 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+	"time"
 
 	"github.com/spf13/cobra"
 
@@ -45,6 +46,7 @@ var rootFlags struct {
 	contextName string
 	configFile  string
 	force       bool
+	waitTimeout time.Duration
 }
 
 func main() {
