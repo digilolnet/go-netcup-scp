@@ -83,7 +83,8 @@ defer client.Close()
 | `rescue.go`            | Activate/deactivate/get rescue system                                                                    |
 | `tasks.go`             | List, get, cancel async tasks                                                                            |
 | `vnc.go`               | Dial the VNC console WebSocket; screenshot/keyboard helpers (via `pkg/rfb`)                              |
-| `client.go`            | Ping, API traffic recorder (`WithTraceDir`)                                                              |
+| `client.go`            | Client construction (`WithBaseURL`), ping                                                                |
+| `trace.go`             | API traffic recorder (`WithTraceDir`)                                                                    |
 
 For operations not covered by wrappers, the full generated client is accessible via `client.API()`.
 
@@ -141,7 +142,13 @@ err = client.SendVNCKeys(ctx, serverID, 0, rfb.KeyDown, rfb.KeyDown, rfb.KeyEnte
 
 `netcup-scp` is a full-featured CLI built on top of the library.
 
-### Build
+### Install
+
+```bash
+go install github.com/digilolnet/go-netcup-scp/cmd/netcup-scp@latest
+```
+
+Or build from a checkout:
 
 ```bash
 task build
@@ -149,12 +156,15 @@ task build
 go build -o netcup-scp ./cmd/netcup-scp/
 ```
 
+`netcup-scp --version` prints the installed version.
+
 ### Authentication
 
 ```bash
 netcup-scp auth login          # device flow login, saves token
 netcup-scp auth logout         # revoke and remove token
 netcup-scp auth status         # show current auth state
+netcup-scp auth refresh        # refresh the access token now
 ```
 
 Multiple accounts are supported via named contexts:
@@ -163,6 +173,8 @@ Multiple accounts are supported via named contexts:
 netcup-scp context add prod --token-file ~/.config/netcup/prod.json
 netcup-scp context use prod
 netcup-scp context list
+netcup-scp context current     # show the active context
+netcup-scp context delete prod
 ```
 
 ### Commands
@@ -270,6 +282,9 @@ runs abort without it.
 
 Environment variables: `NETCUP_SCP_JSON=1` (default to JSON output),
 `NETCUP_SCP_CONTEXT` (select a named account context),
+`NETCUP_SCP_CONFIG` (path of the contexts config file, default
+`~/.config/netcup-scp/config.json`), `NETCUP_SCP_TOKEN_FILE` (default token
+file when no context is used, default `~/.config/netcup-scp/token.json`),
 `NETCUP_SCP_TRACE_DIR` (record every API exchange to files for debugging),
 `NETCUP_SCP_API_URL` (override the API base URL, default
 `https://www.servercontrolpanel.de/scp-core`), `NETCUP_SCP_AUTH_URL` (override
@@ -296,8 +311,9 @@ task generate     # regenerate (oapi-codegen version is pinned in Taskfile.yaml)
 task check
 ```
 
-CI (`.github/workflows/ci.yml`) builds, vets, tests, and fails if the generated
-client is out of date with `openapi.json`. A weekly job
+CI (`.github/workflows/ci.yml`) builds, vets, and tests (Go and the
+spec-drift script), and fails if the generated client is out of date with
+`openapi.json` or `go.mod` is not tidy. A weekly job
 (`.github/workflows/spec-drift.yml`) runs the same comparison as
 `task spec-check` and keeps one open issue labelled `spec-drift` listing the
 differences; it closes the issue once the spec is refreshed.
