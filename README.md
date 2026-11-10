@@ -287,11 +287,20 @@ task generate    # regenerate client from openapi.json
 task check       # build + test
 ```
 
-Regenerate the client after updating `openapi.json`:
+Refresh the client when netcup changes the API:
 
 ```bash
-oapi-codegen -config oapi-codegen.yaml openapi.json
+task spec-check   # show how openapi.json differs from netcup's live spec
+task spec-update  # fetch the live spec into openapi.json
+task generate     # regenerate (oapi-codegen version is pinned in Taskfile.yaml)
+task check
 ```
+
+CI (`.github/workflows/ci.yml`) builds, vets, tests, and fails if the generated
+client is out of date with `openapi.json`. A weekly job
+(`.github/workflows/spec-drift.yml`) runs the same comparison as
+`task spec-check` and keeps one open issue labelled `spec-drift` listing the
+differences; it closes the issue once the spec is refreshed.
 
 ---
 

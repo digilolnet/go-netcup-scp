@@ -9,6 +9,7 @@ task build       # build netcup-scp binary
 task test        # run tests with race detection
 task generate    # regenerate client from openapi.json
 task check       # build + test
+task spec-check  # compare openapi.json with the live API spec
 ```
 
 ## Architecture
@@ -79,7 +80,14 @@ Two layers:
 ## Updating the API
 
 ```bash
-curl -o openapi.json https://www.servercontrolpanel.de/scp-core/api/v1/openapi
+task spec-check   # diff openapi.json against netcup's live spec (scripts/spec-drift.py)
+task spec-update  # fetch + sanitize the live spec into openapi.json
 task generate
 task check
 ```
+
+Don't `curl` the spec directly: `spec-update` applies the hostname
+sanitization the committed spec relies on. The oapi-codegen version is pinned
+in `Taskfile.yaml` and `.github/workflows/ci.yml` (CI fails when the generated
+client is stale); bump both together. `.github/workflows/spec-drift.yml` runs
+`spec-check` weekly and maintains a `spec-drift` issue.

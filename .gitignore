@@ -6,6 +6,9 @@ cmd/netcup-scp/netcup-scp
 *.test
 *.out
 
+# Python bytecode (scripts/)
+__pycache__/
+
 # Go workspace
 go.work
 go.work.sum

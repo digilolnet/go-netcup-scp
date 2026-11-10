@@ -1,10 +1,25 @@
 version: "3"
 
+vars:
+  # Pinned so local runs and CI produce byte-identical generated code.
+  # Keep in sync with .github/workflows/ci.yml.
+  OAPI_CODEGEN_VERSION: v2.8.2
+
 tasks:
   generate:
     desc: Regenerate client from OpenAPI spec
     cmds:
-      - oapi-codegen -config oapi-codegen.yaml openapi.json
+      - go run github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen@{{.OAPI_CODEGEN_VERSION}} -config oapi-codegen.yaml openapi.json
+
+  spec-check:
+    desc: Report differences between openapi.json and netcup's live spec
+    cmds:
+      - python3 scripts/spec-drift.py
+
+  spec-update:
+    desc: Replace openapi.json with netcup's live spec (sanitized)
+    cmds:
+      - python3 scripts/spec-drift.py --update
 
   build:
     desc: Build netcup-scp binary
@@ -30,15 +45,6 @@ tasks:
     desc: Remove build caches
     cmds:
       - go clean -cache
-
-  install-tools:
-    desc: Install required tools
-    cmds:
-      - cmd: echo "Installing oapi-codegen..."
-        silent: true
-      - go install github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen@latest
-      - cmd: echo "Tools installed successfully!"
-        silent: true
 
   godoc:
     desc: Serve documentation and open in browser
