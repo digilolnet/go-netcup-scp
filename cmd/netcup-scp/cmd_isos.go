@@ -91,6 +91,7 @@ var isoImageDisplayer = newDisplayer(
 // and 'user-images list'.
 var s3ObjectDisplayer = newDisplayer(
 	column("key", "KEY", func(o scp.S3Object) any { return derefStr(o.Key) }),
+	column("type", "TYPE", func(o scp.S3Object) any { return derefStr((*string)(o.Type)) }),
 	column("size", "SIZE (bytes)", func(o scp.S3Object) any { return deref(o.SizeInB) }),
 	column("modified", "LAST MODIFIED (UTC)", func(o scp.S3Object) any { return fmtTime(o.LastModified) }),
 )

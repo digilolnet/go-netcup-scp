@@ -1,0 +1,67 @@
+name: Spec drift
+
+# Compares the committed openapi.json with netcup's live spec and keeps a
+# single open issue (label: spec-drift) describing the differences. The issue
+# is closed automatically once the spec is refreshed.
+
+on:
+  schedule:
+    - cron: "23 5 * * 1" # Mondays 05:23 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: spec-drift
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Compare with upstream
+        id: drift
+        run: |
+          set +e
+          python3 scripts/spec-drift.py > report.md
+          status=$?
+          set -e
+          cat report.md
+          case "$status" in
+            0) echo "drift=false" >> "$GITHUB_OUTPUT" ;;
+            1) echo "drift=true" >> "$GITHUB_OUTPUT" ;;
+            *) echo "::error::could not fetch or parse the upstream spec"; exit 1 ;;
+          esac
+
+      - name: Open or update the drift issue
+        if: steps.drift.outputs.drift == 'true'
+        run: |
+          gh label create spec-drift --color D93F0B \
+            --description "Upstream OpenAPI spec differs from openapi.json" --force
+          {
+            echo "netcup's live OpenAPI spec no longer matches the committed \`openapi.json\`."
+            echo
+            cat report.md
+            echo
+            echo "_Updated by the [Spec drift workflow]($GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID)._"
+          } > body.md
+          issue=$(gh issue list --label spec-drift --state open --json number --jq '.[0].number // empty')
+          if [ -n "$issue" ]; then
+            gh issue edit "$issue" --body-file body.md
+          else
+            gh issue create --title "Upstream OpenAPI spec changed" --label spec-drift --body-file body.md
+          fi
+
+      - name: Close the drift issue when back in sync
+        if: steps.drift.outputs.drift == 'false'
+        run: |
+          for issue in $(gh issue list --label spec-drift --state open --json number --jq '.[].number'); do
+            gh issue close "$issue" --comment "openapi.json matches upstream again."
+          done

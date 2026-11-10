@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+permissions:
+  contents: read
+
+env:
+  # Keep in sync with OAPI_CODEGEN_VERSION in Taskfile.yaml.
+  OAPI_CODEGEN_VERSION: v2.8.2
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
+        with:
+          go-version-file: go.mod
+      - name: Build
+        run: go build ./...
+      - name: Vet
+        run: go vet ./...
+      - name: Test
+        run: go test -race ./...
+      - name: Test spec-drift script
+        run: python3 -m unittest discover -s scripts
+      - name: Generated client matches openapi.json
+        run: |
+          go run "github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen@${OAPI_CODEGEN_VERSION}" \
+            -config oapi-codegen.yaml openapi.json
+          git diff --exit-code -- internal/generated
+      - name: go.mod is tidy
+        run: |
+          go mod tidy
+          git diff --exit-code -- go.mod go.sum

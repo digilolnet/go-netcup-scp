@@ -167,7 +167,7 @@ func newServersGetCmd() *cobra.Command {
 					"Disabled", deref(server.Disabled),
 					"Rescue Active", deref(server.RescueSystemActive),
 					"Snapshot Allowed", deref(server.SnapshotAllowed),
-					"Snapshot Count", derefInt32(server.SnapshotCount),
+					"Export Count", derefInt32(server.ExportCount),
 					"Disk Free (MiB)", deref(server.DisksAvailableSpaceInMiB),
 					"GPU Driver Available", deref(server.GpuDriverAvailable),
 				)
@@ -224,6 +224,7 @@ func newServersGetCmd() *cobra.Command {
 						"Latest QEMU", deref(li.LatestQemu),
 						"Config Changed", deref(li.ConfigChanged),
 						"Autostart", deref(li.Autostart),
+						"Backup Time", derefStr(li.BackupTime),
 						"Boot Order", bootorder,
 						"CPU Count", derefInt32(li.CpuCount),
 						"CPU Max", derefInt32(li.CpuMaxCount),
