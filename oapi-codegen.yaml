@@ -2,7 +2,6 @@ package: generated
 generate:
   models: true
   client: true
-  embedded-spec: true
 output: internal/generated/client.gen.go
 output-options:
   skip-prune: true
